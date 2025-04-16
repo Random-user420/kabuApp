@@ -1,16 +1,13 @@
 package org.lilith.kabuapp.login;
 
 
-import android.content.Intent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Insert;
 
 import org.lilith.kabuapp.api.BadRequestException;
 import org.lilith.kabuapp.api.DigikabuApiService;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.entity.User;
+import org.lilith.kabuapp.models.Callback;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,16 +25,16 @@ public class AuthController {
     private DigikabuApiService digikabuApiService;
     public boolean setCredentials(String username, String password)
     {
-        return setCredentials(username, password, (Intent) null, (AppCompatActivity) null);
+        return setCredentials(username, password, (Callback) null, (Object[]) null);
     }
 
-    public boolean setCredentials(String username, String password, Intent i, AppCompatActivity a)
+    public boolean setCredentials(String username, String password, Callback callback, Object[] args)
     {
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty())
         {
             stateholder.setUsername(username);
             stateholder.setPassword(password);
-            auth(i, a);
+            auth(callback, args);
             return true;
         }
         return false;
@@ -51,31 +48,28 @@ public class AuthController {
         new Thread(this::save).start();
     }
 
-    public void auth(Intent i, AppCompatActivity a)
+    public void auth(Callback callback, Object[] args)
     {
-        new Thread(() ->
+        try
         {
-            try
+            String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
+            if (token == null)
             {
-                String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
-                if (token == null)
-                {
-                    Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig");
-                    return;
-                }
-                stateholder.setToken(token);
-                new Thread(this::save).start();
-                if (i != null && a != null)
-                {
-                    a.startActivity(i);
-                }
-                Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig2");
+                Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig");
+                return;
             }
-            catch (BadRequestException e)
+            stateholder.setToken(token);
+            new Thread(this::save).start();
+            if (callback != null)
             {
-                Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
+                callback.callback(args);
             }
-        });
+            Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig2");
+        }
+        catch (BadRequestException e)
+        {
+            Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
+        }
     }
 
     private void save()

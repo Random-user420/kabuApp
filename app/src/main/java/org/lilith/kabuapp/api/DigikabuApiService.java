@@ -3,7 +3,6 @@ package org.lilith.kabuapp.api;
 
 import org.lilith.kabuapp.api.models.AuthRequest;
 
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +21,7 @@ public class DigikabuApiService extends ApiService{
                     "POST",
                     String.class,
                     null,
-                    Map.of("Content-Type", "application/json"),
+                    null,
                     new AuthRequest(username, password));
         }
         catch (Exception e)
@@ -35,5 +34,4 @@ public class DigikabuApiService extends ApiService{
             return null;
         }
     }
-
 }

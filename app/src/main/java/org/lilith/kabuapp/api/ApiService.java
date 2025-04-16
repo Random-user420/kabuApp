@@ -5,18 +5,22 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.gson.Gson;
+
+import org.lilith.kabuapp.api.models.AuthRequest;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class ApiService
 {
     protected String baseUrl;
     private final HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-    private final GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+    private final CustomGsonFactory jsonFactory = new CustomGsonFactory();
     protected  <T> T executeRequest(
             String url,
             String httpMethod,
@@ -42,10 +46,13 @@ public abstract class ApiService
         request.setHeaders(httpHeaders);
 
         if (body != null) {
+            Logger.getLogger("API").log(Level.INFO,
+                    "AuthRequest Body (Custom Gson): " +
+                    jsonFactory.toString(body));
             request.setContent(new JsonHttpContent(jsonFactory, body));
         }
 
-        HttpResponse response = request.execute();
+        HttpResponse response = request.executeAsync().get();
 
         if (!response.isSuccessStatusCode())
         {

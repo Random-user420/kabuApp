@@ -21,6 +21,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false // Füge diese Zeile hinzu oder ändere sie
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -28,11 +32,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-    }
-    packaging {
-        resources {
-            excludes += ['META-INF/DEPENDENCIES']
-        }
     }
 }
 
@@ -42,10 +41,14 @@ dependencies {
     implementation libs.navigation.ui
     implementation libs.preference
     implementation libs.room.runtime.android
-    implementation libs.google.http.client
-    implementation libs.google.http.client.gson
-    implementation libs.google.http.client.android
-    implementation libs.gson
+    implementation (libs.google.http.client.gson) {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+    }
+    implementation(libs.google.http.client.android) {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+    }
     annotationProcessor libs.lombok
     annotationProcessor libs.room.compiler
 
