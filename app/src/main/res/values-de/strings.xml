@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KabuApp</string>
+    <string name="login_title">Einloggen</string>
+    <string name="login_username">Nutzername</string>
+    <string name="login_password">Passwort</string>
+    <string name="login_loginButton">Einloggen</string>
+</resources>
