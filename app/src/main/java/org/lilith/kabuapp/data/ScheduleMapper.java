@@ -6,7 +6,6 @@ import org.lilith.kabuapp.data.model.Schedule;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
