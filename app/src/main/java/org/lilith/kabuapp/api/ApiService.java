@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public abstract class ApiService
     protected  <T> T executeRequest(
             String url,
             String httpMethod,
-            Class<T> responseModel,
+            Type responseType,
             Map<String, Object> params,
             Map<String, String> headers,
             Object body) throws Exception {
@@ -51,30 +52,35 @@ public abstract class ApiService
             Logger.getLogger("API").log(Level.INFO,
                     "AuthRequest Body: " + jsonBody);
 
-            request.setContent(new HttpContent() {
+            request.setContent(new HttpContent()
+            {
                 @Override
-                public long getLength() {
+                public long getLength()
+                {
                     return jsonBody.getBytes(StandardCharsets.UTF_8).length;
                 }
 
                 @Override
-                public String getType() {
+                public String getType()
+                {
                     return "application/json";
                 }
 
                 @Override
-                public boolean retrySupported() {
+                public boolean retrySupported()
+                {
                     return false;
                 }
 
                 @Override
-                public void writeTo(OutputStream out) throws IOException {
+                public void writeTo(OutputStream out) throws IOException
+                {
                     out.write(jsonBody.getBytes(StandardCharsets.UTF_8));
                 }
             });
         }
 
-        HttpResponse response = request.execute();
+        HttpResponse response = request.executeAsync().get();
 
         if (!response.isSuccessStatusCode())
         {
@@ -85,13 +91,13 @@ public abstract class ApiService
             throw new Exception("API-Fehler: " + response.getStatusCode() + " - " + response.getStatusMessage());
         }
 
-        if (responseModel.equals(String.class))
+        if (responseType instanceof Class && responseType.equals(String.class))
         {
             return (T) response.parseAsString();
         }
-        else 
+        else
         {
-            return response.parseAs(responseModel);
+            return gson.fromJson(response.parseAsString(), responseType);
         }
     }
 }

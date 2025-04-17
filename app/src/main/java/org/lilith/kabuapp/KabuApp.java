@@ -6,9 +6,12 @@ import android.os.StrictMode;
 import com.google.android.material.color.DynamicColors;
 
 import org.lilith.kabuapp.api.DigikabuApiService;
+import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
+import org.lilith.kabuapp.data.model.Schedule;
 import org.lilith.kabuapp.login.AuthController;
+import org.lilith.kabuapp.schedule.ScheduleController;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +24,11 @@ public class KabuApp extends Application
     private AppDatabase db;
     private AuthController authController;
     private DigikabuApiService digikabuApiService;
+    private Schedule schedule;
+    private ScheduleController scheduleController;
+    private ScheduleMapper scheduleMapper;
     //NOT FOR PRODUCTION!!!
-    private final boolean fakeService = true;
+    private final boolean fakeService = false;
 
     @Override
     public void onCreate()
@@ -35,8 +41,11 @@ public class KabuApp extends Application
 
         DynamicColors.applyToActivitiesIfAvailable(this);
 
+        schedule = new Schedule();
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
+        scheduleMapper = new ScheduleMapper();
+        scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule);
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService);
 
         authController.getInitialUser();

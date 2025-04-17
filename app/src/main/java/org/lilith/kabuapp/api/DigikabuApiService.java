@@ -1,8 +1,14 @@
 package org.lilith.kabuapp.api;
 
 
-import org.lilith.kabuapp.api.models.AuthRequest;
+import com.google.gson.reflect.TypeToken;
 
+import org.lilith.kabuapp.api.models.AuthRequest;
+import org.lilith.kabuapp.api.models.LessonResponse;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +36,26 @@ public class DigikabuApiService extends ApiService{
             {
                 throw (BadRequestException) e;
             }
+            Logger.getLogger("API").log(Level.WARNING, e.toString());
+            return null;
+        }
+    }
+
+    public List<LessonResponse> getSchedule(String token, LocalDate date, int days)
+    {
+        try
+        {
+            return executeRequest(
+                    "stundenplan",
+                    "GET",
+                    new TypeToken<List<LessonResponse>>(){}.getType(),
+                    Map.of("datum", date, "anzahl", days),
+                    Map.of("Authorization", token),
+                    null
+            );
+        }
+        catch (Exception e)
+        {
             Logger.getLogger("API").log(Level.WARNING, e.toString());
             return null;
         }

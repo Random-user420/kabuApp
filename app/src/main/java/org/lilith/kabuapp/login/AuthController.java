@@ -19,7 +19,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public class AuthController {
-    @Getter
+    @Getter //TODO REMOVE
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
