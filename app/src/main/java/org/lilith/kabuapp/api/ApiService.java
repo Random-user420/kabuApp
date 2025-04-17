@@ -1,17 +1,17 @@
 package org.lilith.kabuapp.api;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.http.json.JsonHttpContent;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 
-import org.lilith.kabuapp.api.models.AuthRequest;
-
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +20,7 @@ public abstract class ApiService
 {
     protected String baseUrl;
     private final HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-    private final CustomGsonFactory jsonFactory = new CustomGsonFactory();
+    private final Gson gson = new Gson();
     protected  <T> T executeRequest(
             String url,
             String httpMethod,
@@ -46,13 +46,35 @@ public abstract class ApiService
         request.setHeaders(httpHeaders);
 
         if (body != null) {
+            final String jsonBody = gson.toJson(body);
+
             Logger.getLogger("API").log(Level.INFO,
-                    "AuthRequest Body (Custom Gson): " +
-                    jsonFactory.toString(body));
-            request.setContent(new JsonHttpContent(jsonFactory, body));
+                    "AuthRequest Body: " + jsonBody);
+
+            request.setContent(new HttpContent() {
+                @Override
+                public long getLength() {
+                    return jsonBody.getBytes(StandardCharsets.UTF_8).length;
+                }
+
+                @Override
+                public String getType() {
+                    return "application/json";
+                }
+
+                @Override
+                public boolean retrySupported() {
+                    return false;
+                }
+
+                @Override
+                public void writeTo(OutputStream out) throws IOException {
+                    out.write(jsonBody.getBytes(StandardCharsets.UTF_8));
+                }
+            });
         }
 
-        HttpResponse response = request.executeAsync().get();
+        HttpResponse response = request.execute();
 
         if (!response.isSuccessStatusCode())
         {

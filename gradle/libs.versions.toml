@@ -38,8 +38,8 @@ room-runtime-android = { group = "androidx.room", name = "room-runtime-android",
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 #google-http-client = { group = "com.google.http-client", name = "google-http-client", version.ref = "googleHttpClient" }
 google-http-client-android = { group = "com.google.http-client", name = "google-http-client-android", version.ref = "googleHttpClient" }
-google-http-client-gson = { group = "com.google.http-client", name = "google-http-client-gson", version.ref = "googleHttpClient" }
-#gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+#google-http-client-gson = { group = "com.google.http-client", name = "google-http-client-gson", version.ref = "googleHttpClient" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -45,7 +45,7 @@ public class Schedule extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        if (!authController.isInitalized())
+        if (!authController.isInitialized())
         {
             var i = new Intent(this, Login.class);
             startActivity(i);

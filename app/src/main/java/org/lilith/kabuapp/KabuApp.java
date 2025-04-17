@@ -1,6 +1,7 @@
 package org.lilith.kabuapp;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.google.android.material.color.DynamicColors;
 
@@ -20,17 +21,23 @@ public class KabuApp extends Application
     private AppDatabase db;
     private AuthController authController;
     private DigikabuApiService digikabuApiService;
+    //NOT FOR PRODUCTION!!!
+    private final boolean fakeService = true;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
 
+        //Until Threadding with login is implimented
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         DynamicColors.applyToActivitiesIfAvailable(this);
 
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
-        authController = new AuthController(new AuthStateholder(), db, digikabuApiService);
+        authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService);
 
         authController.getInitialUser();
     }

@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,7 +18,6 @@ import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.schedule.Schedule;
 import org.lilith.kabuapp.settings.Settings;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,7 +54,7 @@ public class Login extends AppCompatActivity implements Callback
     protected void onStart() {
         super.onStart();
 
-        if (authController.isInitalized())
+        if (authController.isInitialized())
         {
             var i = new Intent(this, Schedule.class);
             startActivity(i);

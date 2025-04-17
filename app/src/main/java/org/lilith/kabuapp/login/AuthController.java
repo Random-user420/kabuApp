@@ -23,6 +23,7 @@ public class AuthController {
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
+    private final boolean fakeService;
     public boolean setCredentials(String username, String password)
     {
         return setCredentials(username, password, (Callback) null, (Object[]) null);
@@ -50,6 +51,7 @@ public class AuthController {
 
     public void auth(Callback callback, Object[] args)
     {
+        if (!fakeService)
         try
         {
             String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
@@ -64,11 +66,18 @@ public class AuthController {
             {
                 callback.callback(args);
             }
-            Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig2");
         }
         catch (BadRequestException e)
         {
             Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
+        }
+        else {
+            stateholder.setToken("FAKE");
+            new Thread(this::save).start();
+            if (callback != null)
+            {
+                callback.callback(args);
+            }
         }
     }
 
@@ -92,10 +101,10 @@ public class AuthController {
 
     public void getInitialUser()
     {
-        new Thread(this::getAsyncInitalUser).start();
+        new Thread(this::getAsyncInitialUser).start();
     }
 
-    private void getAsyncInitalUser()
+    private void getAsyncInitialUser()
     {
         if (db.userDao().getAll().isEmpty())
         {
@@ -110,8 +119,10 @@ public class AuthController {
         }
     }
 
-    public boolean isInitalized()
+    public boolean isInitialized()
     {
-        return !stateholder.getUsername().isEmpty();
+        return !stateholder.getUsername().isEmpty() &&
+                !stateholder.getPassword().isEmpty() &&
+                !stateholder.getToken().isEmpty();
     }
 }
