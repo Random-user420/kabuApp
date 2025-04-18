@@ -28,7 +28,7 @@ public class KabuApp extends Application
     private ScheduleController scheduleController;
     private ScheduleMapper scheduleMapper;
     //NOT FOR PRODUCTION!!!
-    private final boolean fakeService = false;
+    private final boolean fakeService = true;
 
     @Override
     public void onCreate()

@@ -56,7 +56,7 @@ public class Schedule extends AppCompatActivity
 
     private void settingsHandler()
     {
-        binding.settingsButton2.setOnClickListener(v ->
+        binding.barSettings.setOnClickListener(v ->
         {
             var i = new Intent(this, Settings.class);
             startActivity(i);
