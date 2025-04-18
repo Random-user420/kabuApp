@@ -19,7 +19,7 @@ public class ScheduleController {
     public void updateSchedule(LocalDate date, int days, String token)
     {
         //TODO async
-        scheduleMapper.mapSchedule(apiService.getSchedule(token, date, days), schedule);
+        scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
     }
 }
