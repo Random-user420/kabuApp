@@ -1,0 +1,44 @@
+package org.lilith.kabuapp.data.model.entity;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import org.jetbrains.annotations.NotNull;
+import org.lilith.kabuapp.data.LocalDateConverter;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity(tableName = "schedule")
+@TypeConverters({LocalDateConverter.class})
+public class Lesson {
+    @PrimaryKey()
+    @NotNull
+    private UUID id;
+
+    @ColumnInfo(name = "begin")
+    private Short begin;
+    @ColumnInfo(name = "end")
+    private Short end;
+    @ColumnInfo(name = "date")
+    private LocalDate date;
+    @ColumnInfo(name = "group")
+    private Short group;
+    @ColumnInfo(name = "maxGroup")
+    private Short maxGroup;
+    @ColumnInfo(name = "name")
+    private String name;
+    @ColumnInfo(name = "teacher")
+    private String teacher;
+    @ColumnInfo(name = "room")
+    private String room;
+}
