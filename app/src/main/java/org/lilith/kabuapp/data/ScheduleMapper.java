@@ -21,6 +21,10 @@ public class ScheduleMapper {
         {
             schedule.setLessons(new LinkedHashMap<>());
         }
+        if (schedule.getLessons() == null)
+        {
+            return;
+        }
 
         for (LessonResponse lessonResponse : lessonResponses)
         {

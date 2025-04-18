@@ -21,6 +21,7 @@ public class Schedule extends AppCompatActivity
 {
     private ActivityScheduleBinding binding;
     private AuthController authController;
+    private ScheduleController scheduleController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,6 +38,10 @@ public class Schedule extends AppCompatActivity
         });
 
         authController = ((KabuApp) getApplication()).getAuthController();
+        scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        scheduleController.updateSchedule(authController.getStateholder().getToken());
+
+        binding.debug.setText(scheduleController.getScheduleAsText());
 
         settingsHandler();
     }
