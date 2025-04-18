@@ -1,6 +1,8 @@
 package org.lilith.kabuapp.schedule;
 
 import org.lilith.kabuapp.api.DigikabuApiService;
+import org.lilith.kabuapp.api.UnauthorisedException;
+import org.lilith.kabuapp.api.models.AuthCallback;
 import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.Schedule;
@@ -23,23 +25,38 @@ public class ScheduleController {
     private Schedule schedule;
     private AppDatabase db;
 
-    public void updateSchedule(String token)
+    public void updateSchedule(String token, AuthCallback re)
     {
         // note "anzahl" is buggy in api
         LocalDate beginn = LocalDate.now().minusDays(7);
         LocalDate end = LocalDate.now().plusDays(8);
-        for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+        try
         {
-            updateSchedule(date, 1, token);
+            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1)) {
+                updateSchedule(date, 1, token);
+            }
+        }
+        catch (UnauthorisedException ignored)
+        {
+            token = re.renewToken();
+        }
+        try
+        {
+            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1)) {
+                updateSchedule(date, 1, token);
+            }
+        }
+        catch (UnauthorisedException ignored)
+        {
+            Logger.getLogger("ScheduleController").log(Level.WARNING, "Still Unauth");
         }
     }
 
-    public void updateSchedule(LocalDate date, int days, String token)
-    {
+    public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException {
         //TODO async
         scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
-        new Thread(() ->  {  db.lessonDao().insertAll(dbLessons);  }).start();
+        new Thread(() -> { db.lessonDao().insertAll(dbLessons); }).start();
         Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
     }
 

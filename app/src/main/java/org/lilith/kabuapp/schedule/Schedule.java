@@ -39,7 +39,7 @@ public class Schedule extends AppCompatActivity
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        scheduleController.updateSchedule(authController.getStateholder().getToken());
+        scheduleController.updateSchedule(authController.getStateholder().getToken(), authController);
 
         binding.debug.setText(scheduleController.getScheduleAsText());
 

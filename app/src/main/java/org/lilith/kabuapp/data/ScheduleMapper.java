@@ -26,6 +26,11 @@ public class ScheduleMapper {
             return;
         }
 
+        if (lessonResponses == null)
+        {
+            return;
+        }
+
         for (LessonResponse lessonResponse : lessonResponses)
         {
             Lesson lesson = new Lesson(

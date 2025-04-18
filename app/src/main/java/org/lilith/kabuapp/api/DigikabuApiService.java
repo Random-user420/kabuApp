@@ -1,6 +1,7 @@
 package org.lilith.kabuapp.api;
 
 
+import com.google.api.client.http.HttpResponseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.lilith.kabuapp.api.models.AuthRequest;
@@ -41,8 +42,7 @@ public class DigikabuApiService extends ApiService{
         }
     }
 
-    public List<LessonResponse> getSchedule(String token, LocalDate date, int days)
-    {
+    public List<LessonResponse> getSchedule(String token, LocalDate date, int days) throws UnauthorisedException {
         try
         {
             return executeRequest(
@@ -56,6 +56,13 @@ public class DigikabuApiService extends ApiService{
         }
         catch (Exception e)
         {
+            if (e instanceof HttpResponseException)
+            {
+                if (((HttpResponseException) e).getStatusCode() == 401)
+                {
+                    throw new UnauthorisedException();
+                }
+            }
             Logger.getLogger("API").log(Level.WARNING, e.toString());
             return null;
         }

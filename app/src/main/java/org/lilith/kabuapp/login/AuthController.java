@@ -4,6 +4,7 @@ package org.lilith.kabuapp.login;
 
 import org.lilith.kabuapp.api.BadRequestException;
 import org.lilith.kabuapp.api.DigikabuApiService;
+import org.lilith.kabuapp.api.models.AuthCallback;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.entity.User;
@@ -18,12 +19,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class AuthController {
+public class AuthController implements AuthCallback {
     @Getter //TODO REMOVE
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
     private final boolean fakeService;
+
+    public String renewToken()
+    {
+        auth(null, null);
+        return stateholder.getToken();
+    }
     public boolean setCredentials(String username, String password)
     {
         return setCredentials(username, password, (Callback) null, (Object[]) null);
