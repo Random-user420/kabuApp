@@ -2,6 +2,7 @@ package org.lilith.kabuapp.data.model.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -16,6 +17,9 @@ public interface LessonDao {
 
     @Insert
     void insert(Lesson Lesson);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<Lesson> lessons);
 
     @Update
     void update(Lesson Lesson);

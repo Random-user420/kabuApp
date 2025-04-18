@@ -45,7 +45,7 @@ public class KabuApp extends Application
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
         scheduleMapper = new ScheduleMapper();
-        scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule);
+        scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule, db);
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService);
 
         authController.getInitialUser();
