@@ -1,11 +1,9 @@
 package org.lilith.kabuapp.data.model;
 
 import android.content.Context;
-
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
 import org.lilith.kabuapp.data.model.dao.LessonDao;
 import org.lilith.kabuapp.data.model.dao.UserDao;
 import org.lilith.kabuapp.data.model.entity.Lesson;
@@ -16,12 +14,12 @@ public abstract class AppDatabase extends RoomDatabase
 {
     public abstract UserDao userDao();
     public abstract LessonDao lessonDao();
-
     private static volatile AppDatabase INSTANCE;
 
     public static AppDatabase getDatabase(final Context context)
     {
-        if (INSTANCE == null) {
+        if (INSTANCE == null)
+        {
             synchronized (AppDatabase.class)
             {
                 if (INSTANCE == null)

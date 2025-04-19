@@ -47,7 +47,8 @@ public class Schedule extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
 
         if (!authController.isInitialized())

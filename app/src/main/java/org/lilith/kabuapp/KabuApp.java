@@ -2,9 +2,9 @@ package org.lilith.kabuapp;
 
 import android.app.Application;
 import android.os.StrictMode;
-
 import com.google.android.material.color.DynamicColors;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.lilith.kabuapp.api.DigikabuApiService;
 import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
@@ -12,9 +12,6 @@ import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.Schedule;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.schedule.ScheduleController;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter

@@ -1,9 +1,5 @@
 package org.lilith.kabuapp.data;
 
-import org.lilith.kabuapp.api.models.LessonResponse;
-import org.lilith.kabuapp.data.model.Lesson;
-import org.lilith.kabuapp.data.model.Schedule;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,8 +7,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import org.lilith.kabuapp.api.models.LessonResponse;
+import org.lilith.kabuapp.data.model.Lesson;
+import org.lilith.kabuapp.data.model.Schedule;
 
-public class ScheduleMapper {
+public class ScheduleMapper
+{
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
 
     public void mapApiResToSchedule(List<LessonResponse> lessonResponses, Schedule schedule)
@@ -65,9 +65,11 @@ public class ScheduleMapper {
         {
             for (LocalDate date : schedule.getLessons().keySet())
             {
-                for (short begin : schedule.getLessons().get(date).keySet()) {
+                for (short begin : schedule.getLessons().get(date).keySet())
+                {
                     Lesson lesson = schedule.getLessons().get(date).get(begin);
-                    if (lesson.getDbId() == null) {
+                    if (lesson.getDbId() == null)
+                    {
                         lesson.setDbId(UUID.randomUUID());
                     }
                     org.lilith.kabuapp.data.model.entity.Lesson dbLesson = new org.lilith.kabuapp.data.model.entity.Lesson(

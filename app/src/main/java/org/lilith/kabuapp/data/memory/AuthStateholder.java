@@ -1,15 +1,14 @@
 package org.lilith.kabuapp.data.memory;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Setter
-public class AuthStateholder implements Serializable {
+public class AuthStateholder implements Serializable
+{
     @NotNull
     private String username = "";
     @NotNull

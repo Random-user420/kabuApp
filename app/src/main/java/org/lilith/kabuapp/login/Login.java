@@ -4,22 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
 import org.lilith.kabuapp.databinding.ActivityLoginBinding;
 import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.schedule.Schedule;
 import org.lilith.kabuapp.settings.Settings;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class Login extends AppCompatActivity implements Callback

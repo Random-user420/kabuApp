@@ -1,5 +1,6 @@
 package org.lilith.kabuapp.models;
 
-public interface Callback {
+public interface Callback
+{
     void callback(Object[] objects);
 }

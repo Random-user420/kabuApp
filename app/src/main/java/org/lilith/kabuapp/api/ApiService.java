@@ -8,8 +8,6 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
-
-import java.net.URL;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
@@ -29,7 +27,8 @@ public abstract class ApiService
             Type responseType,
             Map<String, Object> params,
             Map<String, String> headers,
-            Object body) throws Exception {
+            Object body) throws Exception
+    {
 
         GenericUrl genericUrl = new GenericUrl(baseUrl + url);
 
@@ -48,11 +47,11 @@ public abstract class ApiService
         httpHeaders.putAll(request.getHeaders());
         request.setHeaders(httpHeaders);
 
-        if (body != null) {
+        if (body != null)
+        {
             final String jsonBody = gson.toJson(body);
 
-            Logger.getLogger("API").log(Level.INFO,
-                    "AuthRequest Body: " + jsonBody);
+            Logger.getLogger("API").log(Level.INFO,"AuthRequest Body: " + jsonBody);
 
             request.setContent(new HttpContent()
             {

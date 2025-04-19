@@ -1,25 +1,22 @@
 package org.lilith.kabuapp.schedule;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import lombok.AllArgsConstructor;
 import org.lilith.kabuapp.api.DigikabuApiService;
 import org.lilith.kabuapp.api.UnauthorisedException;
 import org.lilith.kabuapp.api.models.AuthCallback;
 import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.Schedule;
-import org.lilith.kabuapp.data.model.dao.UserDao;
 import org.lilith.kabuapp.data.model.entity.Lesson;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import lombok.AllArgsConstructor;
-
 @AllArgsConstructor
-public class ScheduleController {
+public class ScheduleController
+{
     private DigikabuApiService apiService;
     private ScheduleMapper scheduleMapper;
     private Schedule schedule;
@@ -32,7 +29,8 @@ public class ScheduleController {
         LocalDate end = LocalDate.now().minusDays(5);
         try
         {
-            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1)) {
+            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+            {
                 updateSchedule(date, 1, token);
             }
         }
@@ -42,7 +40,8 @@ public class ScheduleController {
         }
         try
         {
-            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1)) {
+            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+            {
                 updateSchedule(date, 1, token);
             }
         }
@@ -52,11 +51,12 @@ public class ScheduleController {
         }
     }
 
-    public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException {
+    public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
+    {
         //TODO async
         scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
-        new Thread(() -> { db.lessonDao().insertAll(dbLessons); }).start();
+        new Thread(() -> db.lessonDao().insertAll(dbLessons)).start();
         Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
     }
 

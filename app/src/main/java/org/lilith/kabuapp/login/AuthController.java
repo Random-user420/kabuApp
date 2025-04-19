@@ -1,7 +1,11 @@
 package org.lilith.kabuapp.login;
 
-
-
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.lilith.kabuapp.api.BadRequestException;
 import org.lilith.kabuapp.api.DigikabuApiService;
 import org.lilith.kabuapp.api.models.AuthCallback;
@@ -9,14 +13,6 @@ import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.entity.User;
 import org.lilith.kabuapp.models.Callback;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class AuthController implements AuthCallback {
@@ -59,24 +55,23 @@ public class AuthController implements AuthCallback {
     public void auth(Callback callback, Object[] args)
     {
         if (!fakeService)
-        try
         {
-            String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
-            if (token == null)
-            {
-                Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig");
-                return;
+            try {
+                String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
+                if (token == null)
+                {
+                    Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig");
+                    return;
+                }
+                stateholder.setToken(token);
+                new Thread(this::save).start();
+                if (callback != null) {
+                    callback.callback(args);
+                }
             }
-            stateholder.setToken(token);
-            new Thread(this::save).start();
-            if (callback != null)
-            {
-                callback.callback(args);
+            catch (BadRequestException e) {
+                Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
             }
-        }
-        catch (BadRequestException e)
-        {
-            Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
         }
         else {
             stateholder.setToken("FAKE");

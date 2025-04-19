@@ -4,27 +4,24 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import org.jetbrains.annotations.NotNull;
-import org.lilith.kabuapp.data.LocalDateConverter;
-
 import java.time.LocalDate;
 import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.lilith.kabuapp.data.LocalDateConverter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Entity(tableName = "schedule")
 @TypeConverters({LocalDateConverter.class})
-public class Lesson {
+public class Lesson
+{
     @PrimaryKey()
     @NotNull
     private UUID id;
-
     @ColumnInfo(name = "begin")
     private Short begin;
     @ColumnInfo(name = "end")
