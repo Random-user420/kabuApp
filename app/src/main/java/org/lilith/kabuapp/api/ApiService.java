@@ -9,6 +9,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
 
+import java.net.URL;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
@@ -44,6 +45,7 @@ public abstract class ApiService
         {
             httpHeaders.putAll(headers);
         }
+        httpHeaders.putAll(request.getHeaders());
         request.setHeaders(httpHeaders);
 
         if (body != null) {

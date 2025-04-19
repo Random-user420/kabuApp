@@ -29,7 +29,7 @@ public class ScheduleController {
     {
         // note "anzahl" is buggy in api
         LocalDate beginn = LocalDate.now().minusDays(7);
-        LocalDate end = LocalDate.now().plusDays(8);
+        LocalDate end = LocalDate.now().minusDays(5);
         try
         {
             for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1)) {
