@@ -15,7 +15,8 @@ import org.lilith.kabuapp.data.model.entity.User;
 import org.lilith.kabuapp.models.Callback;
 
 @AllArgsConstructor
-public class AuthController implements AuthCallback {
+public class AuthController implements AuthCallback
+{
     @Getter //TODO REMOVE
     private AuthStateholder stateholder;
     private AppDatabase db;
@@ -56,7 +57,8 @@ public class AuthController implements AuthCallback {
     {
         if (!fakeService)
         {
-            try {
+            try
+            {
                 String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
                 if (token == null)
                 {
@@ -65,15 +67,18 @@ public class AuthController implements AuthCallback {
                 }
                 stateholder.setToken(token);
                 new Thread(this::save).start();
-                if (callback != null) {
+                if (callback != null)
+                {
                     callback.callback(args);
                 }
             }
-            catch (BadRequestException e) {
+            catch (BadRequestException e)
+            {
                 Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
             }
         }
-        else {
+        else
+        {
             stateholder.setToken("FAKE");
             new Thread(this::save).start();
             if (callback != null)

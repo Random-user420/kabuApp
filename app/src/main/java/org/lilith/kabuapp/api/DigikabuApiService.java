@@ -53,7 +53,9 @@ public class DigikabuApiService extends ApiService
             return executeRequest (
                     "stundenplan",
                     "GET",
-                    new TypeToken<List<LessonResponse>>(){}.getType(),
+                    new TypeToken<List<LessonResponse>>()
+                    { }
+                            .getType(),
                     Map.of("datum",
                             ZonedDateTime.of(
                                     date,

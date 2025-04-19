@@ -5,6 +5,10 @@ import java.time.LocalDate;
 
 public class LocalDateConverter
 {
+    private LocalDateConverter()
+    {
+
+    }
     @TypeConverter
     public static LocalDate fromTimestamp(Long value)
     {

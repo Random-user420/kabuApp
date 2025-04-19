@@ -14,9 +14,9 @@ public interface LessonDao
     @Query("SELECT * FROM schedule")
     List<Lesson> getAll();
     @Insert
-    void insert(Lesson Lesson);
+    void insert(Lesson lesson);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Lesson> lessons);
     @Update
-    void update(Lesson Lesson);
+    void update(Lesson lesson);
 }

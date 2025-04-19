@@ -48,7 +48,8 @@ public class Login extends AppCompatActivity implements Callback
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
 
         if (authController.isInitialized())
@@ -66,7 +67,8 @@ public class Login extends AppCompatActivity implements Callback
         final EditText password = binding.password;
         final Button loginButton = binding.login;
 
-        loginButton.setOnClickListener(v -> {
+        loginButton.setOnClickListener(v ->
+        {
             Object[] args = {};
             if (!authController.setCredentials(username.getText().toString(), password.getText().toString(), this, args))
             {

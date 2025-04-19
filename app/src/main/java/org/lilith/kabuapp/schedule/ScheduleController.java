@@ -85,8 +85,8 @@ public class ScheduleController
     {
         new Thread(() ->
         {
-           List<Lesson> dbLessons = db.lessonDao().getAll();
-           scheduleMapper.mapDbLessonToSchedule(dbLessons, schedule);
+            List<Lesson> dbLessons = db.lessonDao().getAll();
+            scheduleMapper.mapDbLessonToSchedule(dbLessons, schedule);
         });
     }
 }
