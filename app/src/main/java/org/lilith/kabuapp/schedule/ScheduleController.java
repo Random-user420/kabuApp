@@ -22,38 +22,41 @@ public class ScheduleController
     private Schedule schedule;
     private AppDatabase db;
 
-    public void updateSchedule(String token, AuthCallback re)
+    public void updateSchedule(String tokenIn, AuthCallback re)
     {
-        // note "anzahl" is buggy in api
-        LocalDate beginn = LocalDate.now().minusDays(7);
-        LocalDate end = LocalDate.now().minusDays(5);
-        try
+        new Thread(() ->
         {
-            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+            String token = tokenIn;
+            // note "anzahl" is buggy in api
+            LocalDate beginn = LocalDate.now().minusDays(7);
+            LocalDate end = LocalDate.now().minusDays(5);
+            try
             {
-                updateSchedule(date, 1, token);
+                for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+                {
+                    updateSchedule(date, 1, token);
+                }
             }
-        }
-        catch (UnauthorisedException ignored)
-        {
-            token = re.renewToken();
-        }
-        try
-        {
-            for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+            catch (UnauthorisedException ignored)
             {
-                updateSchedule(date, 1, token);
+                token = re.renewToken();
             }
-        }
-        catch (UnauthorisedException ignored)
-        {
-            Logger.getLogger("ScheduleController").log(Level.WARNING, "Still Unauth");
-        }
+            try
+            {
+                for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
+                {
+                    updateSchedule(date, 1, token);
+                }
+            }
+            catch (UnauthorisedException ignored)
+            {
+                Logger.getLogger("ScheduleController").log(Level.WARNING, "Still Unauth");
+            }
+        });
     }
 
     public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
     {
-        //TODO async
         scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
         new Thread(() -> db.lessonDao().insertAll(dbLessons)).start();
@@ -63,19 +66,22 @@ public class ScheduleController
     public String getScheduleAsText()
     {
         StringBuilder text = new StringBuilder();
-        for (Map<Short, org.lilith.kabuapp.data.model.Lesson> entry : schedule.getLessons().values())
+        if (schedule.getLessons() != null && !schedule.getLessons().isEmpty())
         {
-            for (org.lilith.kabuapp.data.model.Lesson lesson : entry.values())
+            for (Map<Short, org.lilith.kabuapp.data.model.Lesson> entry : schedule.getLessons().values())
             {
-                text.append(lesson.getName())
-                        .append(lesson.getRoom())
-                        .append(lesson.getTeacher())
-                        .append(lesson.getDate().getDayOfMonth())
-                        .append(lesson.getDate().getMonthValue())
-                        .append(lesson.getBegin())
-                        .append(lesson.getEnd())
-                        .append(lesson.getGroup())
-                        .append(lesson.getMaxGroup());
+                for (org.lilith.kabuapp.data.model.Lesson lesson : entry.values()) 
+                {
+                    text.append(lesson.getName())
+                            .append(lesson.getRoom())
+                            .append(lesson.getTeacher())
+                            .append(lesson.getDate().getDayOfMonth())
+                            .append(lesson.getDate().getMonthValue())
+                            .append(lesson.getBegin())
+                            .append(lesson.getEnd())
+                            .append(lesson.getGroup())
+                            .append(lesson.getMaxGroup());
+                }
             }
         }
         return text.toString();
