@@ -89,7 +89,7 @@ public abstract class ApiService
             {
                 throw new BadRequestException();
             }
-            throw new Exception("API-Fehler: " + response.getStatusCode() + " - " + response.getStatusMessage());
+            throw new Exception("API-Error: " + response.getStatusCode() + " - " + response.getStatusMessage());
         }
 
         if (responseType instanceof Class && responseType.equals(String.class))
