@@ -1,27 +1,32 @@
 package org.lilith.kabuapp.api;
 
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.net.URIBuilder;
+
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class ApiService
 {
     protected String baseUrl;
-    private final HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
+    private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
     private final Gson gson = new Gson();
-    protected  <T> T executeRequest(
+
+    protected <T> T executeRequest(
             String url,
             String httpMethod,
             Type responseType,
@@ -30,75 +35,106 @@ public abstract class ApiService
             Object body) throws Exception
     {
 
-        GenericUrl genericUrl = new GenericUrl(baseUrl + url);
-
-        if (params != null && !params.isEmpty())
+        URI uri;
+        try
         {
-            genericUrl.putAll(params);
+            URIBuilder uriBuilder = new URIBuilder(baseUrl + url);
+            if (params != null && !params.isEmpty())
+            {
+                for (Map.Entry<String, Object> entry : params.entrySet())
+                {
+                    uriBuilder.addParameter(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+            uri = uriBuilder.build();
+        }
+        catch (Exception e)
+        {
+            throw new IOException("Failed to build URI", e);
         }
 
-        HttpRequest request = requestFactory.buildRequest(httpMethod, genericUrl, null);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
+        HttpUriRequestBase request;
+
+        switch (httpMethod.toUpperCase())
+        {
+            case "GET":
+                request = new HttpGet(uri);
+                break;
+            case "POST":
+                HttpPost httpPost = new HttpPost(uri);
+                if (body != null)
+                {
+                    String jsonBody = gson.toJson(body);
+                    httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+                }
+                request = httpPost;
+                break;
+            case "PUT":
+                HttpPut httpPut = new HttpPut(uri);
+                if (body != null)
+                {
+                    String jsonBody = gson.toJson(body);
+                    httpPut.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+                }
+                request = httpPut;
+                break;
+            default:
+                throw new UnsupportedOperationException("HTTP method " + httpMethod + " is not supported.");
+        }
+
+        // Header hinzufügen
         if (headers != null && !headers.isEmpty())
         {
-            httpHeaders.putAll(headers);
-        }
-        httpHeaders.putAll(request.getHeaders());
-        request.setHeaders(httpHeaders);
-
-        if (body != null)
-        {
-            final String jsonBody = gson.toJson(body);
-
-            Logger.getLogger("API").log(Level.INFO,"AuthRequest Body: " + jsonBody);
-
-            request.setContent(new HttpContent()
+            for (Map.Entry<String, String> header : headers.entrySet())
             {
-                @Override
-                public long getLength()
-                {
-                    return jsonBody.getBytes(StandardCharsets.UTF_8).length;
-                }
-
-                @Override
-                public String getType()
-                {
-                    return "application/json";
-                }
-
-                @Override
-                public boolean retrySupported()
-                {
-                    return false;
-                }
-
-                @Override
-                public void writeTo(OutputStream out) throws IOException
-                {
-                    out.write(jsonBody.getBytes(StandardCharsets.UTF_8));
-                }
-            });
-        }
-
-        HttpResponse response = request.executeAsync().get();
-
-        if (!response.isSuccessStatusCode())
-        {
-            if (response.getStatusCode() == 400)
-            {
-                throw new BadRequestException();
+                request.setHeader(header.getKey(), header.getValue());
             }
-            throw new Exception("API-Error: " + response.getStatusCode() + " - " + response.getStatusMessage());
         }
 
-        if (responseType instanceof Class && responseType.equals(String.class))
+        try (CloseableHttpResponse response = httpClient.execute(request))
         {
-            return (T) response.parseAsString();
+            int statusCode = response.getCode();
+            HttpEntity responseEntity = response.getEntity();
+            String responseString = responseEntity != null ? EntityUtils.toString(responseEntity, StandardCharsets.UTF_8) : null;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                if (statusCode == 400)
+                {
+                    throw new BadRequestException();
+                }
+                else if (statusCode == 401)
+                {
+                    throw new UnauthorisedException();
+                }
+                throw new Exception("API-Error: " + statusCode + " - " + response.getReasonPhrase() + "\nResponse Body: " + responseString);
+            }
+
+            if (responseType instanceof Class && responseType.equals(String.class))
+            {
+                return (T) responseString;
+            }
+            else if (responseString != null)
+            {
+                return gson.fromJson(responseString, responseType);
+            }
+            else
+            {
+                return null;
+            }
         }
-        else
+        finally
         {
-            return gson.fromJson(response.parseAsString(), responseType);
+            request.abort();
+        }
+    }
+
+    public void closeHttpClient() throws IOException
+    {
+        if (httpClient != null)
+        {
+            httpClient.close();
         }
     }
 }

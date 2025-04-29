@@ -1,6 +1,5 @@
 package org.lilith.kabuapp.api;
 
-import com.google.api.client.http.HttpResponseException;
 import com.google.gson.reflect.TypeToken;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.lilith.kabuapp.api.models.AuthRequest;
 import org.lilith.kabuapp.api.models.LessonResponse;
 
@@ -69,12 +69,9 @@ public class DigikabuApiService extends ApiService
         }
         catch (Exception e)
         {
-            if (e instanceof HttpResponseException)
+            if (e instanceof UnauthorisedException)
             {
-                if (((HttpResponseException) e).getStatusCode() == 401)
-                {
-                    throw new UnauthorisedException();
-                }
+                throw new UnauthorisedException();
             }
             Logger.getLogger("API").log(Level.WARNING, e.toString());
             return null;

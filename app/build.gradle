@@ -27,15 +27,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding true
     }
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
+        resources {
+            excludes += ['META-INF/DEPENDENCIES']
+        }
     }
+    buildToolsVersion '36.0.0'
 }
 
 dependencies {
@@ -44,8 +47,9 @@ dependencies {
     implementation libs.navigation.ui
     implementation libs.preference
     implementation libs.room.runtime.android
-    implementation libs.google.http.client.android
     implementation libs.gson
+    implementation libs.apache.httpclient
+    implementation libs.apache.httpcore
     annotationProcessor libs.lombok
     annotationProcessor libs.room.compiler
 
