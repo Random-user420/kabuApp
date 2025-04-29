@@ -16,7 +16,9 @@ import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -83,7 +85,6 @@ public abstract class ApiService
                 throw new UnsupportedOperationException("HTTP method " + httpMethod + " is not supported.");
         }
 
-        // Header hinzufügen
         if (headers != null && !headers.isEmpty())
         {
             for (Map.Entry<String, String> header : headers.entrySet())
@@ -91,6 +92,7 @@ public abstract class ApiService
                 request.setHeader(header.getKey(), header.getValue());
             }
         }
+        request.setHeader("Host", getDefaultHostHeader(baseUrl + url));
 
         try (CloseableHttpResponse response = httpClient.execute(request))
         {
@@ -135,6 +137,21 @@ public abstract class ApiService
         if (httpClient != null)
         {
             httpClient.close();
+        }
+    }
+
+    private static String getDefaultHostHeader(String urlString) throws MalformedURLException
+    {
+        URL url = new URL(urlString);
+        String host = url.getHost();
+        int port = url.getPort();
+        if (port != -1)
+        {
+            return host + ":" + port;
+        }
+        else
+        {
+            return host;
         }
     }
 }
