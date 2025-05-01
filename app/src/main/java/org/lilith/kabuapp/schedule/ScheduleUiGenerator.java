@@ -81,7 +81,7 @@ public class ScheduleUiGenerator
 
 
         timeTextView.setText(beginTime + " - " + endTime);
-        nameTextView.setText(name);
+        nameTextView.setText(name + "  ");
         name2TextView.setText(name2);
         roomTextView.setText("Raum: " + room);
         room2TextView.setText("Raum: " + room2);
