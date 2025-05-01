@@ -38,7 +38,7 @@ public class ScheduleMapper
                     (short) lessonResponse.getEndStd(),
                     LocalDate.parse(lessonResponse.getDatum(), formatter),
                     Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
-                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(1))),
+                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
                     lessonResponse.getUFachBez(),
                     lessonResponse.getLehrer(),
                     lessonResponse.getRaumLongtext(),
