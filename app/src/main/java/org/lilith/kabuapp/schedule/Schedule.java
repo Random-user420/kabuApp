@@ -14,10 +14,11 @@ import org.lilith.kabuapp.R;
 import org.lilith.kabuapp.databinding.ActivityScheduleBinding;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.login.Login;
+import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.settings.Settings;
 
 
-public class Schedule extends AppCompatActivity
+public class Schedule extends AppCompatActivity implements Callback
 {
     private ActivityScheduleBinding binding;
     private AuthController authController;
@@ -39,11 +40,16 @@ public class Schedule extends AppCompatActivity
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        scheduleController.updateSchedule(authController.getStateholder().getToken(), authController);
 
-        binding.debug.setText(scheduleController.getScheduleAsText());
+        scheduleController.updateSchedule(
+                authController.getStateholder().getToken(), authController, this, new Object[1]);
 
         settingsHandler();
+    }
+
+    public void callback(Object[] objects)
+    {
+        binding.debug.setText((String) objects[0]);
     }
 
     @Override
