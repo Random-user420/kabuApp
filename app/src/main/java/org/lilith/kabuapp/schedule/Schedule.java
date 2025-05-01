@@ -2,6 +2,7 @@ package org.lilith.kabuapp.schedule;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +12,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
+import org.lilith.kabuapp.data.model.Lesson;
 import org.lilith.kabuapp.databinding.ActivityScheduleBinding;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.login.Login;
 import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.settings.Settings;
+
+import java.time.LocalDate;
 
 
 public class Schedule extends AppCompatActivity implements Callback
@@ -23,6 +27,7 @@ public class Schedule extends AppCompatActivity implements Callback
     private ActivityScheduleBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
+    private ScheduleUiGenerator scheduleUiGenerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +45,7 @@ public class Schedule extends AppCompatActivity implements Callback
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        scheduleUiGenerator = new ScheduleUiGenerator();
 
         scheduleController.updateSchedule(
                 authController.getStateholder().getToken(), authController, this, new Object[1]);
@@ -49,7 +55,40 @@ public class Schedule extends AppCompatActivity implements Callback
 
     public void callback(Object[] objects)
     {
-        binding.debug.setText((String) objects[0]);
+        ViewGroup linearSchedule = binding.linearSchedule;
+        Lesson cashed = null;
+        for (Lesson lesson : scheduleController.getSchedule().getLessons().get(LocalDate.now().minusDays(2)).values())
+        {
+            if (lesson.getMaxGroup() == 1)
+            {
+                scheduleUiGenerator.addSingleLessonElement(
+                        this,
+                        linearSchedule,
+                        scheduleUiGenerator.mapBeginnToString(lesson.getBegin()),
+                        scheduleUiGenerator.mapBeginnToString((short) (lesson.getEnd() + 1)),
+                        lesson.getRoom(),
+                        lesson.getTeacher(),
+                        lesson.getName());
+            }
+            else if (lesson.getMaxGroup() != lesson.getGroup())
+            {
+                cashed = lesson;
+            }
+            else
+            {
+                scheduleUiGenerator.addDoubleLessonElement(
+                        this,
+                        linearSchedule,
+                        scheduleUiGenerator.mapBeginnToString(lesson.getBegin()),
+                        scheduleUiGenerator.mapBeginnToString((short) (lesson.getEnd() + 1)),
+                        cashed.getRoom(),
+                        lesson.getRoom(),
+                        cashed.getTeacher(),
+                        lesson.getTeacher(),
+                        cashed.getName(),
+                        lesson.getName());
+            }
+        }
     }
 
     @Override
