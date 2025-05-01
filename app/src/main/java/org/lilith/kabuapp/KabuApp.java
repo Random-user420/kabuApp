@@ -13,6 +13,8 @@ import org.lilith.kabuapp.data.model.Schedule;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.schedule.ScheduleController;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class KabuApp extends Application
@@ -39,6 +41,8 @@ public class KabuApp extends Application
         DynamicColors.applyToActivitiesIfAvailable(this);
 
         schedule = new Schedule();
+        schedule.setSelectedDate(LocalDate.now().minusDays(1));
+
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
         scheduleMapper = new ScheduleMapper();
