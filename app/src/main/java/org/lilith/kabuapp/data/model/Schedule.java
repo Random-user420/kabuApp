@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Schedule
 {
-    private Map<LocalDate, Map<Short, Lesson>> lessons;
+    private Map<LocalDate, Map<Short, Map<Short, Lesson>>> lessons;
 
-    public synchronized Map<LocalDate, Map<Short, Lesson>> getLessons()
+    public synchronized Map<LocalDate, Map<Short, Map<Short, Lesson>>> getLessons()
     {
         return lessons;
     }
 
-    public synchronized void setLessons(Map<LocalDate, Map<Short, Lesson>> lessons)
+    public synchronized void setLessons(Map<LocalDate, Map<Short, Map<Short, Lesson>>> lessons)
     {
         this.lessons = lessons;
     }

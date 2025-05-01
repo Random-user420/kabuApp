@@ -20,6 +20,7 @@ import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.settings.Settings;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 
 public class Schedule extends AppCompatActivity implements Callback
@@ -56,10 +57,10 @@ public class Schedule extends AppCompatActivity implements Callback
     public void callback(Object[] objects)
     {
         ViewGroup linearSchedule = binding.linearSchedule;
-        Lesson cashed = null;
-        for (Lesson lesson : scheduleController.getSchedule().getLessons().get(LocalDate.now().minusDays(2)).values())
+        for (Map<Short, Lesson> lessons : scheduleController.getSchedule().getLessons().get(LocalDate.now().minusDays(1)).values())
         {
-            if (lesson.getMaxGroup() == 1)
+            Lesson lesson = lessons.get((short) 1);
+            if (lessons.get((short) 1).getMaxGroup() == 1)
             {
                 scheduleUiGenerator.addSingleLessonElement(
                         this,
@@ -70,23 +71,20 @@ public class Schedule extends AppCompatActivity implements Callback
                         lesson.getTeacher(),
                         lesson.getName());
             }
-            else if (lesson.getMaxGroup() != lesson.getGroup())
-            {
-                cashed = lesson;
-            }
             else
             {
+                Lesson lesson2 = lessons.get((short) 2);
                 scheduleUiGenerator.addDoubleLessonElement(
                         this,
                         linearSchedule,
                         scheduleUiGenerator.mapBeginnToString(lesson.getBegin()),
                         scheduleUiGenerator.mapBeginnToString((short) (lesson.getEnd() + 1)),
-                        cashed.getRoom(),
                         lesson.getRoom(),
-                        cashed.getTeacher(),
+                        lesson2.getRoom(),
                         lesson.getTeacher(),
-                        cashed.getName(),
-                        lesson.getName());
+                        lesson2.getTeacher(),
+                        lesson.getName(),
+                        lesson2.getName());
             }
         }
     }

@@ -48,13 +48,19 @@ public class ScheduleMapper
             {
                 schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
             }
-
-            else if (schedule.getLessons().get(lesson.getDate()) != null && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()) != null)
+            if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
             {
-                lesson.setDbId(schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).getDbId());
+                schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
             }
 
-            schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), lesson);
+            else if (schedule.getLessons().get(lesson.getDate()) != null
+                    && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()) != null
+                    && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()) != null)
+            {
+                lesson.setDbId(schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
+            }
+
+            schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
         }
     }
 
@@ -67,23 +73,26 @@ public class ScheduleMapper
             {
                 for (short begin : schedule.getLessons().get(date).keySet())
                 {
-                    Lesson lesson = schedule.getLessons().get(date).get(begin);
-                    if (lesson.getDbId() == null)
+                    for (short group : schedule.getLessons().get(date).get(begin).keySet())
                     {
-                        lesson.setDbId(UUID.randomUUID());
+                        Lesson lesson = schedule.getLessons().get(date).get(begin).get(group);
+                        if (lesson.getDbId() == null)
+                        {
+                            lesson.setDbId(UUID.randomUUID());
+                        }
+                        org.lilith.kabuapp.data.model.entity.Lesson dbLesson = new org.lilith.kabuapp.data.model.entity.Lesson(
+                                lesson.getDbId(),
+                                lesson.getBegin(),
+                                lesson.getEnd(),
+                                lesson.getDate(),
+                                lesson.getGroup(),
+                                lesson.getMaxGroup(),
+                                lesson.getName(),
+                                lesson.getTeacher(),
+                                lesson.getRoom()
+                        );
+                        dbLessons.add(dbLesson);
                     }
-                    org.lilith.kabuapp.data.model.entity.Lesson dbLesson = new org.lilith.kabuapp.data.model.entity.Lesson(
-                            lesson.getDbId(),
-                            lesson.getBegin(),
-                            lesson.getEnd(),
-                            lesson.getDate(),
-                            lesson.getGroup(),
-                            lesson.getMaxGroup(),
-                            lesson.getName(),
-                            lesson.getTeacher(),
-                            lesson.getRoom()
-                    );
-                    dbLessons.add(dbLesson);
                 }
             }
         }
@@ -113,7 +122,11 @@ public class ScheduleMapper
             {
                 schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
             }
-            schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), lesson);
+            if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
+            {
+                schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
+            }
+            schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
         }
     }
 }
