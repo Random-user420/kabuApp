@@ -24,13 +24,14 @@ public class DigikabuApiService extends ApiService
     {
         try
         {
-            return executeRequest(
+            String response = executeRequest(
                     "authenticate",
                     "POST",
                     String.class,
                     null,
                     null,
                     new AuthRequest(username, password));
+            return response.substring(1, response.length() - 1);
         }
         catch (Exception e)
         {
