@@ -13,6 +13,7 @@ import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.Schedule;
 import org.lilith.kabuapp.data.model.entity.Lesson;
+import org.lilith.kabuapp.models.Callback;
 
 @AllArgsConstructor
 public class ScheduleController
@@ -21,6 +22,13 @@ public class ScheduleController
     private ScheduleMapper scheduleMapper;
     private Schedule schedule;
     private AppDatabase db;
+
+    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects)
+    {
+        updateSchedule(token, re);
+        objects[0] = getScheduleAsText();
+        ce.callback(objects);
+    }
 
     public void updateSchedule(String tokenIn, AuthCallback re)
     {
