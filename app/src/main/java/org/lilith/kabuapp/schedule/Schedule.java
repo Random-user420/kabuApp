@@ -69,7 +69,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
 
-        dateItems = generateDateItems(LocalDate.now().minusDays(7), 14);
+        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 12);
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
@@ -86,6 +86,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             }
         });
 
+        updateSchedule();
     }
 
     public void callback(Object[] objects)

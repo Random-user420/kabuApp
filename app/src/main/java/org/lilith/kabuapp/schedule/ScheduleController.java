@@ -34,11 +34,11 @@ public class ScheduleController
     public void updateSchedule(String tokenIn, AuthCallback re)
     {
         String token = tokenIn;
-        LocalDate beginn = LocalDate.now().minusDays(7);
+        LocalDate beginn = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
         {
-            updateSchedule(beginn, 7, token);
-            updateSchedule(beginn.plusDays(7), 7, token);
+            updateSchedule(beginn, 5, token);
+            updateSchedule(beginn.plusDays(7), 5, token);
         }
         catch (UnauthorisedException ignored)
         {
@@ -46,8 +46,8 @@ public class ScheduleController
         }
         try
         {
-            updateSchedule(beginn, 7, token);
-            updateSchedule(beginn.plusDays(7), 7, token);
+            updateSchedule(beginn, 5, token);
+            updateSchedule(beginn.plusDays(7), 5, token);
         }
         catch (UnauthorisedException ignored)
         {

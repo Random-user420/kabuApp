@@ -41,7 +41,7 @@ public class KabuApp extends Application
         DynamicColors.applyToActivitiesIfAvailable(this);
 
         schedule = new Schedule();
-        schedule.setSelectedDate(LocalDate.now().minusDays(1));
+        schedule.setSelectedDate(LocalDate.now());
 
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
