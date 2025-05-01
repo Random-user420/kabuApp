@@ -62,7 +62,7 @@ public class AuthController implements AuthCallback
                 String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
                 if (token == null)
                 {
-                    Logger.getLogger("AuthController").log(Level.WARNING, "Something else ig");
+                    Logger.getLogger("AuthController").log(Level.WARNING, "Token return is null");
                     return;
                 }
                 stateholder.setToken(token);
