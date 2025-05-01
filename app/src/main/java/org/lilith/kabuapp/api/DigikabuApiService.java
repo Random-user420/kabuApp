@@ -2,9 +2,6 @@ package org.lilith.kabuapp.api;
 
 import com.google.gson.reflect.TypeToken;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +13,7 @@ import org.lilith.kabuapp.api.models.LessonResponse;
 
 public class DigikabuApiService extends ApiService
 {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public DigikabuApiService()
     {
         super();
@@ -57,13 +54,9 @@ public class DigikabuApiService extends ApiService
                     { }
                             .getType(),
                     Map.of("datum",
-                            ZonedDateTime.of(
-                                    date,
-                                    LocalTime.of(0, 0, 1, 0),
-                                    ZoneOffset.systemDefault())
-                                    .format(formatter),
+                            date.format(formatter) + "T00:00:01.123Z",
                             "anzahl", days),
-                    Map.of("Authorization", token),
+                    Map.of("Authorization", "Bearer " + token),
                     null
             );
         }
