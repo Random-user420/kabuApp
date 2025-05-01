@@ -32,35 +32,23 @@ public class ScheduleController
 
     public void updateSchedule(String tokenIn, AuthCallback re)
     {
-        new Thread(() ->
+        String token = tokenIn;
+        LocalDate beginn = LocalDate.now().minusDays(7);
+        try
         {
-            String token = tokenIn;
-            // note "anzahl" is buggy in api
-            LocalDate beginn = LocalDate.now().minusDays(7);
-            LocalDate end = LocalDate.now().minusDays(5);
-            try
-            {
-                for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
-                {
-                    updateSchedule(date, 1, token);
-                }
-            }
-            catch (UnauthorisedException ignored)
-            {
-                token = re.renewToken();
-            }
-            try
-            {
-                for (LocalDate date = beginn; date.isBefore(end); date = date.plusDays(1))
-                {
-                    updateSchedule(date, 1, token);
-                }
-            }
-            catch (UnauthorisedException ignored)
-            {
-                Logger.getLogger("ScheduleController").log(Level.WARNING, "Still Unauth");
-            }
-        });
+            updateSchedule(beginn, 14, token);
+        }
+        catch (UnauthorisedException ignored)
+        {
+            token = re.renewToken();
+        }
+        try
+        {
+            updateSchedule(beginn, 14, token);
+        }
+        catch (UnauthorisedException ignored)
+        {
+        }
     }
 
     public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
