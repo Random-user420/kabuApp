@@ -58,7 +58,7 @@ public class ScheduleController
         new Thread(() -> db.lessonDao().insertAll(dbLessons)).start();
         Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
     }
-
+//TODO remove after Schedule UI implimentation
     public String getScheduleAsText()
     {
         StringBuilder text = new StringBuilder();
@@ -68,15 +68,16 @@ public class ScheduleController
             {
                 for (org.lilith.kabuapp.data.model.Lesson lesson : entry.values()) 
                 {
-                    text.append(lesson.getName())
-                            .append(lesson.getRoom())
-                            .append(lesson.getTeacher())
-                            .append(lesson.getDate().getDayOfMonth())
-                            .append(lesson.getDate().getMonthValue())
-                            .append(lesson.getBegin())
-                            .append(lesson.getEnd())
-                            .append(lesson.getGroup())
-                            .append(lesson.getMaxGroup());
+                    text
+                            .append("\nName: ").append(lesson.getName())
+                            .append("\nRoom: ").append(lesson.getRoom())
+                            .append("\nTeacher: ").append(lesson.getTeacher())
+                            .append("\nDay: ").append(lesson.getDate().getDayOfMonth())
+                            .append("\nMonth: ").append(lesson.getDate().getMonthValue())
+                            .append("\nBegin: ").append(lesson.getBegin())
+                            .append("\nEnd: ").append(lesson.getEnd())
+                            .append("\nGroup: ").append(lesson.getGroup())
+                            .append("\nMaxGroup: ").append(lesson.getMaxGroup());
                 }
             }
         }
