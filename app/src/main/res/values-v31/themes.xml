@@ -1,4 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.KabuApp" parent="Theme.Material3.DynamicColors.DayNight" />
+    <style name="Base.Theme.KabuApp" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar" />
     <style name="Theme.KabuApp" parent="Base.Theme.KabuApp" />
 </resources>
