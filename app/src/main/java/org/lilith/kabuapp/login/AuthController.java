@@ -74,7 +74,11 @@ public class AuthController implements AuthCallback
             }
             catch (BadRequestException e)
             {
-                Logger.getLogger("AuthController").log(Level.WARNING, e.toString());
+                if (args != null && args.length > 0)
+                {
+                    args[0] = false;
+                    callback.callback((args));
+                }
             }
         }
         else

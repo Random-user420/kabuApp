@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity implements Callback
 
         loginButton.setOnClickListener(v ->
         {
-            Object[] args = {};
+            Object[] args = { null };
             if (!authController.setCredentials(username.getText().toString(), password.getText().toString(), this, args))
             {
                 Logger.getLogger("Login").log(Level.INFO, "No username or password");
@@ -79,8 +79,22 @@ public class Login extends AppCompatActivity implements Callback
 
     public void callback(Object[] args)
     {
-        Intent i = new Intent(this, Schedule.class);
-        startActivity(i);
+        if (args == null || args[0] == null)
+        {
+            Intent i = new Intent(this, Schedule.class);
+            startActivity(i);
+        }
+        else
+        {
+            if (binding.username.isFocused())
+            {
+                binding.username.setError(getString(R.string.login_wrong));
+            }
+            else
+            {
+                binding.password.setError(getString(R.string.login_wrong));
+            }
+        }
     }
 
     private void settingsHandler()
