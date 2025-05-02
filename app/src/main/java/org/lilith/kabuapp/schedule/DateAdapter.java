@@ -1,5 +1,8 @@
 package org.lilith.kabuapp.schedule;
 
+import static org.lilith.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +48,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         return new DateViewHolder(view);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull DateViewHolder holder, int position)
     {
@@ -56,12 +60,11 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
         if (dateItem.isSelected())
         {
-            int accentColor = android.R.attr.colorAccent;
             int selectedBackgroundColor = android.R.attr.colorPrimary;
             try
             {
                 android.util.TypedValue typedValue = new android.util.TypedValue();
-                context.getTheme().resolveAttribute(android.R.attr.colorAccent, typedValue, true);
+                context.getTheme().resolveAttribute(android.R.attr.colorBackgroundFloating, typedValue, true);
                 selectedBackgroundColor = typedValue.data;
             }
             catch (Exception e)
@@ -69,9 +72,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             }
 
             holder.itemView.setBackgroundColor(selectedBackgroundColor);
-            holder.dayTextView.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-            holder.monthTextView.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-            holder.weekdayTextView.setTextColor(ContextCompat.getColor(context, android.R.color.white));
+            holder.itemView.setElevation(10f);
+            holder.dayTextView.setTextColor(resolveColorAttribute(context, android.R.attr.textColorPrimary));
+            holder.monthTextView.setTextColor(resolveColorAttribute(context, android.R.attr.textColorPrimary));
+            holder.weekdayTextView.setTextColor(resolveColorAttribute(context, android.R.attr.textColorPrimary));
         }
         else
         {
