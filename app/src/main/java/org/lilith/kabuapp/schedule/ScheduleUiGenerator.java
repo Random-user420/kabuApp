@@ -49,8 +49,8 @@ public class ScheduleUiGenerator
 
         timeTextView.setText(beginTime + " - " + endTime);
         nameTextView.setText(name);
-        roomTextView.setText("Raum: " + room);
-        teacherTextView.setText("Lehrer: " + teacher);
+        roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
+        teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
 
         parentLayout.addView(lessonView);
     }
@@ -83,10 +83,10 @@ public class ScheduleUiGenerator
         timeTextView.setText(beginTime + " - " + endTime);
         nameTextView.setText(name + "  ");
         name2TextView.setText(name2);
-        roomTextView.setText("Raum: " + room);
-        room2TextView.setText("Raum: " + room2);
-        teacherTextView.setText("Lehrer: " + teacher);
-        teacher2TextView.setText("Lehrer: " + teacher2);
+        roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
+        room2TextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room2);
+        teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
+        teacher2TextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher2);
 
         parentLayout.addView(lessonView);
     }

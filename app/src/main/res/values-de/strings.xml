@@ -8,4 +8,6 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="settings">Einstellungen</string>
     <string name="schedule_title">Stundenplan</string>
+    <string name="lesson_room_prefix">Raum</string>
+    <string name="lesson_teacher_prefix">Lehrkraft</string>
 </resources>
