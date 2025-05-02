@@ -19,6 +19,7 @@ roomCompiler = "2.7.1"
 gson = "2.13.1"
 apache-httpclient = "5.4.4"
 apache-httpcore = "5.3.4"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -40,6 +41,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 apache-httpclient = { group = "org.apache.httpcomponents.client5", name = "httpclient5", version.ref = "apache-httpclient" }
 apache-httpcore = { group = "org.apache.httpcomponents.core5", name = "httpcore5", version.ref = "apache-httpcore" }
+swiperrefeshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

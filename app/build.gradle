@@ -50,6 +50,7 @@ dependencies {
     implementation libs.gson
     implementation libs.apache.httpclient
     implementation libs.apache.httpcore
+    implementation libs.swiperrefeshlayout
     annotationProcessor libs.lombok
     annotationProcessor libs.room.compiler
 

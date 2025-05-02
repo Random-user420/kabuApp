@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
@@ -29,7 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class Schedule extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener
+public class Schedule extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     private ActivityScheduleBinding binding;
     private AuthController authController;
@@ -39,6 +40,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     private DateAdapter dateAdapter;
     private List<DateItem> dateItems;
     private LinearLayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +67,9 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
 
         setContentView(R.layout.activity_schedule);
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         dateRecyclerView = findViewById(R.id.recycler_view_date_selector);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
@@ -87,6 +92,14 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         });
 
         updateSchedule();
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        scheduleController.updateSchedule(
+                authController.getStateholder().getToken(), authController, this, new Object[1]);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void callback(Object[] objects)
