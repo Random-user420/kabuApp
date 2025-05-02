@@ -121,7 +121,7 @@
                     android:contentDescription="@string/settings"
                     android:elevation="0dp"
                     android:foregroundGravity="fill"
-                    android:foregroundTint="@color/material_dynamic_primary0"
+                    android:foregroundTint="?android:attr/textColorPrimary"
                     android:foregroundTintMode="add"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
