@@ -1,6 +1,7 @@
 package org.lilith.kabuapp.schedule;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +15,7 @@ import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.Schedule;
 import org.lilith.kabuapp.data.model.entity.Lesson;
+import org.lilith.kabuapp.data.model.entity.Lifetime;
 import org.lilith.kabuapp.models.Callback;
 
 @AllArgsConstructor
@@ -24,6 +26,29 @@ public class ScheduleController
     @Getter
     private Schedule schedule;
     private AppDatabase db;
+
+    public void updateScheduleIfOld(String token, AuthCallback re, Callback ce, Object[] objects)
+    {
+        new Thread(() ->
+        {
+            List<Lifetime> lifetimes = db.lifetimeDao().getAll();
+            if (lifetimes.isEmpty())
+            {
+                db.lifetimeDao().insert(new Lifetime(0, LocalDateTime.now()));
+                updateSchedule(token, re, ce, objects);
+            }
+            else if (lifetimes.get(0).getScheduleLastUpdate().isBefore(LocalDateTime.now().minusHours(2)))
+            {
+                updateSchedule(token, re, ce, objects);
+                new Thread(() ->
+                {
+                    Lifetime lifetime = lifetimes.get(0);
+                    lifetime.setScheduleLastUpdate(LocalDateTime.now());
+                    db.lifetimeDao().update(lifetime);
+                }).start();
+            }
+        }).start();
+    }
 
     public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects)
     {
@@ -60,5 +85,13 @@ public class ScheduleController
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
         new Thread(() -> db.lessonDao().insertAll(dbLessons)).start();
         Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
+    }
+
+    public void getDbSchedule()
+    {
+        new Thread(() ->
+        {
+            scheduleMapper.mapDbLessonToSchedule(db.lessonDao().getAll(), schedule);
+        }).start();
     }
 }

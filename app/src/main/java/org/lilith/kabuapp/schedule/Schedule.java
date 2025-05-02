@@ -58,7 +58,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
         scheduleUiGenerator = new ScheduleUiGenerator();
 
-        scheduleController.updateSchedule(
+        scheduleController.updateScheduleIfOld(
                 authController.getStateholder().getToken(), authController, this, new Object[1]);
 
         settingsHandler();
@@ -91,7 +91,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
 
     public void callback(Object[] objects)
     {
-        updateSchedule();
+        runOnUiThread(this::updateSchedule);
     }
 
     public void updateSchedule()

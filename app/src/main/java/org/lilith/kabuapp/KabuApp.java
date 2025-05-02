@@ -50,5 +50,6 @@ public class KabuApp extends Application
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService);
 
         authController.getInitialUser();
+        scheduleController.getDbSchedule();
     }
 }
