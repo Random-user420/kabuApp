@@ -14,6 +14,9 @@ import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.schedule.ScheduleController;
 
 import java.time.LocalDate;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 @Setter
@@ -26,6 +29,7 @@ public class KabuApp extends Application
     private Schedule schedule;
     private ScheduleController scheduleController;
     private ScheduleMapper scheduleMapper;
+    private ExecutorService executorService;
     //NOT FOR PRODUCTION!!!
     private final boolean fakeService = false;
 
@@ -40,16 +44,40 @@ public class KabuApp extends Application
 
         DynamicColors.applyToActivitiesIfAvailable(this);
 
+        executorService = Executors.newCachedThreadPool();
+
         schedule = new Schedule();
         schedule.setSelectedDate(LocalDate.now());
 
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
         scheduleMapper = new ScheduleMapper();
-        scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule, db);
-        authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService);
+        scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule, db, executorService);
+        authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService, executorService);
 
         authController.getInitialUser();
         scheduleController.getDbSchedule();
+    }
+
+    @Override
+    public void onTerminate()
+    {
+        super.onTerminate();
+        if (executorService != null && !executorService.isShutdown())
+        {
+            executorService.shutdown();
+            try
+            {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS))
+                {
+                    executorService.shutdownNow();
+                }
+            }
+            catch (InterruptedException e)
+            {
+                executorService.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }

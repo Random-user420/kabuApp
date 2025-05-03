@@ -2,6 +2,7 @@ package org.lilith.kabuapp.login;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class AuthController implements AuthCallback
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
     private final boolean fakeService;
+    private ExecutorService executorService;
 
     public String renewToken()
     {
@@ -50,7 +52,7 @@ public class AuthController implements AuthCallback
         stateholder.setUsername(username);
         stateholder.setPassword(password);
         stateholder.setToken(token);
-        new Thread(this::save).start();
+        executorService.execute(this::save);
     }
 
     public void auth(Callback callback, Object[] args)
@@ -66,7 +68,7 @@ public class AuthController implements AuthCallback
                     return;
                 }
                 stateholder.setToken(token);
-                new Thread(this::save).start();
+                executorService.execute(this::save);
                 if (callback != null)
                 {
                     callback.callback(args);
@@ -84,7 +86,7 @@ public class AuthController implements AuthCallback
         else
         {
             stateholder.setToken("FAKE");
-            new Thread(this::save).start();
+            executorService.execute(this::save);
             if (callback != null)
             {
                 callback.callback(args);
@@ -112,7 +114,7 @@ public class AuthController implements AuthCallback
 
     public void getInitialUser()
     {
-        new Thread(this::getAsyncInitialUser).start();
+        executorService.execute(this::getAsyncInitialUser);
     }
 
     private void getAsyncInitialUser()
