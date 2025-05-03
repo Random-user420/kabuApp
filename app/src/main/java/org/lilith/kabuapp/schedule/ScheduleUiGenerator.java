@@ -49,11 +49,10 @@ public class ScheduleUiGenerator
         TextView roomTextView = lessonView.findViewById(R.id.text_view_lesson_room);
         TextView teacherTextView = lessonView.findViewById(R.id.text_view_lesson_teacher);
 
-
-        timeTextView.setText(beginTime + " - " + endTime);
         if (teacher.isEmpty())
         {
             nameTextView.setText(Html.fromHtml("<s>" + name + "</s>"));
+            timeTextView.setText(Html.fromHtml("<s>" + beginTime + " - " + endTime + "</s>"));
             teacherTextView.getParent().clearChildFocus(teacherTextView);
             roomTextView.setVisibility(View.GONE);
             teacherTextView.setVisibility(View.GONE);
@@ -61,6 +60,7 @@ public class ScheduleUiGenerator
         else
         {
             nameTextView.setText(name);
+            timeTextView.setText(beginTime + " - " + endTime);
             teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
             roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
         }
@@ -93,8 +93,14 @@ public class ScheduleUiGenerator
         TextView teacherTextView = lessonView.findViewById(R.id.text_view_lesson_teacher);
         TextView teacher2TextView = lessonView.findViewById(R.id.text_view_lesson_teacher2);
 
-
-        timeTextView.setText(beginTime + " - " + endTime);
+        if (teacher.isEmpty() && teacher2.isEmpty())
+        {
+            timeTextView.setText(Html.fromHtml("<s>" + beginTime + " - " + endTime + "</s>"));
+        }
+        else
+        {
+            timeTextView.setText(beginTime + " - " + endTime);
+        }
         if (teacher.isEmpty())
         {
             nameTextView.setText(Html.fromHtml("<s>" + name + "</s>"));
