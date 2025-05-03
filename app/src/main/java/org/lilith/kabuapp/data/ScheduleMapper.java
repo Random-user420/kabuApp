@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import org.lilith.kabuapp.api.models.LessonResponse;
-import org.lilith.kabuapp.data.model.Lesson;
-import org.lilith.kabuapp.data.model.Schedule;
+import org.lilith.kabuapp.data.memory.Lesson;
+import org.lilith.kabuapp.data.memory.Schedule;
 
 public class ScheduleMapper
 {

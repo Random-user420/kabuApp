@@ -1,4 +1,4 @@
-package org.lilith.kabuapp.data.model;
+package org.lilith.kabuapp.data.memory;
 
 import java.time.LocalDate;
 import java.util.UUID;

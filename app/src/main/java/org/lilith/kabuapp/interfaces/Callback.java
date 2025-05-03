@@ -1,4 +1,4 @@
-package org.lilith.kabuapp.models;
+package org.lilith.kabuapp.interfaces;
 
 public interface Callback
 {

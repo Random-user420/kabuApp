@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
 import org.lilith.kabuapp.databinding.ActivityLoginBinding;
-import org.lilith.kabuapp.models.Callback;
+import org.lilith.kabuapp.interfaces.Callback;
 import org.lilith.kabuapp.schedule.Schedule;
 import org.lilith.kabuapp.settings.Settings;
 

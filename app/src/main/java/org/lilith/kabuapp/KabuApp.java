@@ -9,7 +9,7 @@ import org.lilith.kabuapp.api.DigikabuApiService;
 import org.lilith.kabuapp.data.ScheduleMapper;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
-import org.lilith.kabuapp.data.model.Schedule;
+import org.lilith.kabuapp.data.memory.Schedule;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.schedule.ScheduleController;
 

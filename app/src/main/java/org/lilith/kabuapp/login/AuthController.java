@@ -13,7 +13,7 @@ import org.lilith.kabuapp.api.models.AuthCallback;
 import org.lilith.kabuapp.data.memory.AuthStateholder;
 import org.lilith.kabuapp.data.model.AppDatabase;
 import org.lilith.kabuapp.data.model.entity.User;
-import org.lilith.kabuapp.models.Callback;
+import org.lilith.kabuapp.interfaces.Callback;
 
 @AllArgsConstructor
 public class AuthController implements AuthCallback

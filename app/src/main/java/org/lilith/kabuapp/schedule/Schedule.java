@@ -19,11 +19,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
-import org.lilith.kabuapp.data.model.Lesson;
+import org.lilith.kabuapp.data.memory.Lesson;
 import org.lilith.kabuapp.databinding.ActivityScheduleBinding;
 import org.lilith.kabuapp.login.AuthController;
 import org.lilith.kabuapp.login.Login;
-import org.lilith.kabuapp.models.Callback;
+import org.lilith.kabuapp.interfaces.Callback;
 import org.lilith.kabuapp.settings.Settings;
 
 import java.time.DayOfWeek;
