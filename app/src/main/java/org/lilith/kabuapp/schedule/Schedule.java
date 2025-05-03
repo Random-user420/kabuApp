@@ -26,6 +26,7 @@ import org.lilith.kabuapp.login.Login;
 import org.lilith.kabuapp.models.Callback;
 import org.lilith.kabuapp.settings.Settings;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -79,6 +80,11 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         scheduleController.updateScheduleIfOld(
                 authController.getStateholder().getToken(), authController, this, new Object[1]);
 
+        if (scheduleController.getSchedule().getSelectedDate().isEqual(LocalDate.now()))
+        {
+            scheduleController.getSchedule().setSelectedDate(getDate());
+        }
+
         settingsHandler();
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
@@ -88,7 +94,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
 
-        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 12);
+        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 12, scheduleController);
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
@@ -197,7 +203,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         });
     }
 
-    private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays)
+    private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays, ScheduleController scheduleController)
     {
         List<DateItem> items = new ArrayList<>();
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
@@ -208,6 +214,12 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         for (int i = 0; i < numberOfDays; i++)
         {
             LocalDate currentDate = startDate.plusDays(i);
+            if ((currentDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)
+                    || currentDate.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+                    && !scheduleController.isSchool(currentDate))
+            {
+                continue;
+            }
             String month = currentDate.format(monthFormatter);
             String day = currentDate.format(dayFormatter);
             String weekday = currentDate.format(weekdayFormatter);
@@ -235,6 +247,20 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             updateSchedule();
 
         }
+    }
+
+    private LocalDate getDate()
+    {
+        LocalDate date = LocalDate.now();
+        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !scheduleController.isSchool(date))
+        {
+            date = date.plusDays(2);
+        }
+        else if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
+        {
+            date = date.plusDays(1);
+        }
+        return date;
     }
 
     private class ScheduleGestureListener extends GestureDetector.SimpleOnGestureListener
