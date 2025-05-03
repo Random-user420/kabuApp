@@ -37,14 +37,14 @@ public class ThemeColorResolver
                     }
                     catch (Resources.NotFoundException e2)
                     {
-                        Log.e("ThemeColorResolver", "Ressource für Attribut nicht gefunden: " +
+                        Log.e("ThemeColorResolver", "Resource not for Attribute not found: " +
                                 context.getResources().getResourceEntryName(themeAttributeId), e2);
                         return Color.BLACK;
                     }
                 }
             }
         }
-        Log.w("ThemeColorResolver", "Konnte Theme-Attribut nicht zu einer Farbe auflösen: " + context.getResources().getResourceEntryName(themeAttributeId));
+        Log.w("ThemeColorResolver", "Not able so resolve theme Attribute: " + context.getResources().getResourceEntryName(themeAttributeId));
         return Color.BLACK;
     }
 }
