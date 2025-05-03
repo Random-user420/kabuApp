@@ -225,7 +225,8 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
 
     private void changeSelectedDate(LocalDate newDate)
     {
-        int newPosition = IntStream.range(0, dateItems.size()).filter(i -> dateItems.get(i).getDate().equals(newDate)).findFirst().orElse(-1);
+        int newPosition = IntStream.range(0, dateItems.size()).filter(i ->
+                dateItems.get(i).getDate().equals(newDate)).findFirst().orElse(-1);
 
         if (newPosition != -1)
         {
@@ -281,11 +282,27 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
 
     private void onSwipeRight()
     {
-        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().minusDays(1));
+        int days = 1;
+        for (;days < 15; days++)
+        {
+            if (scheduleController.isSchool(scheduleController.getSchedule().getSelectedDate().minusDays(days)))
+            {
+                break;
+            }
+        }
+        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().minusDays(days));
     }
 
     private void onSwipeLeft()
     {
-        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().plusDays(1));
+        int days = 1;
+        for (;days < 15; days++)
+        {
+            if (scheduleController.isSchool(scheduleController.getSchedule().getSelectedDate().plusDays(days)))
+            {
+                break;
+            }
+        }
+        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().plusDays(days));
     }
 }
