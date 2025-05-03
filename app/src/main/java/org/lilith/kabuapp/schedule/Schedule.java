@@ -39,8 +39,8 @@ import java.util.stream.IntStream;
 
 public class Schedule extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
-    private static final int SWIPE_THRESHOLD_DP = 1;
-    private static final int SWIPE_VELOCITY_THRESHOLD_DP = 1;
+    private static final int SWIPE_THRESHOLD_DP = 69;
+    private static final int SWIPE_VELOCITY_THRESHOLD_DP = 69;
     private ActivityScheduleBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
