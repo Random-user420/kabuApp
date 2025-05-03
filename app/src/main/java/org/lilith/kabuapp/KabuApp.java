@@ -30,8 +30,6 @@ public class KabuApp extends Application
     private ScheduleController scheduleController;
     private ScheduleMapper scheduleMapper;
     private ExecutorService executorService;
-    //NOT FOR PRODUCTION!!!
-    private final boolean fakeService = false;
 
     @Override
     public void onCreate()
@@ -53,7 +51,7 @@ public class KabuApp extends Application
         digikabuApiService = new DigikabuApiService();
         scheduleMapper = new ScheduleMapper();
         scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule, db, executorService);
-        authController = new AuthController(new AuthStateholder(), db, digikabuApiService, fakeService, executorService);
+        authController = new AuthController(new AuthStateholder(), db, digikabuApiService, executorService);
 
         authController.getInitialUser();
         scheduleController.getDbSchedule();

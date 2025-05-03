@@ -22,7 +22,6 @@ public class AuthController implements AuthCallback
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
-    private final boolean fakeService;
     private ExecutorService executorService;
 
     public String renewToken()
@@ -57,39 +56,27 @@ public class AuthController implements AuthCallback
 
     public void auth(Callback callback, Object[] args)
     {
-        if (!fakeService)
+        try
         {
-            try
+            String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
+            if (token == null)
             {
-                String token = digikabuApiService.auth(stateholder.getUsername(), stateholder.getPassword());
-                if (token == null)
-                {
-                    Logger.getLogger("AuthController").log(Level.WARNING, "Token return is null");
-                    return;
-                }
-                stateholder.setToken(token);
-                executorService.execute(this::save);
-                if (callback != null)
-                {
-                    callback.callback(args);
-                }
+                Logger.getLogger("AuthController").log(Level.WARNING, "Token return is null");
+                return;
             }
-            catch (BadRequestException e)
-            {
-                if (args != null && args.length > 0)
-                {
-                    args[0] = false;
-                    callback.callback((args));
-                }
-            }
-        }
-        else
-        {
-            stateholder.setToken("FAKE");
+            stateholder.setToken(token);
             executorService.execute(this::save);
             if (callback != null)
             {
                 callback.callback(args);
+            }
+        }
+        catch (BadRequestException e)
+        {
+            if (args != null && args.length > 0)
+            {
+                args[0] = false;
+                callback.callback((args));
             }
         }
     }
