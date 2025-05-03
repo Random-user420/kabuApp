@@ -30,8 +30,9 @@
         app:layout_constraintTop_toBottomOf="@+id/recycler_view_date_selector">
 
         <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:id="@+id/schedule_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.402"

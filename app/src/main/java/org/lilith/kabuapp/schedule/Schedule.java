@@ -1,8 +1,12 @@
 package org.lilith.kabuapp.schedule;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 
 public class Schedule extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
+    private static final int SWIPE_THRESHOLD_DP = 1;
+    private static final int SWIPE_VELOCITY_THRESHOLD_DP = 1;
     private ActivityScheduleBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
@@ -41,7 +50,10 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     private List<DateItem> dateItems;
     private LinearLayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ScrollView scheduleScrollView;
+    private GestureDetector gestureDetector;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,6 +61,10 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         EdgeToEdge.enable(this);
         binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
+        scheduleScrollView = findViewById(R.id.schedule_scroll_view);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) ->
         {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,8 +80,6 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
                 authController.getStateholder().getToken(), authController, this, new Object[1]);
 
         settingsHandler();
-
-        setContentView(R.layout.activity_schedule);
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -91,6 +105,20 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             }
         });
 
+        gestureDetector = new GestureDetector(this, new ScheduleGestureListener());
+
+        if (scheduleScrollView != null)
+        {
+            scheduleScrollView.setOnTouchListener((v, event) ->
+            {
+                if (gestureDetector.onTouchEvent(event))
+                {
+                    return true;
+                }
+                return v.onTouchEvent(event);
+            });
+        }
+
         updateSchedule();
     }
 
@@ -107,7 +135,21 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         runOnUiThread(this::updateSchedule);
     }
 
-    public void updateSchedule()
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        if (!authController.isInitialized())
+        {
+            var i = new Intent(this, Login.class);
+            startActivity(i);
+        }
+
+        getDelegate().onStart();
+    }
+
+    private void updateSchedule()
     {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
         linearSchedule.removeAllViews();
@@ -146,20 +188,6 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         }
     }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
-        if (!authController.isInitialized())
-        {
-            var i = new Intent(this, Login.class);
-            startActivity(i);
-        }
-
-        getDelegate().onStart();
-    }
-
     private void settingsHandler()
     {
         binding.barSettings.setOnClickListener(v ->
@@ -193,5 +221,71 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     {
         scheduleController.getSchedule().setSelectedDate(date);
         updateSchedule();
+    }
+
+    private void changeSelectedDate(LocalDate newDate)
+    {
+        int newPosition = IntStream.range(0, dateItems.size()).filter(i -> dateItems.get(i).getDate().equals(newDate)).findFirst().orElse(-1);
+
+        if (newPosition != -1)
+        {
+            scheduleController.getSchedule().setSelectedDate(newDate);
+            dateAdapter.setSelectedDate(newDate);
+            updateSchedule();
+
+        }
+    }
+
+    private class ScheduleGestureListener extends GestureDetector.SimpleOnGestureListener
+    {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            boolean result = false;
+            try
+            {
+                if (e1 == null || e2 == null)
+                {
+                    return false;
+                }
+
+                float diffY = e2.getY() - e1.getY();
+                float diffX = e2.getX() - e1.getX();
+
+                float density = getResources().getDisplayMetrics().density;
+                int swipeThresholdPx = (int) (SWIPE_THRESHOLD_DP * density);
+                int swipeVelocityThresholdPx = (int) (SWIPE_VELOCITY_THRESHOLD_DP * density);
+
+                if (Math.abs(diffX) > Math.abs(diffY)
+                        && Math.abs(diffX) > swipeThresholdPx
+                        && Math.abs(velocityX) > swipeVelocityThresholdPx)
+                {
+                    if (diffX > 0)
+                    {
+                        onSwipeRight();
+                    }
+                    else
+                    {
+                        onSwipeLeft();
+                    }
+                    result = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.getLogger("GestureListener").log(Level.SEVERE, "Fehler in onFling", exception);
+            }
+            return result;
+        }
+    }
+
+    private void onSwipeRight()
+    {
+        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().minusDays(1));
+    }
+
+    private void onSwipeLeft()
+    {
+        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().plusDays(1));
     }
 }
