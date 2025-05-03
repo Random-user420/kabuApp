@@ -14,7 +14,6 @@ import org.lilith.kabuapp.data.model.Schedule;
 public class ScheduleMapper
 {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-
     public void mapApiResToSchedule(List<LessonResponse> lessonResponses, Schedule schedule)
     {
         if (schedule.getLessons() == null)
@@ -30,38 +29,34 @@ public class ScheduleMapper
         {
             return;
         }
-
-        for (LessonResponse lessonResponse : lessonResponses)
-        {
-            Lesson lesson = new Lesson(
-                    (short) lessonResponse.getAnfStd(),
-                    (short) lessonResponse.getEndStd(),
-                    LocalDate.parse(lessonResponse.getDatum(), formatter),
-                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
-                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
-                    lessonResponse.getUFachBez(),
-                    lessonResponse.getLehrer(),
-                    lessonResponse.getRaumLongtext(),
-                    null);
-
-            if (!schedule.getLessons().containsKey(lesson.getDate()))
-            {
-                schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
-            }
-            if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
-            {
-                schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
-            }
-
-            else if (schedule.getLessons().get(lesson.getDate()) != null
-                    && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()) != null
-                    && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()) != null)
-            {
-                lesson.setDbId(schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
-            }
-
-            schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
-        }
+        lessonResponses.stream().map(lessonResponse -> new Lesson(
+                (short) lessonResponse.getAnfStd(),
+                (short) lessonResponse.getEndStd(),
+                LocalDate.parse(lessonResponse.getDatum(), formatter),
+                Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
+                Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
+                lessonResponse.getUFachBez(),
+                lessonResponse.getLehrer(),
+                lessonResponse.getRaumLongtext(),
+                null))
+                .forEach(lesson ->
+                {
+                    if (!schedule.getLessons().containsKey(lesson.getDate()))
+                    {
+                        schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
+                    }
+                    if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
+                    {
+                        schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
+                    }
+                    else if (schedule.getLessons().get(lesson.getDate()) != null
+                            && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()) != null
+                            && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()) != null)
+                    {
+                        lesson.setDbId(schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
+                    }
+                    schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
+                });
     }
 
     public List<org.lilith.kabuapp.data.model.entity.Lesson> mapScheduleToDb(Schedule schedule)
@@ -69,11 +64,11 @@ public class ScheduleMapper
         List<org.lilith.kabuapp.data.model.entity.Lesson> dbLessons = new ArrayList<>();
         if (schedule != null && schedule.getLessons() != null)
         {
-            for (LocalDate date : schedule.getLessons().keySet())
+            schedule.getLessons().keySet().forEach(date ->
             {
-                for (short begin : schedule.getLessons().get(date).keySet())
+                schedule.getLessons().get(date).keySet().forEach(begin ->
                 {
-                    for (short group : schedule.getLessons().get(date).get(begin).keySet())
+                    schedule.getLessons().get(date).get(begin).keySet().forEach(group ->
                     {
                         Lesson lesson = schedule.getLessons().get(date).get(begin).get(group);
                         if (lesson.getDbId() == null)
@@ -92,9 +87,9 @@ public class ScheduleMapper
                                 lesson.getRoom()
                         );
                         dbLessons.add(dbLesson);
-                    }
-                }
-            }
+                    });
+                });
+            });
         }
         return dbLessons;
     }
@@ -105,28 +100,27 @@ public class ScheduleMapper
         {
             schedule.setLessons(new LinkedHashMap<>());
         }
-        for (org.lilith.kabuapp.data.model.entity.Lesson dbLesson : dbLessons)
-        {
-            Lesson lesson = new Lesson(
-                    dbLesson.getBegin(),
-                    dbLesson.getEnd(),
-                    dbLesson.getDate(),
-                    dbLesson.getGroup(),
-                    dbLesson.getMaxGroup(),
-                    dbLesson.getName(),
-                    dbLesson.getTeacher(),
-                    dbLesson.getRoom(),
-                    dbLesson.getId()
-            );
-            if (!schedule.getLessons().containsKey(lesson.getDate()))
-            {
-                schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
-            }
-            if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
-            {
-                schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
-            }
-            schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
-        }
+        dbLessons.stream().map(dbLesson -> new Lesson(
+                dbLesson.getBegin(),
+                dbLesson.getEnd(),
+                dbLesson.getDate(),
+                dbLesson.getGroup(),
+                dbLesson.getMaxGroup(),
+                dbLesson.getName(),
+                dbLesson.getTeacher(),
+                dbLesson.getRoom(),
+                dbLesson.getId()))
+                .forEach(lesson ->
+                {
+                    if (!schedule.getLessons().containsKey(lesson.getDate()))
+                    {
+                        schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
+                    }
+                    if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
+                    {
+                        schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
+                    }
+                    schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
+                });
     }
 }

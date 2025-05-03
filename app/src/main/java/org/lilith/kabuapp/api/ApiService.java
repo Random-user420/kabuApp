@@ -43,10 +43,7 @@ public abstract class ApiService
             URIBuilder uriBuilder = new URIBuilder(baseUrl + url);
             if (params != null && !params.isEmpty())
             {
-                for (Map.Entry<String, Object> entry : params.entrySet())
-                {
-                    uriBuilder.addParameter(entry.getKey(), String.valueOf(entry.getValue()));
-                }
+                params.forEach((key, value) -> uriBuilder.addParameter(key, String.valueOf(value)));
             }
             uri = uriBuilder.build();
         }
@@ -87,10 +84,7 @@ public abstract class ApiService
 
         if (headers != null && !headers.isEmpty())
         {
-            for (Map.Entry<String, String> header : headers.entrySet())
-            {
-                request.setHeader(header.getKey(), header.getValue());
-            }
+            headers.forEach(request::setHeader);
         }
         request.setHeader("Host", getDefaultHostHeader(baseUrl + url));
 
