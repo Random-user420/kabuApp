@@ -44,7 +44,6 @@ public class Login extends AppCompatActivity implements Callback
 
         setContentView(binding.getRoot());
         authHandler();
-        settingsHandler();
     }
 
     @Override
@@ -95,14 +94,5 @@ public class Login extends AppCompatActivity implements Callback
                 binding.password.setError(getString(R.string.login_wrong));
             }
         }
-    }
-
-    private void settingsHandler()
-    {
-        binding.settingsButton.setOnClickListener(v ->
-        {
-            var i = new Intent(this, Settings.class);
-            startActivity(i);
-        });
     }
 }
