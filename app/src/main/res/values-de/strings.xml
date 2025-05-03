@@ -11,4 +11,6 @@
     <string name="lesson_room_prefix">Raum</string>
     <string name="lesson_teacher_prefix">Lehrkraft</string>
     <string name="login_wrong">Falscher Nutzername oder Passwort</string>
+    <string name="settings_logout">Ausloggen</string>
+    <string name="settings_debugInformation">Debug-Informationen</string>
 </resources>

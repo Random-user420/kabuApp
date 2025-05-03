@@ -12,4 +12,6 @@
     <string name="lesson_room_prefix">Room</string>
     <string name="lesson_teacher_prefix">Teacher</string>
     <string name="login_wrong">Wrong username or password</string>
+    <string name="settings_logout">Logout</string>
+    <string name="settings_debugInformation">Debug information</string>
 </resources>
