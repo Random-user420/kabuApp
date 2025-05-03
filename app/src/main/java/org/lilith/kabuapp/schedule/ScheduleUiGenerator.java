@@ -2,6 +2,7 @@ package org.lilith.kabuapp.schedule;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,19 @@ public class ScheduleUiGenerator
 
 
         timeTextView.setText(beginTime + " - " + endTime);
-        nameTextView.setText(name);
-        roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
-        teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
+        if (teacher.isEmpty())
+        {
+            nameTextView.setText(Html.fromHtml("<s>" + name + "</s>"));
+            teacherTextView.getParent().clearChildFocus(teacherTextView);
+            roomTextView.setVisibility(View.GONE);
+            teacherTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            nameTextView.setText(name);
+            teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
+            roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
+        }
 
         parentLayout.addView(lessonView);
     }
@@ -84,12 +95,30 @@ public class ScheduleUiGenerator
 
 
         timeTextView.setText(beginTime + " - " + endTime);
-        nameTextView.setText(name + "  ");
-        name2TextView.setText(name2);
-        roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
-        room2TextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room2);
-        teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
-        teacher2TextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher2);
+        if (teacher.isEmpty())
+        {
+            nameTextView.setText(Html.fromHtml("<s>" + name + "</s>"));
+            roomTextView.setVisibility(View.GONE);
+            teacherTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            nameTextView.setText(name + "  ");
+            roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
+            teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
+        }
+        if (teacher2.isEmpty())
+        {
+            name2TextView.setText(Html.fromHtml("<s>" + name + "</s>"));
+            room2TextView.setVisibility(View.GONE);
+            teacher2TextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            name2TextView.setText(name2);
+            room2TextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room2);
+            teacher2TextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher2);
+        }
 
         parentLayout.addView(lessonView);
     }
