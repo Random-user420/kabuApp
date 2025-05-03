@@ -67,7 +67,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
                 context.getTheme().resolveAttribute(android.R.attr.colorBackgroundFloating, typedValue, true);
                 selectedBackgroundColor = typedValue.data;
             }
-            catch (Exception e)
+            catch (Exception ignored)
             {
             }
 

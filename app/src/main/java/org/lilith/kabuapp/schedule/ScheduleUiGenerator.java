@@ -1,5 +1,6 @@
 package org.lilith.kabuapp.schedule;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class ScheduleUiGenerator
         };
     }
 
+    @SuppressLint("SetTextI18n")
     public void addSingleLessonElement(
             Context context,
             ViewGroup parentLayout,
@@ -55,6 +57,7 @@ public class ScheduleUiGenerator
         parentLayout.addView(lessonView);
     }
 
+    @SuppressLint("SetTextI18n")
     public void addDoubleLessonElement(
             Context context,
             ViewGroup parentLayout,
