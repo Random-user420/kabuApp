@@ -14,4 +14,8 @@
     <string name="login_wrong">Wrong username or password</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_debugInformation">Debug information</string>
+    <string name="notice_warrenty">We don\'t provide any warranty on this programm.</string>
+    <string name="notice_code">"The code and licence is on "</string>
+    <string name="github_link" translatable="false">https://github.com/Random-user420/kabuApp/tree/master\\</string>
+    <string name="github_text" translatable="false">GitHub</string>
 </resources>

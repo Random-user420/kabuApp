@@ -13,4 +13,6 @@
     <string name="login_wrong">Wrong username or password</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_debugInformation">Debug information</string>
+    <string name="notice_warrenty">We don\'t provide any warranty on this programm.</string>
+    <string name="notice_code">"The code and licence is on "</string>
 </resources>
