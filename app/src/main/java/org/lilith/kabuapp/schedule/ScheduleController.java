@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -60,6 +58,7 @@ public class ScheduleController
 
     public void updateSchedule(String tokenIn, AuthCallback re)
     {
+        executorService.execute(() -> db.lessonDao().deleteAll());
         String token = tokenIn;
         LocalDate beginn = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
@@ -90,10 +89,7 @@ public class ScheduleController
 
     public void getDbSchedule()
     {
-        executorService.execute(() ->
-        {
-            scheduleMapper.mapDbLessonToSchedule(db.lessonDao().getAll(), schedule);
-        });
+        executorService.execute(() -> scheduleMapper.mapDbLessonToSchedule(db.lessonDao().getAll(), schedule));
     }
 
     public boolean isSchool(LocalDate date)
