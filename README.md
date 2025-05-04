@@ -82,6 +82,9 @@ The project follows the standard Android app structure. Key packages/components 
 
 ---
 
+# Privicy Policy / Datenschutzerklärung
+[here](https://github.com/Random-user420/kabuApp/blob/03a3f4968481bb9b7f2bf1d6e39d4fefae375c66/PRIVACY.md)
+
 # Warranty
 ** We don't provide any sort of warranty on this programm **
 
