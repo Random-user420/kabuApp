@@ -36,7 +36,7 @@ public class ScheduleController
             List<Lifetime> lifetimes = db.lifetimeDao().getAll();
             if (lifetimes.isEmpty())
             {
-                db.lifetimeDao().insert(new Lifetime(0, LocalDateTime.now()));
+                executorService.execute(() -> db.lifetimeDao().insert(new Lifetime(0, LocalDateTime.now())));
                 updateSchedule(token, re, ce, objects);
             }
             else if (lifetimes.get(0).getScheduleLastUpdate().isBefore(LocalDateTime.now().minusHours(2)))
@@ -86,7 +86,6 @@ public class ScheduleController
         scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
         executorService.execute(() -> db.lessonDao().insertAll(dbLessons));
-        Logger.getLogger("ScheduleController").log(Level.INFO, "got schedule");
     }
 
     public void getDbSchedule()
