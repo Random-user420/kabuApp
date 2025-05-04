@@ -1,5 +1,7 @@
 package org.lilith.kabuapp.login;
 
+import static org.lilith.kabuapp.ui.NoticeGenerator.setNotice;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -16,7 +18,6 @@ import org.lilith.kabuapp.R;
 import org.lilith.kabuapp.databinding.ActivityLoginBinding;
 import org.lilith.kabuapp.interfaces.Callback;
 import org.lilith.kabuapp.schedule.Schedule;
-import org.lilith.kabuapp.settings.Settings;
 
 
 public class Login extends AppCompatActivity implements Callback
@@ -44,6 +45,7 @@ public class Login extends AppCompatActivity implements Callback
 
         setContentView(binding.getRoot());
         authHandler();
+        setNotice(this, findViewById(R.id.notice_code_login));
     }
 
     @Override

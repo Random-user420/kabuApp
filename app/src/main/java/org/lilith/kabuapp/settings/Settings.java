@@ -1,12 +1,9 @@
 package org.lilith.kabuapp.settings;
 
+import static org.lilith.kabuapp.ui.NoticeGenerator.setNotice;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,25 +44,7 @@ public class Settings extends AppCompatActivity
 
         setScheduleListener();
         debugSwitchListener();
-        setNotice();
-    }
-
-    private void setNotice()
-    {
-        TextView myTextView = findViewById(R.id.notice_code);
-
-        String prefix = getString(R.string.notice_code);
-        String linkText = getString(R.string.github_text);
-        String url = getString(R.string.github_link);
-
-        String fullText = prefix + linkText + ".";
-
-        SpannableString spannableString = new SpannableString(fullText);
-        spannableString.setSpan(new URLSpan(url), fullText.indexOf(linkText), fullText.indexOf(linkText) + linkText.length(), Spanned.SPAN_COMPOSING);
-
-        myTextView.setText(spannableString);
-
-        myTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        setNotice(this, findViewById(R.id.notice_code_settings));
     }
 
     private void resetUserHandler()
