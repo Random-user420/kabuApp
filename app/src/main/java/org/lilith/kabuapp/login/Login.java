@@ -73,7 +73,14 @@ public class Login extends AppCompatActivity implements Callback
             Object[] args = { null };
             if (!authController.setCredentials(username.getText().toString(), password.getText().toString(), this, args))
             {
-                Logger.getLogger("Login").log(Level.INFO, "No username or password");
+                if (binding.username.isFocused())
+                {
+                    binding.username.setError(getString(R.string.login_wrong));
+                }
+                else
+                {
+                    binding.password.setError(getString(R.string.login_wrong));
+                }
             }
         });
     }
