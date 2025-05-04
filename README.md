@@ -4,6 +4,10 @@
 
 Diese Android-Anwendung dient zur Anzeige des Stundenplans. Benutzer können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren.
 
+**Diese App ist nur für Schüler:innen der BSZ Wiesau**
+
+Die BSZ Wiesau ist nicht für diese App verantwortlich oder involviert, dies ist ein rein privates Projekt.
+
 ## Features
 
 * Anzeige des Stundenplans für einen ausgewählten Tag.
