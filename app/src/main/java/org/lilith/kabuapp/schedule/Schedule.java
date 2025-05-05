@@ -159,7 +159,8 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
         linearSchedule.removeAllViews();
-        if (scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate()))
+        if (scheduleController.getSchedule().getLessons() != null
+                && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate()))
         {
             for (Map<Short, Lesson> lessons : scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values())
             {
@@ -214,9 +215,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         for (int i = 0; i < numberOfDays; i++)
         {
             LocalDate currentDate = startDate.plusDays(i);
-            if ((currentDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)
-                    || currentDate.getDayOfWeek().equals(DayOfWeek.SUNDAY))
-                    && !scheduleController.isSchool(currentDate))
+            if (!scheduleController.isSchool(currentDate))
             {
                 continue;
             }

@@ -94,7 +94,8 @@ public class ScheduleController
 
     public boolean isSchool(LocalDate date)
     {
-        return schedule.getLessons().containsKey(date)
+        return schedule.getLessons() != null
+                && schedule.getLessons().containsKey(date)
                 && !schedule.getLessons().get(date).isEmpty()
                 && schedule.getLessons().get(date).values().stream().findAny().isPresent()
                 && !schedule.getLessons().get(date).values().stream().findAny().get().isEmpty()
