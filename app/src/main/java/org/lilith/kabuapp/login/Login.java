@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lilith.kabuapp.KabuApp;
 import org.lilith.kabuapp.R;
 import org.lilith.kabuapp.databinding.ActivityLoginBinding;
