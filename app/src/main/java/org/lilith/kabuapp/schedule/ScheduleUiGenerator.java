@@ -149,7 +149,7 @@ public class ScheduleUiGenerator
 
     private boolean isCurrent(LocalTime begin, LocalTime end)
     {
-        return (LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin));
+        return LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin);
     }
 
     private LocalTime toLocaleDate(String date)
