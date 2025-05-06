@@ -1,5 +1,7 @@
 package org.lilith.kabuapp.schedule;
 
+import static org.lilith.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
@@ -7,7 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+
 import org.lilith.kabuapp.R;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ScheduleUiGenerator
 {
@@ -63,6 +71,11 @@ public class ScheduleUiGenerator
             timeTextView.setText(beginTime + " - " + endTime);
             teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher);
             roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + room);
+        }
+
+        if (isCurrent(toLocaleDate(beginTime), toLocaleDate(endTime)))
+        {
+            ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorSecondaryInverse));
         }
 
         parentLayout.addView(lessonView);
@@ -126,6 +139,25 @@ public class ScheduleUiGenerator
             teacher2TextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + teacher2);
         }
 
+        if (isCurrent(toLocaleDate(beginTime), toLocaleDate(endTime)))
+        {
+            ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorSecondaryInverse));
+        }
+
         parentLayout.addView(lessonView);
+    }
+
+    private boolean isCurrent(LocalTime begin, LocalTime end)
+    {
+        return (LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin));
+    }
+
+    private LocalTime toLocaleDate(String date)
+    {
+        if (date.length() == 4)
+        {
+            date = "0" + date;
+        }
+        return LocalTime.parse(date, DateTimeFormatter.ofPattern("HH:mm"));
     }
 }
