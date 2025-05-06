@@ -49,6 +49,7 @@ This guide helps you set up and run the project locally.
 ### Prerequisites
 
 * Android Studio installed
+* Checkstyle Plugin installed
 * An Android device or emulator
 
 ### Installation
@@ -81,6 +82,8 @@ The project follows the standard Android app structure. Key packages/components 
 ```res/values```: Resources like strings, colors, etc.
 
 ---
+**Note:**
+Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included in the Project before making a Pull request. I use this to keep the code style consistant.
 
 # Privicy Policy / Datenschutzerklärung
 [here](https://github.com/Random-user420/kabuApp/blob/03a3f4968481bb9b7f2bf1d6e39d4fefae375c66/PRIVACY.md)
