@@ -18,7 +18,7 @@ import org.lilith.kabuapp.interfaces.Callback;
 @AllArgsConstructor
 public class AuthController implements AuthCallback
 {
-    @Getter //TODO REMOVE
+    @Getter
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
