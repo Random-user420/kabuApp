@@ -16,8 +16,6 @@ public class Lesson
     private String teacher;
     private String room;
     private UUID dbId;
-    //TODO
-    //private Color color;
 
     public synchronized short getBegin()
     {
