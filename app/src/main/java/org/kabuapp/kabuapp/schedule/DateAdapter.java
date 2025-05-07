@@ -21,7 +21,7 @@ import lombok.Setter;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder>
 {
-
+    @Getter
     private List<DateItem> dateList;
     private Context context;
     private OnDateSelectedListener onDateSelectedListener;

@@ -117,8 +117,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
 
-        LocalDate initialSelectedDate = scheduleController.getSchedule().getSelectedDate();
-        dateAdapter.setSelectedDate(initialSelectedDate);
+        dateAdapter.setSelectedDate(scheduleController.getSchedule().getSelectedDate());
 
         dateRecyclerView.post(() ->
         {
@@ -194,6 +193,10 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
                             lesson2.getTeacher(),
                             lesson.getName(),
                             lesson2.getName());
+                }
+                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
+                {
+                    dateAdapter.getDateList().add(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
                 }
             }
         }
