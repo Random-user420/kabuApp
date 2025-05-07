@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'org.lilith.kabuapp'
+    namespace 'org.kabuapp.kabuapp'
     compileSdk 35
 
     defaultConfig {
-        applicationId "org.lilith.kabuapp"
+        applicationId "org.kabuapp.kabuapp"
         minSdk 28
         targetSdk 35
         versionCode 1
