@@ -36,7 +36,6 @@ public class KabuApp extends Application
     {
         super.onCreate();
 
-        //Until Threadding with login is implimented
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
