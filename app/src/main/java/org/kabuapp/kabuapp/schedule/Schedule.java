@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -53,6 +54,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     private SwipeRefreshLayout swipeRefreshLayout;
     private ScrollView scheduleScrollView;
     private GestureDetector gestureDetector;
+    private ExecutorService executorService;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -64,6 +66,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
         scheduleUiGenerator = new ScheduleUiGenerator();
+        executorService = ((KabuApp) getApplication()).getExecutorService();
 
         scheduleController.updateScheduleIfOld(
                 authController.getStateholder().getToken(), authController, this, new Object[1]);
@@ -126,7 +129,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             }
         });
 
-        updateSchedule();
+        updateScheduleLoop();
     }
 
     @Override
@@ -194,6 +197,24 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
                 }
             }
         }
+    }
+
+    private void updateScheduleLoop()
+    {
+        executorService.execute(() ->
+        {
+            while (!this.isDestroyed())
+            {
+                runOnUiThread(this::updateSchedule);
+                try
+                {
+                    Thread.sleep(3000);
+                }
+                catch (InterruptedException ignored)
+                {
+                }
+            }
+        });
     }
 
     private void settingsHandler()
