@@ -28,6 +28,7 @@ import org.kabuapp.kabuapp.settings.Settings;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +69,8 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         scheduleUiGenerator = new ScheduleUiGenerator();
         executorService = ((KabuApp) getApplication()).getExecutorService();
 
-        scheduleController.updateScheduleIfOld(
-                authController.getStateholder().getToken(), authController, this, new Object[1]);
+        scheduleController.updateSchedule(
+                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusHours(2));
 
         binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -135,7 +136,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     public void onRefresh()
     {
         scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1]);
+                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(10));
         swipeRefreshLayout.setRefreshing(false);
     }
 

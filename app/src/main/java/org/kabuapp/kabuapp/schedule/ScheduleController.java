@@ -27,7 +27,7 @@ public class ScheduleController
     private AppDatabase db;
     private ExecutorService executorService;
 
-    public void updateScheduleIfOld(String token, AuthCallback re, Callback ce, Object[] objects)
+    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, LocalDateTime time)
     {
         executorService.execute(() ->
         {
@@ -37,7 +37,7 @@ public class ScheduleController
                 executorService.execute(() -> db.lifetimeDao().insert(new Lifetime(0, LocalDateTime.now())));
                 updateSchedule(token, re, ce, objects);
             }
-            else if (lifetimes.get(0).getScheduleLastUpdate().isBefore(LocalDateTime.now().minusHours(2)))
+            else if (lifetimes.get(0).getScheduleLastUpdate().isBefore(time))
             {
                 updateSchedule(token, re, ce, objects);
                 executorService.execute(() ->
@@ -50,13 +50,13 @@ public class ScheduleController
         });
     }
 
-    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects)
+    private void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects)
     {
         updateSchedule(token, re);
         ce.callback(objects);
     }
 
-    public void updateSchedule(String tokenIn, AuthCallback re)
+    private void updateSchedule(String tokenIn, AuthCallback re)
     {
         executorService.execute(() -> db.lessonDao().deleteAll());
         String token = tokenIn;
@@ -80,7 +80,7 @@ public class ScheduleController
         }
     }
 
-    public void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
+    private void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
     {
         scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
         List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
