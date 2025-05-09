@@ -20,15 +20,11 @@ public class ScheduleMapper
         {
             schedule.setLessons(new LinkedHashMap<>());
         }
-        if (schedule.getLessons() == null)
+        if (schedule.getLessons() == null || lessonResponses == null)
         {
             return;
         }
 
-        if (lessonResponses == null)
-        {
-            return;
-        }
         lessonResponses.stream().map(lessonResponse -> new Lesson(
                 (short) lessonResponse.getAnfStd(),
                 (short) lessonResponse.getEndStd(),
