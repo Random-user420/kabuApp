@@ -129,7 +129,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             }
         });
 
-        //updateScheduleLoop();
+        updateScheduleLoop();
     }
 
     @Override
@@ -174,11 +174,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
                     scheduleUiGenerator.addSingleLessonElement(
                             this,
                             linearSchedule,
-                            scheduleUiGenerator.mapBeginnToString(lesson.getBegin()),
-                            scheduleUiGenerator.mapBeginnToString((short) (lesson.getEnd() + 1)),
-                            lesson.getRoom(),
-                            lesson.getTeacher(),
-                            lesson.getName());
+                            lesson);
                 }
                 else
                 {
@@ -186,14 +182,8 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
                     scheduleUiGenerator.addDoubleLessonElement(
                             this,
                             linearSchedule,
-                            scheduleUiGenerator.mapBeginnToString(lesson.getBegin()),
-                            scheduleUiGenerator.mapBeginnToString((short) (lesson.getEnd() + 1)),
-                            lesson.getRoom(),
-                            lesson2.getRoom(),
-                            lesson.getTeacher(),
-                            lesson2.getTeacher(),
-                            lesson.getName(),
-                            lesson2.getName());
+                            lesson,
+                            lesson2);
                 }
                 if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
                 {
