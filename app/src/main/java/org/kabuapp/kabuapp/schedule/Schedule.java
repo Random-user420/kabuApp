@@ -129,14 +129,14 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             }
         });
 
-        updateScheduleLoop();
+        //updateScheduleLoop();
     }
 
     @Override
     public void onRefresh()
     {
         scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(10));
+                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now());
         swipeRefreshLayout.setRefreshing(false);
     }
 
