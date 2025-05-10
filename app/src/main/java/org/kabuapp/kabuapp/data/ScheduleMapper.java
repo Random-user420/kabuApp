@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
 import org.kabuapp.kabuapp.data.memory.Lesson;
@@ -16,43 +17,47 @@ public class ScheduleMapper
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
     public void mapApiResToSchedule(List<LessonResponse> lessonResponses, Schedule schedule)
     {
-        if (schedule.getLessons() == null)
-        {
-            schedule.setLessons(new LinkedHashMap<>());
-        }
-        if (schedule.getLessons() == null || lessonResponses == null)
+        if (lessonResponses == null)
         {
             return;
         }
 
-        lessonResponses.stream().map(lessonResponse -> new Lesson(
-                (short) lessonResponse.getAnfStd(),
-                (short) lessonResponse.getEndStd(),
-                LocalDate.parse(lessonResponse.getDatum(), formatter),
-                Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
-                Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
-                lessonResponse.getUFachBez(),
-                lessonResponse.getLehrer(),
-                lessonResponse.getRaumLongtext(),
-                null))
-                .forEach(lesson ->
-                {
-                    if (!schedule.getLessons().containsKey(lesson.getDate()))
-                    {
-                        schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
-                    }
-                    if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
-                    {
-                        schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
-                    }
-                    else if (schedule.getLessons().get(lesson.getDate()) != null
-                            && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()) != null
-                            && schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()) != null)
-                    {
-                        lesson.setDbId(schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
-                    }
-                    schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
-                });
+        if (schedule.getLessons() == null)
+        {
+            schedule.setLessons(new LinkedHashMap<>());
+        }
+
+        Map<LocalDate, Map<Short, Map<Short, Lesson>>> lessons = schedule.getLessons();
+
+        lessonResponses.forEach(lessonResponse ->
+        {
+            Lesson lesson = new Lesson(
+                    (short) lessonResponse.getAnfStd(),
+                    (short) lessonResponse.getEndStd(),
+                    LocalDate.parse(lessonResponse.getDatum(), formatter),
+                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
+                    Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
+                    lessonResponse.getUFachBez(),
+                    lessonResponse.getLehrer(),
+                    lessonResponse.getRaumLongtext(),
+                    null);
+            if (!lessons.containsKey(lesson.getDate()))
+            {
+                lessons.put(lesson.getDate(), new LinkedHashMap<>());
+            }
+
+            Map<Short, Map<Short, Lesson>> dateLessons = lessons.get(lesson.getDate());
+
+            if (!dateLessons.containsKey(lesson.getBegin()))
+            {
+                dateLessons.put(lesson.getBegin(), new LinkedHashMap<>());
+            }
+            else if (dateLessons.get(lesson.getBegin()).get(lesson.getGroup()) != null)
+            {
+                lesson.setDbId(dateLessons.get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
+            }
+            dateLessons.get(lesson.getBegin()).put(lesson.getGroup(), lesson);
+        });
     }
 
     public List<org.kabuapp.kabuapp.data.model.entity.Lesson> mapScheduleToDb(Schedule schedule)
