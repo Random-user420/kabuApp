@@ -34,7 +34,10 @@ public class ScheduleMapper
             Lesson lesson = new Lesson(
                     (short) lessonResponse.getAnfStd(),
                     (short) lessonResponse.getEndStd(),
-                    LocalDate.parse(lessonResponse.getDatum(), formatter),
+                    LocalDate.of(
+                            Integer.parseInt(lessonResponse.getDatum().substring(6)),
+                            Integer.parseInt(lessonResponse.getDatum().substring(3, 5)),
+                            Integer.parseInt(lessonResponse.getDatum().substring(0, 2))),
                     Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(0))),
                     Short.parseShort(String.valueOf(lessonResponse.getGruppe().charAt(2))),
                     lessonResponse.getUFachBez(),
