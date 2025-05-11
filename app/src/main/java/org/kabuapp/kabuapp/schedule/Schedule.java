@@ -227,7 +227,6 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
         DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
-
         for (int i = 0; i < numberOfDays; i++)
         {
             LocalDate currentDate = startDate.plusDays(i);
@@ -239,6 +238,14 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
             String day = currentDate.format(dayFormatter);
             String weekday = currentDate.format(weekdayFormatter);
             items.add(new DateItem(currentDate, month, day, weekday, false));
+        }
+        if (items.isEmpty())
+        {
+            LocalDate currentDate = LocalDate.now();
+            String month = currentDate.format(monthFormatter);
+            String day = currentDate.format(dayFormatter);
+            String weekday = currentDate.format(weekdayFormatter);
+            items.add(new DateItem(currentDate, month, day, weekday, true));
         }
         return items;
     }
