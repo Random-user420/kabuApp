@@ -2,6 +2,7 @@ package org.kabuapp.kabuapp.schedule;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import lombok.AllArgsConstructor;
@@ -100,5 +101,11 @@ public class ScheduleController
                 && schedule.getLessons().get(date).values().stream().findAny().isPresent()
                 && !schedule.getLessons().get(date).values().stream().findAny().get().isEmpty()
                 && !schedule.getLessons().get(date).values().stream().findAny().get().values().stream().findAny().isEmpty();
+    }
+
+    public void resetSchedule()
+    {
+        schedule.setLessons(new HashMap<>());
+        executorService.execute(() -> db.lessonDao().deleteAll());
     }
 }

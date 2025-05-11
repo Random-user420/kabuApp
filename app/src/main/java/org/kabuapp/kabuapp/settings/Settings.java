@@ -16,11 +16,13 @@ import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.Login;
 import org.kabuapp.kabuapp.schedule.Schedule;
+import org.kabuapp.kabuapp.schedule.ScheduleController;
 
 public class Settings extends AppCompatActivity
 {
     private SettingsActivityBinding binding;
     private AuthController authController;
+    private ScheduleController scheduleController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,6 +41,7 @@ public class Settings extends AppCompatActivity
         });
 
         authController = ((KabuApp) getApplication()).getAuthController();
+        scheduleController = ((KabuApp) getApplication()).getScheduleController();
 
         resetUserHandler();
 
@@ -52,6 +55,7 @@ public class Settings extends AppCompatActivity
         binding.logout.setOnClickListener(v ->
         {
             authController.setCredentials("", "", "");
+            scheduleController.resetSchedule();
             var i = new Intent(this, Login.class);
             startActivity(i);
         });
