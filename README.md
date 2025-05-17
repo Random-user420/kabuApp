@@ -2,7 +2,7 @@
 
 ## Beschreibung
 
-Diese Android-Anwendung dient zur Anzeige des Stundenplans. Benutzer können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren.
+Diese Android-Anwendung dient zur Anzeige des Stundenplans. Benutzer:innen können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren. Dies wird auch automatisch im hintergrund getan.
 
 **Diese App ist nur für Schüler:innen der BSZ Wiesau**
 
@@ -25,6 +25,8 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich oder involviert, dies ist
 * **View Binding** für den Zugriff auf UI-Elemente.
 * **Java Time API (LocalDate)** für die Datumsverwaltung.
 * **ExecutorService** für die Hintergrundausführung von Aufgaben (z.B. API-Aufrufe).
+* **Apache-htt\*** für die API Aufrufe.
+* **Room** als DataBase abstraction.
 * Externe API: www.digikabu.de/api/
 
 # How to use
@@ -35,8 +37,8 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich oder involviert, dies ist
 
 ## Steps (comming soon)
 1. Download the newest release APK to your Phone
-2. Click to install
-2.1. if there are questions form your Phone, awnser them accordingly. If your Phone doesn't want to install the app, google how to install unsigned apps  \<your phone model>   
+2. Click to install\
+  2.1. if there are questions form your Phone, awnser them accordingly. If your Phone doesn't want to install the app, google how to install unsigned apps  \<your phone model>   
   
 ## Contributing
 
