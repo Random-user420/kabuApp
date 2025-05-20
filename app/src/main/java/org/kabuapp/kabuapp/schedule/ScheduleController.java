@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.kabuapp.kabuapp.api.DigikabuApiService;
-import org.kabuapp.kabuapp.api.UnauthorisedException;
+import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.data.ScheduleMapper;
 import org.kabuapp.kabuapp.data.model.AppDatabase;

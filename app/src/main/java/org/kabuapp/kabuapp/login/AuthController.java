@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.kabuapp.kabuapp.api.BadRequestException;
+import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;

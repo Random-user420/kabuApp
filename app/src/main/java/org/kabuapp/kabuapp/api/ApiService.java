@@ -13,6 +13,8 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
+import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
+import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

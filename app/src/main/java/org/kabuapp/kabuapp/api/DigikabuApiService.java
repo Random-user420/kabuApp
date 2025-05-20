@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
+import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.api.models.AuthRequest;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
 
