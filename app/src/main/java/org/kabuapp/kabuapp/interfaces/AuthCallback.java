@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.api.models;
+package org.kabuapp.kabuapp.interfaces;
 
 public interface AuthCallback
 {
