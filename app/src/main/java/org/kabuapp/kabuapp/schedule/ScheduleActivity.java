@@ -22,9 +22,9 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.Lesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.login.AuthController;
-import org.kabuapp.kabuapp.login.Login;
+import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.settings.Settings;
+import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 
-public class Schedule extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
+public class ScheduleActivity extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     private static final int SWIPE_THRESHOLD_DP = 69;
     private static final int SWIPE_VELOCITY_THRESHOLD_DP = 69;
@@ -152,7 +152,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
 
         if (!authController.isInitialized())
         {
-            var i = new Intent(this, Login.class);
+            var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         }
 
@@ -215,7 +215,7 @@ public class Schedule extends AppCompatActivity implements Callback, DateAdapter
     {
         binding.barSettings.setOnClickListener(v ->
         {
-            var i = new Intent(this, Settings.class);
+            var i = new Intent(this, SettingsActivity.class);
             startActivity(i);
         });
     }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="0dp"
-    tools:context=".schedule.Schedule">
+    tools:context=".schedule.ScheduleActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_date_selector"

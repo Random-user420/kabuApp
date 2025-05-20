@@ -14,11 +14,11 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
 import org.kabuapp.kabuapp.login.AuthController;
-import org.kabuapp.kabuapp.login.Login;
-import org.kabuapp.kabuapp.schedule.Schedule;
+import org.kabuapp.kabuapp.login.LoginActivity;
+import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
-public class Settings extends AppCompatActivity
+public class SettingsActivity extends AppCompatActivity
 {
     private SettingsActivityBinding binding;
     private AuthController authController;
@@ -56,7 +56,7 @@ public class Settings extends AppCompatActivity
         {
             authController.setCredentials("", "", "");
             scheduleController.resetSchedule();
-            var i = new Intent(this, Login.class);
+            var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
     }
@@ -85,7 +85,7 @@ public class Settings extends AppCompatActivity
     {
         binding.barSchedule.setOnClickListener((v) ->
         {
-            var i = new Intent(this, Schedule.class);
+            var i = new Intent(this, ScheduleActivity.class);
             startActivity(i);
         });
     }

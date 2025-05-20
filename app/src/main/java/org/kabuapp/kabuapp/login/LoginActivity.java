@@ -15,10 +15,10 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityLoginBinding;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.schedule.Schedule;
+import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 
 
-public class Login extends AppCompatActivity implements Callback
+public class LoginActivity extends AppCompatActivity implements Callback
 {
     private ActivityLoginBinding binding;
     private AuthController authController;
@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity implements Callback
 
         if (authController.isInitialized())
         {
-            var i = new Intent(this, Schedule.class);
+            var i = new Intent(this, ScheduleActivity.class);
             startActivity(i);
         }
 
@@ -87,7 +87,7 @@ public class Login extends AppCompatActivity implements Callback
     {
         if (args == null || args[0] == null)
         {
-            Intent i = new Intent(this, Schedule.class);
+            Intent i = new Intent(this, ScheduleActivity.class);
             startActivity(i);
         }
         else
