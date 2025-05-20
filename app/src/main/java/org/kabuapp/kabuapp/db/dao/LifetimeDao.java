@@ -1,11 +1,11 @@
-package org.kabuapp.kabuapp.data.model.dao;
+package org.kabuapp.kabuapp.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.kabuapp.kabuapp.data.model.entity.Lifetime;
+import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 
 import java.util.List;
 

@@ -11,8 +11,8 @@ import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
-import org.kabuapp.kabuapp.data.model.AppDatabase;
-import org.kabuapp.kabuapp.data.model.entity.User;
+import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.entity.User;
 import org.kabuapp.kabuapp.interfaces.Callback;
 
 @AllArgsConstructor

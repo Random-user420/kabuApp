@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.data.model.entity;
+package org.kabuapp.kabuapp.db.model.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.kabuapp.kabuapp.data.LocalDateConverter;
+import org.kabuapp.kabuapp.db.LocalDateConverter;
 
 @Getter
 @Setter

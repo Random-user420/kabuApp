@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.data.model.entity;
+package org.kabuapp.kabuapp.db.model.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.data;
+package org.kabuapp.kabuapp.db;
 
 import androidx.room.TypeConverter;
 import java.time.LocalDate;

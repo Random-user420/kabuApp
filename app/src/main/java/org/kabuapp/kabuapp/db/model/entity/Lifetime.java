@@ -1,11 +1,11 @@
-package org.kabuapp.kabuapp.data.model.entity;
+package org.kabuapp.kabuapp.db.model.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import org.kabuapp.kabuapp.data.LocalDateTimeConverter;
+import org.kabuapp.kabuapp.db.LocalDateTimeConverter;
 
 import java.time.LocalDateTime;
 

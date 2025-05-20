@@ -11,11 +11,11 @@ import lombok.Getter;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
-import org.kabuapp.kabuapp.data.ScheduleMapper;
-import org.kabuapp.kabuapp.data.model.AppDatabase;
+import org.kabuapp.kabuapp.db.ScheduleMapper;
+import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
-import org.kabuapp.kabuapp.data.model.entity.Lesson;
-import org.kabuapp.kabuapp.data.model.entity.Lifetime;
+import org.kabuapp.kabuapp.db.model.entity.Lesson;
+import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.interfaces.Callback;
 
 @AllArgsConstructor

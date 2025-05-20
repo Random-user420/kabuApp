@@ -1,11 +1,11 @@
-package org.kabuapp.kabuapp.data.model.dao;
+package org.kabuapp.kabuapp.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
-import org.kabuapp.kabuapp.data.model.entity.Lesson;
+import org.kabuapp.kabuapp.db.model.entity.Lesson;
 
 @Dao
 public interface LessonDao

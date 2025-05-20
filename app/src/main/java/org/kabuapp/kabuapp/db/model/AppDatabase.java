@@ -1,15 +1,15 @@
-package org.kabuapp.kabuapp.data.model;
+package org.kabuapp.kabuapp.db.model;
 
 import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import org.kabuapp.kabuapp.data.model.dao.LessonDao;
-import org.kabuapp.kabuapp.data.model.dao.LifetimeDao;
-import org.kabuapp.kabuapp.data.model.dao.UserDao;
-import org.kabuapp.kabuapp.data.model.entity.Lesson;
-import org.kabuapp.kabuapp.data.model.entity.Lifetime;
-import org.kabuapp.kabuapp.data.model.entity.User;
+import org.kabuapp.kabuapp.db.dao.LessonDao;
+import org.kabuapp.kabuapp.db.dao.LifetimeDao;
+import org.kabuapp.kabuapp.db.dao.UserDao;
+import org.kabuapp.kabuapp.db.model.entity.Lesson;
+import org.kabuapp.kabuapp.db.model.entity.Lifetime;
+import org.kabuapp.kabuapp.db.model.entity.User;
 
 @Database(entities = {User.class, Lesson.class, Lifetime.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase

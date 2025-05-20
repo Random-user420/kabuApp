@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.data;
+package org.kabuapp.kabuapp.db;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
+import org.kabuapp.kabuapp.db.model.entity.Lesson;
 
 public class ScheduleMapper
 {
@@ -60,9 +61,9 @@ public class ScheduleMapper
         });
     }
 
-    public List<org.kabuapp.kabuapp.data.model.entity.Lesson> mapScheduleToDb(MemSchedule schedule)
+    public List<Lesson> mapScheduleToDb(MemSchedule schedule)
     {
-        List<org.kabuapp.kabuapp.data.model.entity.Lesson> dbLessons = new ArrayList<>();
+        List<Lesson> dbLessons = new ArrayList<>();
         if (schedule != null && schedule.getLessons() != null)
         {
             schedule.getLessons().values().forEach(shortMapMap ->
@@ -75,7 +76,7 @@ public class ScheduleMapper
                         {
                             lesson.setDbId(UUID.randomUUID());
                         }
-                        org.kabuapp.kabuapp.data.model.entity.Lesson dbLesson = new org.kabuapp.kabuapp.data.model.entity.Lesson(
+                        Lesson dbLesson = new Lesson(
                                 lesson.getDbId(),
                                 lesson.getBegin(),
                                 lesson.getEnd(),
@@ -94,7 +95,7 @@ public class ScheduleMapper
         return dbLessons;
     }
 
-    public void mapDbLessonToSchedule(List<org.kabuapp.kabuapp.data.model.entity.Lesson> dbLessons, MemSchedule schedule)
+    public void mapDbLessonToSchedule(List<Lesson> dbLessons, MemSchedule schedule)
     {
         if (schedule.getLessons() == null)
         {
