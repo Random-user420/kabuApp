@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.data.memory.Lesson;
+import org.kabuapp.kabuapp.data.memory.MemLesson;
 
 import java.time.LocalTime;
 
@@ -24,7 +24,7 @@ public class ScheduleUiGenerator
     public void addSingleLessonElement(
             Context context,
             ViewGroup parentLayout,
-            Lesson lesson)
+            MemLesson lesson)
     {
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -64,8 +64,8 @@ public class ScheduleUiGenerator
     public void addDoubleLessonElement(
             Context context,
             ViewGroup parentLayout,
-            Lesson lesson1,
-            Lesson lesson2)
+            MemLesson lesson1,
+            MemLesson lesson2)
     {
 
         LayoutInflater inflater = LayoutInflater.from(context);

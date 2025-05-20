@@ -5,18 +5,18 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class Schedule
+public class MemSchedule
 {
     //date, begin, group
-    private Map<LocalDate, Map<Short, Map<Short, Lesson>>> lessons;
+    private Map<LocalDate, Map<Short, Map<Short, MemLesson>>> lessons;
     private LocalDate selectedDate;
 
-    public synchronized Map<LocalDate, Map<Short, Map<Short, Lesson>>> getLessons()
+    public synchronized Map<LocalDate, Map<Short, Map<Short, MemLesson>>> getLessons()
     {
         return lessons;
     }
 
-    public synchronized void setLessons(Map<LocalDate, Map<Short, Map<Short, Lesson>>> lessons)
+    public synchronized void setLessons(Map<LocalDate, Map<Short, Map<Short, MemLesson>>> lessons)
     {
         this.lessons = lessons;
     }

@@ -19,7 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.data.memory.Lesson;
+import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
@@ -166,9 +166,9 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         if (scheduleController.getSchedule().getLessons() != null
                 && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate()))
         {
-            for (Map<Short, Lesson> lessons : scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values())
+            for (Map<Short, MemLesson> lessons : scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values())
             {
-                Lesson lesson = lessons.get((short) 1);
+                MemLesson lesson = lessons.get((short) 1);
                 if (lessons.get((short) 1).getMaxGroup() == 1)
                 {
                     scheduleUiGenerator.addSingleLessonElement(
@@ -178,7 +178,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                 }
                 else
                 {
-                    Lesson lesson2 = lessons.get((short) 2);
+                    MemLesson lesson2 = lessons.get((short) 2);
                     scheduleUiGenerator.addDoubleLessonElement(
                             this,
                             linearSchedule,

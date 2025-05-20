@@ -13,7 +13,7 @@ import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.data.ScheduleMapper;
 import org.kabuapp.kabuapp.data.model.AppDatabase;
-import org.kabuapp.kabuapp.data.memory.Schedule;
+import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.data.model.entity.Lesson;
 import org.kabuapp.kabuapp.data.model.entity.Lifetime;
 import org.kabuapp.kabuapp.interfaces.Callback;
@@ -24,7 +24,7 @@ public class ScheduleController
     private DigikabuApiService apiService;
     private ScheduleMapper scheduleMapper;
     @Getter
-    private Schedule schedule;
+    private MemSchedule schedule;
     private AppDatabase db;
     private ExecutorService executorService;
 

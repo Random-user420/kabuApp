@@ -9,7 +9,7 @@ import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.data.ScheduleMapper;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.data.model.AppDatabase;
-import org.kabuapp.kabuapp.data.memory.Schedule;
+import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
@@ -26,7 +26,7 @@ public class KabuApp extends Application
     private AppDatabase db;
     private AuthController authController;
     private DigikabuApiService digikabuApiService;
-    private Schedule schedule;
+    private MemSchedule schedule;
     private ScheduleController scheduleController;
     private ScheduleMapper scheduleMapper;
     private ExecutorService executorService;
@@ -43,7 +43,7 @@ public class KabuApp extends Application
 
         executorService = Executors.newCachedThreadPool();
 
-        schedule = new Schedule();
+        schedule = new MemSchedule();
         schedule.setSelectedDate(LocalDate.now());
 
         db = AppDatabase.getDatabase(getApplicationContext());

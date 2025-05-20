@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class Lesson
+public class MemLesson
 {
     private short begin;
     private short end;
