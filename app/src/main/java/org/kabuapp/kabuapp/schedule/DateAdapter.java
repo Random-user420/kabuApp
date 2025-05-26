@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import org.kabuapp.kabuapp.R;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import lombok.Getter;
@@ -27,6 +28,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     private OnDateSelectedListener onDateSelectedListener;
     @Getter
     private int selectedItemPosition = RecyclerView.NO_POSITION;
+    private DateTimeFormatter monthFormatter;
+    private DateTimeFormatter weekdayFormatter;
 
     public interface OnDateSelectedListener
     {
@@ -38,6 +41,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         this.context = context;
         this.dateList = dateList;
         this.onDateSelectedListener = listener;
+        this.monthFormatter = DateTimeFormatter.ofPattern("MMM", context.getResources().getConfiguration().getLocales().get(0));
+        this.weekdayFormatter = DateTimeFormatter.ofPattern("EE", context.getResources().getConfiguration().getLocales().get(0));
     }
 
     @NonNull
@@ -54,9 +59,9 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     {
         DateItem dateItem = dateList.get(position);
 
-        holder.monthTextView.setText(dateItem.getMonth());
+        holder.monthTextView.setText(dateItem.getDate().format(monthFormatter));
         holder.dayTextView.setText(dateItem.getDay());
-        holder.weekdayTextView.setText(dateItem.getWeekday());
+        holder.weekdayTextView.setText(dateItem.getDate().format(weekdayFormatter));
 
         if (dateItem.isSelected())
         {
