@@ -113,7 +113,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
 
-        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 12, scheduleController);
+        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 14, scheduleController);
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
@@ -274,11 +274,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private LocalDate getDate()
     {
         LocalDate date = LocalDate.now();
-        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !scheduleController.isSchool(date))
-        {
-            date = date.plusDays(2);
-        }
-        else if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
+        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
         {
             date = date.plusDays(1);
         }

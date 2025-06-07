@@ -61,11 +61,11 @@ public class ScheduleController
     {
         executorService.execute(() -> db.lessonDao().deleteAll());
         String token = tokenIn;
-        LocalDate beginn = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
+        LocalDate begin = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
         {
-            updateSchedule(beginn, 5, token);
-            updateSchedule(beginn.plusDays(7), 5, token);
+            updateSchedule(begin, 7, token);
+            updateSchedule(begin.plusDays(7), 7, token);
         }
         catch (UnauthorisedException ignored)
         {
@@ -73,8 +73,8 @@ public class ScheduleController
         }
         try
         {
-            updateSchedule(beginn, 5, token);
-            updateSchedule(beginn.plusDays(7), 5, token);
+            updateSchedule(begin, 7, token);
+            updateSchedule(begin.plusDays(7), 7, token);
         }
         catch (UnauthorisedException ignored)
         {
