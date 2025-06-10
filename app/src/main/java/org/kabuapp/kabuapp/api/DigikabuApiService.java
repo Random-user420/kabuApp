@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.api.models.AuthRequest;
+import org.kabuapp.kabuapp.api.models.ExamResponse;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
 
 public class DigikabuApiService extends ApiService
@@ -59,6 +60,32 @@ public class DigikabuApiService extends ApiService
                     Map.of("datum",
                             date.format(formatter) + "T00:00:01.123Z",
                             "anzahl", days),
+                    Map.of("Authorization", "Bearer " + token),
+                    null
+            );
+        }
+        catch (Exception e)
+        {
+            if (e instanceof UnauthorisedException)
+            {
+                throw new UnauthorisedException();
+            }
+            Logger.getLogger("API").log(Level.WARNING, e.toString());
+            return null;
+        }
+    }
+
+    public List<ExamResponse> getExams(String token, int month) throws UnauthorisedException
+    {
+        try
+        {
+            return executeRequest (
+                    "termine/schulaufgaben",
+                    "GET",
+                    new TypeToken<List<ExamResponse>>()
+                    { }
+                            .getType(),
+                    Map.of("monat", month),
                     Map.of("Authorization", "Bearer " + token),
                     null
             );
