@@ -10,7 +10,6 @@ import lombok.Getter;
 
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
-import org.kabuapp.kabuapp.api.models.LessonResponse;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
@@ -84,13 +83,9 @@ public class ScheduleController
 
     private void updateSchedule(LocalDate date, int days, String token) throws UnauthorisedException
     {
-        List<LessonResponse> response = apiService.getSchedule(token, date, days);
-        executorService.execute(() ->
-        {
-            scheduleMapper.mapApiResToSchedule(response, schedule);
-            List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
-            db.lessonDao().insertAll(dbLessons);
-        });
+        scheduleMapper.mapApiResToSchedule(apiService.getSchedule(token, date, days), schedule);
+        List<Lesson> dbLessons = scheduleMapper.mapScheduleToDb(schedule);
+        executorService.execute(() -> db.lessonDao().insertAll(dbLessons));
     }
 
     public void getDbSchedule()
