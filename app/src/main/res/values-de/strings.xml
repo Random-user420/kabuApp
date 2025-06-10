@@ -15,4 +15,5 @@
     <string name="settings_debugInformation">Debug-Informationen</string>
     <string name="notice_warrenty">Wir geben keine Garantie auf dieses Programm.</string>
     <string name="notice_code">"Der code und die Lizens ist auf "</string>
+    <string name="exam_title">Schulaufgaben</string>
 </resources>

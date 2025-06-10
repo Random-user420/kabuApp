@@ -18,4 +18,5 @@
     <string name="notice_code">"The code and licence is on "</string>
     <string name="github_link" translatable="false">https://github.com/Random-user420/kabuApp/tree/master\\</string>
     <string name="github_text" translatable="false">GitHub</string>
+    <string name="exam_title">Exams</string>
 </resources>

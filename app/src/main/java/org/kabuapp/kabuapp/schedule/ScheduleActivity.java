@@ -21,6 +21,7 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
+import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
@@ -105,6 +106,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         }
 
         settingsHandler();
+        examHandler();
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -216,6 +218,15 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         binding.barSettings.setOnClickListener(v ->
         {
             var i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+        });
+    }
+
+    private void examHandler()
+    {
+        binding.barExam.setOnClickListener(v ->
+        {
+            var i = new Intent(this, ExamActivity.class);
             startActivity(i);
         });
     }

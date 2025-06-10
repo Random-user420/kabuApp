@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
+import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
@@ -46,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity
         resetUserHandler();
 
         setScheduleListener();
+        examHandler();
         debugSwitchListener();
         setNotice(this, findViewById(R.id.notice_code_settings));
     }
@@ -86,6 +88,15 @@ public class SettingsActivity extends AppCompatActivity
         binding.barSchedule.setOnClickListener((v) ->
         {
             var i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+        });
+    }
+
+    private void examHandler()
+    {
+        binding.barExam.setOnClickListener(v ->
+        {
+            var i = new Intent(this, ExamActivity.class);
             startActivity(i);
         });
     }
