@@ -16,6 +16,7 @@ import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.exam.ExamActivity;
+import org.kabuapp.kabuapp.exam.ExamController;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
@@ -32,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity
     private SettingsActivityBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
+    private ExamController examController;
     private LocalDateTime scheduleLifetime;
     private LocalDateTime examLifetime;
     private ExecutorService executorService;
@@ -55,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        examController = ((KabuApp) getApplication()).getExamController();
         executorService = ((KabuApp) getApplication()).getExecutorService();
         db = ((KabuApp) getApplication()).getDb();
 
@@ -74,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity
         {
             authController.setCredentials("", "", "");
             scheduleController.resetSchedule();
+            examController.resetExams();
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
