@@ -2,7 +2,7 @@ package org.kabuapp.kabuapp.exam;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ScrollView;
+import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,19 +13,16 @@ import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
-import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
-import java.util.concurrent.ExecutorService;
 
 
 public class ExamActivity extends AppCompatActivity
 {
     private ActivityExamBinding binding;
-    private AuthController authController;
-    private ExecutorService executorService;
-    private ScrollView examScrollView;
+    private ExamUiGenerator uiGenerator;
+    private ExamController examController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,13 +30,11 @@ public class ExamActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        authController = ((KabuApp) getApplication()).getAuthController();
-        executorService = ((KabuApp) getApplication()).getExecutorService();
+        examController = ((KabuApp) getApplication()).getExamController();
+        uiGenerator = new ExamUiGenerator();
 
         binding = ActivityExamBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        examScrollView = findViewById(R.id.exam_scroll_view);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) ->
         {
@@ -50,6 +45,23 @@ public class ExamActivity extends AppCompatActivity
 
         settingsHandler();
         setScheduleListener();
+        updateExams();
+    }
+
+    private void updateExams()
+    {
+        ViewGroup linearExams = findViewById(R.id.linear_exams);
+        linearExams.removeAllViews();
+        if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
+        {
+            examController.getExams().getExams().values().forEach(exam ->
+            {
+                uiGenerator.addExamElement(
+                        this,
+                        linearExams,
+                        exam);
+            });
+        }
     }
 
     private void settingsHandler()
