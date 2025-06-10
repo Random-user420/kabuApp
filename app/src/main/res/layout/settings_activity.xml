@@ -145,7 +145,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/debugUsername"
+        android:id="@+id/debugScheduleLifetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -154,14 +154,14 @@
         app:layout_constraintTop_toBottomOf="@+id/debug_switch" />
 
     <TextView
-        android:id="@+id/debugPassword"
+        android:id="@+id/debugExamLifetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/debugUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/debugScheduleLifetime" />
 
     <TextView
         android:id="@+id/debugToken"
@@ -171,7 +171,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/debugPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/debugExamLifetime" />
 
     <Switch
         android:id="@+id/debug_switch"

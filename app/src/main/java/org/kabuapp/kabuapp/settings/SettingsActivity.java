@@ -13,17 +13,29 @@ import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
+import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
 public class SettingsActivity extends AppCompatActivity
 {
     private SettingsActivityBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
+    private LocalDateTime scheduleLifetime;
+    private LocalDateTime examLifetime;
+    private ExecutorService executorService;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,6 +55,10 @@ public class SettingsActivity extends AppCompatActivity
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        executorService = ((KabuApp) getApplication()).getExecutorService();
+        db = ((KabuApp) getApplication()).getDb();
+
+        getLifetimes();
 
         resetUserHandler();
 
@@ -69,16 +85,32 @@ public class SettingsActivity extends AppCompatActivity
         {
             if (ac)
             {
-                binding.debugUsername.setText(authController.getStateholder().getUsername());
-                binding.debugPassword.setText(authController.getStateholder().getPassword());
+                DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+                if (examLifetime != null && scheduleLifetime != null)
+                {
+                    binding.debugScheduleLifetime.setText(formatter.format(scheduleLifetime));
+                    binding.debugExamLifetime.setText(formatter.format(examLifetime));
+                }
                 binding.debugToken.setText(authController.getStateholder().getToken());
             }
             else
             {
-
-                binding.debugUsername.setText("");
-                binding.debugPassword.setText("");
+                binding.debugScheduleLifetime.setText("");
+                binding.debugExamLifetime.setText("");
                 binding.debugToken.setText("");
+            }
+        });
+    }
+
+    private void getLifetimes()
+    {
+        executorService.execute(() ->
+        {
+            List<Lifetime> lifetimes = db.lifetimeDao().getAll();
+            if (!lifetimes.isEmpty())
+            {
+                scheduleLifetime = lifetimes.get(0).getScheduleLastUpdate();
+                examLifetime = lifetimes.get(0).getExamLastUpdate();
             }
         });
     }
