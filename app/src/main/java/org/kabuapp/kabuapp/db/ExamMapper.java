@@ -38,7 +38,7 @@ public class ExamMapper
                                 Integer.parseInt(response.getDate().substring(6)),
                                 Integer.parseInt(response.getDate().substring(3, 5)),
                                 Integer.parseInt(response.getDate().substring(0, 2))),
-                        (short) 0,
+                        (short) 1,
                         response.getInfo());
                 lastExam = exam;
                 lastInfo = response.getInfo();
