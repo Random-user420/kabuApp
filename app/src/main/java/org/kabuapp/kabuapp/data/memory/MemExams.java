@@ -17,4 +17,9 @@ public class MemExams
     {
         return exams;
     }
+
+    public synchronized void reset()
+    {
+        exams = new LinkedHashMap<>();
+    }
 }

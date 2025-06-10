@@ -25,4 +25,7 @@ public class Lifetime
 
     @ColumnInfo(name = "schedule")
     private LocalDateTime scheduleLastUpdate;
+
+    @ColumnInfo(name = "exam")
+    private LocalDateTime examLastUpdate;
 }

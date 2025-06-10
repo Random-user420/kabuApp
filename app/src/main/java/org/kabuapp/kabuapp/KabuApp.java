@@ -6,10 +6,13 @@ import com.google.android.material.color.DynamicColors;
 import lombok.Getter;
 import lombok.Setter;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
+import org.kabuapp.kabuapp.data.memory.MemExams;
+import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
+import org.kabuapp.kabuapp.exam.ExamController;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
@@ -28,6 +31,8 @@ public class KabuApp extends Application
     private DigikabuApiService digikabuApiService;
     private MemSchedule schedule;
     private ScheduleController scheduleController;
+    private ExamController examController;
+    private ExamMapper examMapper;
     private ScheduleMapper scheduleMapper;
     private ExecutorService executorService;
 
@@ -49,11 +54,14 @@ public class KabuApp extends Application
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();
         scheduleMapper = new ScheduleMapper();
+        examMapper = new ExamMapper();
         scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, schedule, db, executorService);
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, executorService);
+        examController = new ExamController(new MemExams(), examMapper, digikabuApiService, executorService, db);
 
         authController.getInitialUser();
         scheduleController.getDbSchedule();
+        examController.getDbExams();
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.exam.ExamActivity;
+import org.kabuapp.kabuapp.exam.ExamController;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
@@ -48,6 +49,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private ActivityScheduleBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
+    private ExamController examController;
     private ScheduleUiGenerator scheduleUiGenerator;
     private RecyclerView dateRecyclerView;
     private DateAdapter dateAdapter;
@@ -67,6 +69,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        examController = ((KabuApp) getApplication()).getExamController();
         scheduleUiGenerator = new ScheduleUiGenerator();
         executorService = ((KabuApp) getApplication()).getExecutorService();
 
@@ -107,6 +110,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         settingsHandler();
         examHandler();
+
+        examController.updateExams(authController.getStateholder().getToken(), authController, LocalDateTime.now().minusDays(1));
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
