@@ -1,12 +1,18 @@
 package org.kabuapp.kabuapp.data.memory;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 public class MemExam
 {
+    @Getter
+    @Setter
+    private UUID dbId;
     private LocalDate beginn;
     private short duration;
     private String info;
@@ -29,6 +35,11 @@ public class MemExam
     public synchronized void setDuration(short duration)
     {
         this.duration = duration;
+    }
+
+    public synchronized void addDuration()
+    {
+        this.duration++;
     }
 
     public synchronized String getInfo()
