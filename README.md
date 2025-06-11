@@ -2,15 +2,16 @@
 
 ## Beschreibung
 
-Diese Android-Anwendung dient zur Anzeige des Stundenplans. Benutzer:innen können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren. Dies wird auch automatisch im hintergrund getan.
+Diese Android-Anwendung dient zur Anzeige des Stunden- und Schulaufgabenplans. Benutzer:innen können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren. Dies wird auch automatisch im hintergrund getan.
 
 **Diese App ist nur für Schüler:innen der BSZ Wiesau**
 
-Die BSZ Wiesau ist nicht für diese App verantwortlich oder involviert, dies ist ein rein privates Projekt.
+Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privates Projekt.
 
 ## Features
 
 * Anzeige des Stundenplans für einen ausgewählten Tag.
+* Anzeige der Schulaufgaben, Ferien und besondere Ereignisse
 * Horizontale Navigation (Wischen) zwischen den Tagen.
 * Datumsauswahlleiste zum schnellen Wechsel des Datums.
 * Pull-to-Refresh Funktion zur Aktualisierung des aktuellen Stundenplans.
@@ -27,7 +28,7 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich oder involviert, dies ist
 * **ExecutorService** für die Hintergrundausführung von Aufgaben (z.B. API-Aufrufe).
 * **Apache-htt\*** für die API Aufrufe.
 * **Room** als DataBase abstraction.
-* Externe API: www.digikabu.de/api/
+* Externe API: www.digikabu.de/api/swagger/
 
 # How to use
 
@@ -71,13 +72,7 @@ The app should be installed and launched on your device/emulator. Note that the 
 Structure
 The project follows the standard Android app structure. Key packages/components include:
 
-```org.lilith.kabuapp.schedule```: Contains the Activity and related logic for the schedule view.
-
-```org.lilith.kabuapp.api```: Contains the logic for communication with the external API.
-
-```org.lilith.kabuapp.login```: Contains the authentication logic.
-
-```org.lilith.kabuapp.ui```: Contains UI-specific helper classes and adapters.
+```org.lilith.kabuapp```: Contains Java code. The naming is self explaining.
 
 ```res/layout```: XML layout files.
 
@@ -91,7 +86,7 @@ Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included 
 [here](https://github.com/Random-user420/kabuApp/blob/03a3f4968481bb9b7f2bf1d6e39d4fefae375c66/PRIVACY.md)
 
 # Warranty
-** We don't provide any sort of warranty on this programm **
+** We don't provide any sort of warranty on this program **
 
 **contact: lilithtechs@protonmail.com**
 
@@ -103,7 +98,7 @@ Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included 
 </a>
 
 # Copyright
-For Everything that is comitted under "Random-user420"
+For Everything that is committed under "Random-user420"
 
 (C) 2025 Lilith
 
