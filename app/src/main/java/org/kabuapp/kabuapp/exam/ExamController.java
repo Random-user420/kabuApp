@@ -115,6 +115,6 @@ public class ExamController
     public void resetExams()
     {
         exams.reset();
-        executorService.execute(() -> db.lessonDao().deleteAll());
+        executorService.execute(() -> db.examDao().deleteAll());
     }
 }
