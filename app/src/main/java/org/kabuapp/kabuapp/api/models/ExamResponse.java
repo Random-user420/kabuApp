@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ExamResponse
 {
-    String date;
-    String info;
+    private String date;
+    private String info;
 }
