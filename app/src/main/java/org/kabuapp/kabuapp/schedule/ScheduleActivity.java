@@ -145,7 +145,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         scheduleController.updateSchedule(
                 authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(5));
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getStateholder().getToken(), authController, LocalDateTime.now().minusMinutes(5));
     }
 
     public void callback(Object[] objects)

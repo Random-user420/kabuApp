@@ -9,20 +9,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
+import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
+import java.time.LocalDateTime;
 
 
-public class ExamActivity extends AppCompatActivity
+public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener
 {
     private ActivityExamBinding binding;
     private ExamUiGenerator uiGenerator;
+    private AuthController authController;
     private ExamController examController;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +35,7 @@ public class ExamActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        authController = ((KabuApp) getApplication()).getAuthController();
         examController = ((KabuApp) getApplication()).getExamController();
         uiGenerator = new ExamUiGenerator();
 
@@ -42,6 +48,9 @@ public class ExamActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_exam);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         settingsHandler();
         setScheduleListener();
@@ -62,6 +71,13 @@ public class ExamActivity extends AppCompatActivity
                         exam);
             });
         }
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        swipeRefreshLayout.setRefreshing(false);
+        examController.updateExams(authController.getStateholder().getToken(), authController, LocalDateTime.now().minusMinutes(5));
     }
 
     private void settingsHandler()
