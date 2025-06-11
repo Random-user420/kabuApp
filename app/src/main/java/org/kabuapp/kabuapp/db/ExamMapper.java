@@ -64,14 +64,17 @@ public class ExamMapper
 
     public void mapDbToExams(List<Exam> dbExams, MemExams exams)
     {
-        dbExams.forEach(dbExam ->
+        if (dbExams != null && !dbExams.isEmpty())
         {
-            MemExam exam = new MemExam(
-                    dbExam.getId(),
-                    dbExam.getDate(),
-                    dbExam.getDuration(),
-                    dbExam.getInfo());
-            exams.getExams().put(exam.getBeginn(), exam);
-        });
+            dbExams.forEach(dbExam ->
+            {
+                MemExam exam = new MemExam(
+                        dbExam.getId(),
+                        dbExam.getDate(),
+                        dbExam.getDuration(),
+                        dbExam.getInfo());
+                exams.getExams().put(exam.getBeginn(), exam);
+            });
+        }
     }
 }
