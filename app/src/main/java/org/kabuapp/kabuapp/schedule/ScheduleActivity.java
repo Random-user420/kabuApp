@@ -59,6 +59,9 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private ScrollView scheduleScrollView;
     private GestureDetector gestureDetector;
     private ExecutorService executorService;
+    private DateTimeFormatter monthFormatter;
+    private DateTimeFormatter dayFormatter;
+    private DateTimeFormatter weekdayFormatter;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -72,6 +75,9 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         examController = ((KabuApp) getApplication()).getExamController();
         scheduleUiGenerator = new ScheduleUiGenerator();
         executorService = ((KabuApp) getApplication()).getExecutorService();
+        monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
+        dayFormatter = DateTimeFormatter.ofPattern("dd");
+        weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
         scheduleController.updateSchedule(
                 authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusHours(2));
@@ -239,9 +245,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays, ScheduleController scheduleController)
     {
         List<DateItem> items = new ArrayList<>();
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
-        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
-        DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
         for (int i = 0; i < numberOfDays; i++)
         {
