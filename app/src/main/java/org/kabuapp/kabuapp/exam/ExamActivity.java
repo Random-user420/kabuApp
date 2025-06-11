@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
+import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
@@ -21,7 +22,7 @@ import org.kabuapp.kabuapp.settings.SettingsActivity;
 import java.time.LocalDateTime;
 
 
-public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener
+public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
 {
     private ActivityExamBinding binding;
     private ExamUiGenerator uiGenerator;
@@ -77,7 +78,12 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh()
     {
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getStateholder().getToken(), authController, LocalDateTime.now().minusMinutes(5));
+        examController.updateExams(authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(5));
+    }
+
+    public void callback(Object[] objects)
+    {
+        runOnUiThread(this::updateExams);
     }
 
     private void settingsHandler()

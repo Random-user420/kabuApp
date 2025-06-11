@@ -8,6 +8,7 @@ import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
+import org.kabuapp.kabuapp.interfaces.Callback;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class ExamController
     private ExecutorService executorService;
     private AppDatabase db;
 
-    public void updateExams(String token, AuthCallback re, LocalDateTime time)
+    public void updateExams(String token, AuthCallback re, Callback ce, Object[] objects, LocalDateTime time)
     {
         executorService.execute(() ->
         {
@@ -35,11 +36,11 @@ public class ExamController
             if (lifetimes.isEmpty())
             {
                 executorService.execute(() -> db.lifetimeDao().insert(new Lifetime(0, null, LocalDateTime.now())));
-                updateExams(token, re);
+                updateExams(token, re, ce, objects);
             }
             else if (lifetimes.get(0).getExamLastUpdate() == null || lifetimes.get(0).getExamLastUpdate().isBefore(time))
             {
-                updateExams(token, re);
+                updateExams(token, re, ce, objects);
                 executorService.execute(() ->
                 {
                     Lifetime lifetime = lifetimes.get(0);
@@ -48,6 +49,15 @@ public class ExamController
                 });
             }
         });
+    }
+
+    private void updateExams(String token, AuthCallback re, Callback ce, Object[] objects)
+    {
+        updateExams(token, re);
+        if (ce != null)
+        {
+            ce.callback(objects);
+        }
     }
 
     private void updateExams(String tokenIn, AuthCallback re)
