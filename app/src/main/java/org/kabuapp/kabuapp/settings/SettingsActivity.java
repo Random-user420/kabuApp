@@ -4,6 +4,7 @@ import static org.kabuapp.kabuapp.ui.NoticeGenerator.setNotice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,8 +93,10 @@ public class SettingsActivity extends AppCompatActivity
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
                 if (examLifetime != null && scheduleLifetime != null)
                 {
-                    binding.debugScheduleLifetime.setText(formatter.format(scheduleLifetime));
-                    binding.debugExamLifetime.setText(formatter.format(examLifetime));
+                    binding.debugScheduleLifetime.setText(Html.fromHtml(
+                            getApplicationContext().getString(R.string.schedule_title) + "<br/>" + formatter.format(scheduleLifetime)));
+                    binding.debugExamLifetime.setText(Html.fromHtml(
+                            getApplicationContext().getString(R.string.exam_title) + "<br/>" + formatter.format(examLifetime)));
                 }
                 binding.debugToken.setText(authController.getStateholder().getToken());
             }
