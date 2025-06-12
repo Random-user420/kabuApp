@@ -79,6 +79,13 @@ public class SettingsActivity extends AppCompatActivity
             authController.setCredentials("", "", "");
             scheduleController.resetSchedule();
             examController.resetExams();
+            executorService.execute(() ->
+            {
+                Lifetime lifetime = db.lifetimeDao().getAll().get(0);
+                lifetime.setExamLastUpdate(null);
+                lifetime.setScheduleLastUpdate(null);
+                db.lifetimeDao().update(lifetime);
+            });
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
