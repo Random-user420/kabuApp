@@ -16,6 +16,7 @@ import org.kabuapp.kabuapp.exam.ExamController;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,6 +69,13 @@ public class KabuApp extends Application
     public void onTerminate()
     {
         super.onTerminate();
+        try
+        {
+            digikabuApiService.closeHttpClient();
+        }
+        catch (IOException ignored)
+        {
+        }
         if (executorService != null && !executorService.isShutdown())
         {
             executorService.shutdown();
