@@ -1,7 +1,8 @@
-package org.kabuapp.kabuapp.lifetime;
+package org.kabuapp.kabuapp.db.controller;
 
 import org.kabuapp.kabuapp.data.memory.MemLifetime;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.dbType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class LifetimeController
     @Getter
     private MemLifetime memLifetime;
 
-    public void updateLifetime(Lifetime type)
+    public void updateLifetime(dbType type)
     {
         switch (type)
         {
@@ -28,7 +29,7 @@ public class LifetimeController
         }
     }
 
-    public boolean isLifetimeExpired(Duration duration, Lifetime type)
+    public boolean isLifetimeExpired(Duration duration, dbType type)
     {
         return switch (type)
         {

@@ -14,18 +14,16 @@ import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
-import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.exam.ExamController;
-import org.kabuapp.kabuapp.lifetime.LifetimeController;
-import org.kabuapp.kabuapp.login.AuthController;
+import org.kabuapp.kabuapp.db.controller.ExamController;
+import org.kabuapp.kabuapp.db.controller.LifetimeController;
+import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
-import org.kabuapp.kabuapp.schedule.ScheduleController;
+import org.kabuapp.kabuapp.db.controller.ScheduleController;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.concurrent.ExecutorService;
 
 public class SettingsActivity extends AppCompatActivity
 {

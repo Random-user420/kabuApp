@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityLoginBinding;
+import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 

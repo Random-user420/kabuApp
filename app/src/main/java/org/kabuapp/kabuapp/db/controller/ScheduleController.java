@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.schedule;
+package org.kabuapp.kabuapp.db.controller;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -11,12 +11,12 @@ import lombok.Getter;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
+import org.kabuapp.kabuapp.db.model.dbType;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.lifetime.LifetimeController;
 
 @AllArgsConstructor
 public class ScheduleController
@@ -33,14 +33,14 @@ public class ScheduleController
     {
         executorService.execute(() ->
         {
-            if (lifetimeController.isLifetimeExpired(duration, org.kabuapp.kabuapp.lifetime.Lifetime.SCHEDULE))
+            if (lifetimeController.isLifetimeExpired(duration, dbType.SCHEDULE))
             {
                 updateSchedule(token, re);
                 if (ce != null)
                 {
                     ce.callback(objects);
                 }
-                lifetimeController.updateLifetime(org.kabuapp.kabuapp.lifetime.Lifetime.SCHEDULE);
+                lifetimeController.updateLifetime(dbType.SCHEDULE);
                 lifetimeController.saveLifetimeToDb();
             }
         });

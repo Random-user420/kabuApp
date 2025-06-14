@@ -13,10 +13,10 @@ import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
-import org.kabuapp.kabuapp.exam.ExamController;
-import org.kabuapp.kabuapp.lifetime.LifetimeController;
-import org.kabuapp.kabuapp.login.AuthController;
-import org.kabuapp.kabuapp.schedule.ScheduleController;
+import org.kabuapp.kabuapp.db.controller.ExamController;
+import org.kabuapp.kabuapp.db.controller.LifetimeController;
+import org.kabuapp.kabuapp.db.controller.AuthController;
+import org.kabuapp.kabuapp.db.controller.ScheduleController;
 
 import java.io.IOException;
 import java.time.LocalDate;

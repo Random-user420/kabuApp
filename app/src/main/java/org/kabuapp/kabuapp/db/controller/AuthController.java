@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.login;
+package org.kabuapp.kabuapp.db.controller;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.exam;
+package org.kabuapp.kabuapp.db.controller;
 
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
@@ -6,9 +6,9 @@ import org.kabuapp.kabuapp.api.models.ExamResponse;
 import org.kabuapp.kabuapp.data.memory.MemExams;
 import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.dbType;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.lifetime.LifetimeController;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -33,14 +33,14 @@ public class ExamController
     {
         executorService.execute(() ->
         {
-            if (lifetimeController.isLifetimeExpired(duration,org.kabuapp.kabuapp.lifetime.Lifetime.LIFETIME))
+            if (lifetimeController.isLifetimeExpired(duration, dbType.LIFETIME))
             {
                 updateExams(token, re);
                 if (ce != null)
                 {
                     ce.callback(objects);
                 }
-                lifetimeController.updateLifetime(org.kabuapp.kabuapp.lifetime.Lifetime.LIFETIME);
+                lifetimeController.updateLifetime(dbType.LIFETIME);
                 lifetimeController.saveLifetimeToDb();
             }
         });
