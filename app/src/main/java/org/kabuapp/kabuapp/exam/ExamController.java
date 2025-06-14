@@ -6,12 +6,12 @@ import org.kabuapp.kabuapp.api.models.ExamResponse;
 import org.kabuapp.kabuapp.data.memory.MemExams;
 import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
-import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.lifetime.LifetimeController;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -24,40 +24,26 @@ public class ExamController
     @Getter
     private MemExams exams;
     private ExamMapper examMapper;
+    private LifetimeController lifetimeController;
     private DigikabuApiService apiService;
     private ExecutorService executorService;
     private AppDatabase db;
 
-    public void updateExams(String token, AuthCallback re, Callback ce, Object[] objects, LocalDateTime time)
+    public void updateExams(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration)
     {
         executorService.execute(() ->
         {
-            List<Lifetime> lifetimes = db.lifetimeDao().getAll();
-            if (lifetimes.isEmpty())
+            if (lifetimeController.isLifetimeExpired(duration,org.kabuapp.kabuapp.lifetime.Lifetime.LIFETIME))
             {
-                executorService.execute(() -> db.lifetimeDao().insert(new Lifetime(0, null, LocalDateTime.now())));
-                updateExams(token, re, ce, objects);
-            }
-            else if (lifetimes.get(0).getExamLastUpdate() == null || lifetimes.get(0).getExamLastUpdate().isBefore(time))
-            {
-                updateExams(token, re, ce, objects);
-                executorService.execute(() ->
+                updateExams(token, re);
+                if (ce != null)
                 {
-                    Lifetime lifetime = lifetimes.get(0);
-                    lifetime.setExamLastUpdate(LocalDateTime.now());
-                    db.lifetimeDao().update(lifetime);
-                });
+                    ce.callback(objects);
+                }
+                lifetimeController.updateLifetime(org.kabuapp.kabuapp.lifetime.Lifetime.LIFETIME);
+                lifetimeController.saveLifetimeToDb();
             }
         });
-    }
-
-    private void updateExams(String token, AuthCallback re, Callback ce, Object[] objects)
-    {
-        updateExams(token, re);
-        if (ce != null)
-        {
-            ce.callback(objects);
-        }
     }
 
     private void updateExams(String tokenIn, AuthCallback re)

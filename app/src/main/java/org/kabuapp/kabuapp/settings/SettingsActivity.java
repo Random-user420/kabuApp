@@ -15,18 +15,16 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
-import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.exam.ExamController;
+import org.kabuapp.kabuapp.lifetime.LifetimeController;
 import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleController;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class SettingsActivity extends AppCompatActivity
@@ -35,8 +33,7 @@ public class SettingsActivity extends AppCompatActivity
     private AuthController authController;
     private ScheduleController scheduleController;
     private ExamController examController;
-    private LocalDateTime scheduleLifetime;
-    private LocalDateTime examLifetime;
+    private LifetimeController lifetimeController;
     private ExecutorService executorService;
     private AppDatabase db;
 
@@ -60,12 +57,10 @@ public class SettingsActivity extends AppCompatActivity
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
         examController = ((KabuApp) getApplication()).getExamController();
         executorService = ((KabuApp) getApplication()).getExecutorService();
+        lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
         db = ((KabuApp) getApplication()).getDb();
 
-        getLifetimes();
-
         resetUserHandler();
-
         setScheduleListener();
         examHandler();
         debugSwitchListener();
@@ -79,13 +74,7 @@ public class SettingsActivity extends AppCompatActivity
             authController.setCredentials("", "", "");
             scheduleController.resetSchedule();
             examController.resetExams();
-            executorService.execute(() ->
-            {
-                Lifetime lifetime = db.lifetimeDao().getAll().get(0);
-                lifetime.setExamLastUpdate(null);
-                lifetime.setScheduleLastUpdate(null);
-                db.lifetimeDao().update(lifetime);
-            });
+            lifetimeController.resetLifetimes();
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
@@ -98,12 +87,14 @@ public class SettingsActivity extends AppCompatActivity
             if (ac)
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-                if (examLifetime != null && scheduleLifetime != null)
+                if (lifetimeController.getMemLifetime().getExamLastUpdate() != null && lifetimeController.getMemLifetime().getScheduleLastUpdate() != null)
                 {
                     binding.debugScheduleLifetime.setText(Html.fromHtml(
-                            getApplicationContext().getString(R.string.schedule_title) + "<br/>" + formatter.format(scheduleLifetime)));
+                            getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
+                                    formatter.format(lifetimeController.getMemLifetime().getScheduleLastUpdate())));
                     binding.debugExamLifetime.setText(Html.fromHtml(
-                            getApplicationContext().getString(R.string.exam_title) + "<br/>" + formatter.format(examLifetime)));
+                            getApplicationContext().getString(R.string.exam_title) + "<br/>" +
+                                    formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate())));
                 }
                 binding.debugToken.setText(authController.getStateholder().getToken());
             }
@@ -112,19 +103,6 @@ public class SettingsActivity extends AppCompatActivity
                 binding.debugScheduleLifetime.setText("");
                 binding.debugExamLifetime.setText("");
                 binding.debugToken.setText("");
-            }
-        });
-    }
-
-    private void getLifetimes()
-    {
-        executorService.execute(() ->
-        {
-            List<Lifetime> lifetimes = db.lifetimeDao().getAll();
-            if (!lifetimes.isEmpty())
-            {
-                scheduleLifetime = lifetimes.get(0).getScheduleLastUpdate();
-                examLifetime = lifetimes.get(0).getExamLastUpdate();
             }
         });
     }

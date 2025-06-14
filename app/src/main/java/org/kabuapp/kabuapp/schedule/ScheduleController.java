@@ -1,7 +1,7 @@
 package org.kabuapp.kabuapp.schedule;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -15,46 +15,35 @@ import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
-import org.kabuapp.kabuapp.db.model.entity.Lifetime;
 import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.lifetime.LifetimeController;
 
 @AllArgsConstructor
 public class ScheduleController
 {
     private DigikabuApiService apiService;
     private ScheduleMapper scheduleMapper;
+    private LifetimeController lifetimeController;
     @Getter
     private MemSchedule schedule;
     private AppDatabase db;
     private ExecutorService executorService;
 
-    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, LocalDateTime time)
+    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration)
     {
         executorService.execute(() ->
         {
-            List<Lifetime> lifetimes = db.lifetimeDao().getAll();
-            if (lifetimes.isEmpty())
+            if (lifetimeController.isLifetimeExpired(duration, org.kabuapp.kabuapp.lifetime.Lifetime.SCHEDULE))
             {
-                executorService.execute(() -> db.lifetimeDao().insert(new Lifetime(0, LocalDateTime.now(), null)));
-                updateSchedule(token, re, ce, objects);
-            }
-            else if (lifetimes.get(0).getScheduleLastUpdate() == null || lifetimes.get(0).getScheduleLastUpdate().isBefore(time))
-            {
-                updateSchedule(token, re, ce, objects);
-                executorService.execute(() ->
+                updateSchedule(token, re);
+                if (ce != null)
                 {
-                    Lifetime lifetime = lifetimes.get(0);
-                    lifetime.setScheduleLastUpdate(LocalDateTime.now());
-                    db.lifetimeDao().update(lifetime);
-                });
+                    ce.callback(objects);
+                }
+                lifetimeController.updateLifetime(org.kabuapp.kabuapp.lifetime.Lifetime.SCHEDULE);
+                lifetimeController.saveLifetimeToDb();
             }
         });
-    }
-
-    private void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects)
-    {
-        updateSchedule(token, re);
-        ce.callback(objects);
     }
 
     private void updateSchedule(String tokenIn, AuthCallback re)

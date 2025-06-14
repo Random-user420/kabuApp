@@ -19,7 +19,7 @@ import org.kabuapp.kabuapp.login.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
 
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
@@ -78,7 +78,7 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh()
     {
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(5));
+        examController.updateExams(authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofMinutes(5));
     }
 
     public void callback(Object[] objects)

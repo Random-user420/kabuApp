@@ -29,8 +29,8 @@ import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
         scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusHours(2));
+                authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofHours(2));
 
         binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -117,7 +117,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         settingsHandler();
         examHandler();
 
-        examController.updateExams(authController.getStateholder().getToken(), authController, null, null, LocalDateTime.now().minusDays(1));
+        examController.updateExams(authController.getStateholder().getToken(), authController, null, null, Duration.ofDays(1));
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -149,7 +149,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     public void onRefresh()
     {
         scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1], LocalDateTime.now().minusMinutes(5));
+                authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofMinutes(5));
         swipeRefreshLayout.setRefreshing(false);
     }
 
