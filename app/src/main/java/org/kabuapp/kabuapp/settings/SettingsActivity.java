@@ -34,8 +34,6 @@ public class SettingsActivity extends AppCompatActivity
     private ScheduleController scheduleController;
     private ExamController examController;
     private LifetimeController lifetimeController;
-    private ExecutorService executorService;
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,9 +54,7 @@ public class SettingsActivity extends AppCompatActivity
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
         examController = ((KabuApp) getApplication()).getExamController();
-        executorService = ((KabuApp) getApplication()).getExecutorService();
         lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
-        db = ((KabuApp) getApplication()).getDb();
 
         resetUserHandler();
         setScheduleListener();
