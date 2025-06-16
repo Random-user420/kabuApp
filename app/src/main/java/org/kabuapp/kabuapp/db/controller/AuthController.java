@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+
 import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
@@ -18,7 +18,6 @@ import org.kabuapp.kabuapp.interfaces.Callback;
 @AllArgsConstructor
 public class AuthController implements AuthCallback
 {
-    @Getter
     private AuthStateholder stateholder;
     private AppDatabase db;
     private DigikabuApiService digikabuApiService;
@@ -29,9 +28,15 @@ public class AuthController implements AuthCallback
         auth(null, null);
         return stateholder.getToken();
     }
-    public boolean setCredentials(String username, String password)
+
+    public UUID getId()
     {
-        return setCredentials(username, password, (Callback) null, (Object[]) null);
+        return stateholder.getDbId();
+    }
+
+    public String getToken()
+    {
+        return stateholder.getToken();
     }
 
     public boolean setCredentials(String username, String password, Callback callback, Object[] args)
@@ -83,15 +88,15 @@ public class AuthController implements AuthCallback
 
     private void save()
     {
-        List<User> existingUsers = db.userDao().getAll();
-        if (existingUsers.isEmpty())
+        User existingUser = db.userDao().get(stateholder.getDbId());
+        if (existingUser == null)
         {
-            User user = new User(UUID.randomUUID(), stateholder.getUsername(), stateholder.getPassword(), stateholder.getToken());
+            User user = new User(UUID.randomUUID(), stateholder.getUsername(), stateholder.getPassword(), stateholder.getToken(), true);
+            stateholder.setDbId(user.getId());
             db.userDao().insert(user);
         }
         else
         {
-            User existingUser = existingUsers.get(0);
             existingUser.setUsername(stateholder.getUsername());
             existingUser.setPassword(stateholder.getPassword());
             existingUser.setToken(stateholder.getToken());
@@ -99,24 +104,17 @@ public class AuthController implements AuthCallback
         }
     }
 
-    public void getInitialUser()
+    public UUID getDbUser()
     {
-        executorService.execute(this::getAsyncInitialUser);
-    }
-
-    private void getAsyncInitialUser()
-    {
-        if (db.userDao().getAll().isEmpty())
-        {
-            return;
-        }
-        User user = db.userDao().getAll().get(0);
-        if (user != null)
+        List<User> users = db.userDao().getAll();
+        users.stream().filter(user -> Boolean.TRUE.equals(user.getStandard())).findAny().ifPresentOrElse(user ->
         {
             stateholder.setUsername(user.getUsername());
             stateholder.setPassword(user.getPassword());
             stateholder.setToken(user.getToken());
-        }
+            stateholder.setDbId(user.getId());
+        }, this::save);
+        return stateholder.getDbId();
     }
 
     public boolean isInitialized()

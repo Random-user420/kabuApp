@@ -1,17 +1,20 @@
 package org.kabuapp.kabuapp.data.memory;
 
 import java.io.Serializable;
+import java.util.UUID;
+
 import org.jetbrains.annotations.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
 
 public class AuthStateholder implements Serializable
 {
-    @NotNull
     private String username = "";
-    @NotNull
     private String password = "";
-    @NotNull
     private String token = "";
+    @Getter @Setter
+    private UUID dbId;
 
     public synchronized @NotNull String getUsername()
     {

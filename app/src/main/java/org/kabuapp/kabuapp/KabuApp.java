@@ -11,6 +11,7 @@ import org.kabuapp.kabuapp.data.memory.MemLifetime;
 import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
+import org.kabuapp.kabuapp.db.controller.SessionController;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.db.controller.ExamController;
@@ -38,6 +39,7 @@ public class KabuApp extends Application
     private LifetimeController lifetimeController;
     private ExamMapper examMapper;
     private ScheduleMapper scheduleMapper;
+    private SessionController sessionController;
     private ExecutorService executorService;
 
     @Override
@@ -64,11 +66,9 @@ public class KabuApp extends Application
         scheduleController = new ScheduleController(digikabuApiService, scheduleMapper, lifetimeController, schedule, db, executorService);
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, executorService);
         examController = new ExamController(new MemExams(), examMapper, lifetimeController, digikabuApiService, executorService, db);
+        sessionController = new SessionController(db, examController, lifetimeController, authController, scheduleController, executorService);
 
-        lifetimeController.getLifetimeFromDb();
-        authController.getInitialUser();
-        scheduleController.getDbSchedule();
-        examController.getDbExams();
+        sessionController.loadSession();
     }
 
     @Override

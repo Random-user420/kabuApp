@@ -25,6 +25,8 @@ public class Exam
     @NotNull
     @PrimaryKey()
     private UUID id;
+    @ColumnInfo(name = "userId")
+    private UUID userID;
     @ColumnInfo(name = "date")
     private LocalDate date;
     @ColumnInfo(name = "duration")

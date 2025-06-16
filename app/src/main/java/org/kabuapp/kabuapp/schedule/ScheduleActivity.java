@@ -80,8 +80,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         dayFormatter = DateTimeFormatter.ofPattern("dd");
         weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
-        scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofHours(2));
+        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofHours(2), authController.getId());
 
         binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -118,7 +117,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         settingsHandler();
         examHandler();
 
-        examController.updateExams(authController.getStateholder().getToken(), authController, null, null, Duration.ofDays(1));
+        examController.updateExams(authController.getToken(), authController, null, null, Duration.ofDays(1), authController.getId());
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -149,8 +148,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     @Override
     public void onRefresh()
     {
-        scheduleController.updateSchedule(
-                authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofMinutes(5));
+        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId());
         swipeRefreshLayout.setRefreshing(false);
     }
 

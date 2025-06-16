@@ -22,6 +22,8 @@ public class Lesson
     @PrimaryKey()
     @NotNull
     private UUID id;
+    @ColumnInfo(name = "userId")
+    private UUID userId;
     @ColumnInfo(name = "begin")
     private Short begin;
     @ColumnInfo(name = "end")

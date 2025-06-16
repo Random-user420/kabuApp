@@ -61,7 +61,7 @@ public class ScheduleMapper
         });
     }
 
-    public List<Lesson> mapScheduleToDb(MemSchedule schedule)
+    public List<Lesson> mapScheduleToDb(MemSchedule schedule, UUID userId)
     {
         List<Lesson> dbLessons = new ArrayList<>();
         if (schedule != null && schedule.getLessons() != null)
@@ -78,6 +78,7 @@ public class ScheduleMapper
                         }
                         Lesson dbLesson = new Lesson(
                                 lesson.getDbId(),
+                                userId,
                                 lesson.getBegin(),
                                 lesson.getEnd(),
                                 lesson.getDate(),

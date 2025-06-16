@@ -24,4 +24,6 @@ public class User
     private String password;
     @ColumnInfo(name = "token")
     private String token;
+    @ColumnInfo(name = "standard")
+    private Boolean standard;
 }

@@ -47,13 +47,14 @@ public class ExamMapper
         }
     }
 
-    public List<Exam> mapExamsToDb(MemExams exams)
+    public List<Exam> mapExamsToDb(MemExams exams, UUID userId)
     {
         List<Exam> dbExams = new ArrayList<>(exams.getExams().size());
         exams.getExams().values().forEach(exam ->
         {
             Exam dbExam = new Exam(
                     exam.getDbId(),
+                    userId,
                     exam.getBeginn(),
                     exam.getDuration(),
                     exam.getInfo());

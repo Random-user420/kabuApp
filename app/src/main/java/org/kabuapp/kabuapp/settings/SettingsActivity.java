@@ -66,9 +66,9 @@ public class SettingsActivity extends AppCompatActivity
         binding.logout.setOnClickListener(v ->
         {
             authController.setCredentials("", "", "");
-            scheduleController.resetSchedule();
-            examController.resetExams();
-            lifetimeController.resetLifetimes();
+            scheduleController.resetSchedule(authController.getId());
+            examController.resetExams(authController.getId());
+            lifetimeController.resetLifetimes(authController.getId());
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
@@ -90,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity
                             getApplicationContext().getString(R.string.exam_title) + "<br/>" +
                                     formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate())));
                 }
-                binding.debugToken.setText(authController.getStateholder().getToken());
+                binding.debugToken.setText(authController.getToken());
             }
             else
             {

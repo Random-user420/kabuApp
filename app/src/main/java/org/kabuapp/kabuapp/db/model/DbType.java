@@ -1,7 +1,7 @@
 package org.kabuapp.kabuapp.db.model;
 
-public enum dbType
+public enum DbType
 {
     SCHEDULE,
-    LIFETIME
+    EXAM
 }

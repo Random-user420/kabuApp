@@ -66,12 +66,10 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
             examController.getExams().getExams().values().forEach(exam ->
-            {
-                uiGenerator.addExamElement(
-                        this,
-                        linearExams,
-                        exam);
-            });
+                    uiGenerator.addExamElement(
+                            this,
+                            linearExams,
+                            exam));
         }
     }
 
@@ -79,7 +77,7 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh()
     {
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getStateholder().getToken(), authController, this, new Object[1], Duration.ofMinutes(5));
+        examController.updateExams(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId());
     }
 
     public void callback(Object[] objects)
