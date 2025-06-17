@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class KabuApp extends Application
 {
-
     private AppDatabase db;
     private AuthController authController;
     private DigikabuApiService digikabuApiService;

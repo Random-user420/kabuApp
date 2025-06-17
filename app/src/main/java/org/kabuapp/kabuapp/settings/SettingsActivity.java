@@ -83,11 +83,9 @@ public class SettingsActivity extends AppCompatActivity
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
                 if (lifetimeController.getMemLifetime().getExamLastUpdate() != null && lifetimeController.getMemLifetime().getScheduleLastUpdate() != null)
                 {
-                    binding.debugScheduleLifetime.setText(Html.fromHtml(
-                            getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
+                    binding.debugScheduleLifetime.setText(Html.fromHtml(getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
                                     formatter.format(lifetimeController.getMemLifetime().getScheduleLastUpdate())));
-                    binding.debugExamLifetime.setText(Html.fromHtml(
-                            getApplicationContext().getString(R.string.exam_title) + "<br/>" +
+                    binding.debugExamLifetime.setText(Html.fromHtml( getApplicationContext().getString(R.string.exam_title) + "<br/>" +
                                     formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate())));
                 }
                 binding.debugToken.setText(authController.getToken());

@@ -142,9 +142,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         }
     }
 
-
-    @Getter
-    @Setter
+    @Getter @Setter
     public static class DateViewHolder extends RecyclerView.ViewHolder
     {
         private TextView monthTextView;
