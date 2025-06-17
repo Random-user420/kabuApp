@@ -26,9 +26,21 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 * **View Binding** für den Zugriff auf UI-Elemente.
 * **Java Time API (LocalDate)** für die Datumsverwaltung.
 * **ExecutorService** für die Hintergrundausführung von Aufgaben (z.B. API-Aufrufe).
-* **Apache-htt\*** für die API Aufrufe.
+* **Apache-http\*** für die API Aufrufe.
 * **Room** als DataBase abstraction.
 * Externe API: www.digikabu.de/api/swagger/
+
+
+# Zum Nutzen
+
+## Vorraussetzungen
+* Android (version 9.0+)
+* Aktivierung der installation von nicht signed Apps, falls nötig. Bitte bei Problemen Googeln.
+
+## Schritte
+1. Lade die neuste Veröffentlichte APK von [Realeses](https://github.com/Random-user420/kabuApp/releases/tag/0.1-beta) auf dein Handy
+2. Klicke installieren\
+  2.1. Falls das Handy die installation nicht zulässt, gehe zum zweiten Punkt von Vorrausstzungen zurück.    
 
 # How to use
 
@@ -36,8 +48,8 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 * Android phone (version 9.0+)
 * No locking on unsinged Apps
 
-## Steps (comming soon)
-1. Download the newest release APK to your Phone
+## Steps
+1. Download the newest release APK from [Realeses](https://github.com/Random-user420/kabuApp/releases/tag/0.1-beta) to your Phone
 2. Click to install\
   2.1. if there are questions form your Phone, awnser them accordingly. If your Phone doesn't want to install the app, google how to install unsigned apps  \<your phone model>   
   
