@@ -104,9 +104,8 @@ Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included 
 
 ## Contributors
 
-<p>Thanks to all the contributors who helped improve this project:</p>
 <a href="https://github.com/Random-user420/kabuApp/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Random-user420/kabuApp" />
+  <img src="https://contrib.rocks/image?repo=Random-user420/kabuApp"/>
 </a>
 
 # Copyright
