@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.databinding.SettingsActivityBinding;
+import org.kabuapp.kabuapp.databinding.ActivitySettingsBinding;
 import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.db.controller.ExamController;
 import org.kabuapp.kabuapp.db.controller.LifetimeController;
@@ -27,7 +27,7 @@ import java.time.format.FormatStyle;
 
 public class SettingsActivity extends AppCompatActivity
 {
-    private SettingsActivityBinding binding;
+    private ActivitySettingsBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
     private ExamController examController;
@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity
 
         EdgeToEdge.enable(this);
 
-        binding = SettingsActivityBinding.inflate(getLayoutInflater());
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
         {
