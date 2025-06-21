@@ -16,4 +16,7 @@
     <string name="notice_warrenty">Wir geben keine Garantie auf dieses Programm.</string>
     <string name="notice_code">"Der code und die Lizens ist auf "</string>
     <string name="exam_title">Schulaufgaben</string>
+    <string name="settings_account_management_header">Konten verwalten</string>
+    <string name="settings_add_account">Konto hinzufügen</string>
+    <string name="settings_delete_account">Aktuelles Konto löschen</string>
 </resources>

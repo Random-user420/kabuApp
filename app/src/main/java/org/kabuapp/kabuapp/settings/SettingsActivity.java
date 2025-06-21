@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity
 
     private void resetUserHandler()
     {
-        binding.logout.setOnClickListener(v ->
+        binding.deleteAccountButton.setOnClickListener(v ->
         {
             authController.setCredentials("", "", "");
             scheduleController.resetSchedule(authController.getId());

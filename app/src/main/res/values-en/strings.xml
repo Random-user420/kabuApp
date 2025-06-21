@@ -16,4 +16,7 @@
     <string name="notice_warrenty">We don\'t provide any warranty on this programm.</string>
     <string name="notice_code">"The code and licence is on "</string>
     <string name="exam_title">Exams</string>
+    <string name="settings_account_management_header">Manage accounts</string>
+    <string name="settings_add_account">add account</string>
+    <string name="settings_delete_account">delete account</string>
 </resources>
