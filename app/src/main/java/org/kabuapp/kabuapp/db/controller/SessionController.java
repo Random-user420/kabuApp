@@ -25,6 +25,7 @@ public class SessionController
         executorService.execute(() ->
         {
             UUID userId = authController.getDbUser();
+            authController.getDbUsers();
             examController.getDbExams(userId);
             lifetimeController.getDbLifetime(userId);
             scheduleController.getDbSchedule(userId);

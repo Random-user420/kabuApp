@@ -1,6 +1,8 @@
 package org.kabuapp.kabuapp.db.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
@@ -115,6 +117,17 @@ public class AuthController implements AuthCallback
             stateholder.setDbId(user.getId());
         }, this::save);
         return stateholder.getDbId();
+    }
+
+    public void getDbUsers()
+    {
+        executorService.execute(() ->
+        {
+            List<User> users = db.userDao().getAll();
+            Map<String, UUID> userMap = new LinkedHashMap<>();
+            users.forEach(user -> userMap.put(user.getUsername(), user.getId()));
+            stateholder.setUsers(userMap);
+        });
     }
 
     public boolean isInitialized()
