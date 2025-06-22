@@ -101,7 +101,12 @@ public class ExamController
 
     public void resetExams(UUID userId)
     {
-        exams.reset();
+        resetState();
         executorService.execute(() -> db.examDao().deletePerUser(userId));
+    }
+
+    public void resetState()
+    {
+        exams.reset();
     }
 }

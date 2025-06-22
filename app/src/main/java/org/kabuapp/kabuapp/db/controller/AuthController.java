@@ -1,5 +1,6 @@
 package org.kabuapp.kabuapp.db.controller;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,23 @@ public class AuthController implements AuthCallback
     public String getToken()
     {
         return stateholder.getToken();
+    }
+
+    public void resetUser(UUID id)
+    {
+        if (stateholder.getUsers().entrySet().stream().filter(entry -> entry.getValue().equals(id)).findAny().isEmpty())
+        {
+            return;
+        }
+        stateholder.getUsers().remove(stateholder.getUsers().entrySet().stream().filter(entry -> entry.getValue().equals(id)).findAny().get().getKey());
+        setCredentials(null, null, null);
+    }
+
+    public void resetState()
+    {
+        stateholder.setUsername(null);
+        stateholder.setPassword(null);
+        stateholder.setToken(null);
     }
 
     public boolean setCredentials(String username, String password, Callback callback, Object[] args)
@@ -132,8 +150,19 @@ public class AuthController implements AuthCallback
 
     public boolean isInitialized()
     {
-        return !stateholder.getUsername().isEmpty() &&
+        return  stateholder.getUsername() != null &&
+                !stateholder.getUsername().isEmpty() &&
                 !stateholder.getPassword().isEmpty() &&
                 !stateholder.getToken().isEmpty();
+    }
+
+    public List<String> getUsers()
+    {
+        return new ArrayList<>(stateholder.getUsers().keySet());
+    }
+
+    public String getUser()
+    {
+        return stateholder.getUsername();
     }
 }

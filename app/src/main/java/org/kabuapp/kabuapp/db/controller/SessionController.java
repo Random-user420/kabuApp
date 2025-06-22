@@ -1,6 +1,7 @@
 package org.kabuapp.kabuapp.db.controller;
 
 import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.interfaces.Callback;
 
 import java.util.List;
 import java.util.Map;
@@ -32,16 +33,37 @@ public class SessionController
         });
     }
 
+    public void removeUser(UUID userId, Callback callback)
+    {
+        removeUser(userId);
+        callback.callback(null);
+    }
+
     public void removeUser(UUID userId)
     {
         db.userDao().delete(userId);
-        scheduleController.resetSchedule(authController.getId());
-        examController.resetExams(authController.getId());
-        lifetimeController.resetLifetimes(authController.getId());
+        authController.resetUser(userId);
+        scheduleController.resetSchedule(userId);
+        examController.resetExams(userId);
+        lifetimeController.resetLifetimes(userId);
+    }
+
+    public void resetSate()
+    {
+        UUID id = authController.getId();
+        authController.resetState();
+        scheduleController.resetState();
+        examController.resetState();
+        lifetimeController.resetState();
     }
 
     public List<Map<UUID, String>> getUsers()
     {
         return db.userDao().getAll().stream().map(user -> Map.of(user.getId(), user.getUsername())).collect(Collectors.toList());
+    }
+
+    public void switchAccount(String selectedUsername, Callback callback)
+    {
+
     }
 }

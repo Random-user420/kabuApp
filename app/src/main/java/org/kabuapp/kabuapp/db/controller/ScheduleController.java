@@ -99,7 +99,12 @@ public class ScheduleController
 
     public void resetSchedule(UUID userId)
     {
-        schedule.setLessons(new HashMap<>());
+        resetState();
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
+    }
+
+    public void resetState()
+    {
+        schedule.setLessons(new HashMap<>());
     }
 }

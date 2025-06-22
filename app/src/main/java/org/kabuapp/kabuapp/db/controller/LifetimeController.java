@@ -41,9 +41,14 @@ public class LifetimeController
 
     public void resetLifetimes(UUID userId)
     {
+        resetState();
+        saveLifetimeToDb(userId);
+    }
+
+    public void resetState()
+    {
         memLifetime.setScheduleLastUpdate(null);
         memLifetime.setExamLastUpdate(null);
-        saveLifetimeToDb(userId);
     }
 
     public void saveLifetimeToDb(UUID userId)
