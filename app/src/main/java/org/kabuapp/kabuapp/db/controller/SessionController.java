@@ -50,7 +50,7 @@ public class SessionController
 
     public void resetSate()
     {
-        UUID id = authController.getId();
+        authController.getId();
         authController.resetState();
         scheduleController.resetState();
         examController.resetState();
@@ -64,6 +64,10 @@ public class SessionController
 
     public void switchAccount(String selectedUsername, Callback callback)
     {
-
+        resetSate();
+        UUID userId = authController.getDbUserByNameAndLoad(selectedUsername);
+        examController.getDbExams(userId);
+        lifetimeController.getDbLifetime(userId);
+        scheduleController.getDbSchedule(userId);
     }
 }

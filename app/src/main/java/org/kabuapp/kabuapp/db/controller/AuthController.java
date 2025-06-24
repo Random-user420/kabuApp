@@ -150,6 +150,28 @@ public class AuthController implements AuthCallback
         });
     }
 
+    public UUID getDbUserByNameAndLoad(String name)
+    {
+        UUID id = stateholder.getUsers().get(name);
+        List<User> users = db.userDao().getAll();
+
+        users.stream().filter(user -> Boolean.TRUE.equals(user.getStandard())).findAny().ifPresent(user ->
+        {
+            user.setStandard(false);
+            db.userDao().update(user);
+        });
+        users.stream().filter(user -> user.getId().equals(id)).findAny().ifPresent(user ->
+        {
+            user.setStandard(true);
+            db.userDao().update(user);
+            stateholder.setUsername(user.getUsername());
+            stateholder.setPassword(user.getPassword());
+            stateholder.setToken(user.getToken());
+            stateholder.setDbId(user.getId());
+        });
+        return id;
+    }
+
     public boolean isInitialized()
     {
         return  stateholder.getUsername() != null &&

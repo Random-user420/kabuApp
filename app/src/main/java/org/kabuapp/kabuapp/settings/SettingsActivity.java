@@ -31,6 +31,7 @@ import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     private ExamController examController;
     private LifetimeController lifetimeController;
     private SessionController sessionController;
+    private ExecutorService executorService;
     private Spinner accountSpinner;
 
     @Override
@@ -63,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         examController = ((KabuApp) getApplication()).getExamController();
         lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
         sessionController = ((KabuApp) getApplication()).getSessionController();
+        executorService = ((KabuApp) getApplication()).getExecutorService();
 
         accountSpinner = findViewById(R.id.account_spinner);
         accountSpinner.setOnItemSelectedListener(this);
@@ -123,15 +126,16 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         if (!selectedUsername.equals(currentActiveUsername))
         {
-
-            sessionController.switchAccount(selectedUsername, objects -> runOnUiThread(() ->
+            executorService.execute(() ->
             {
-                Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }));
-
+                sessionController.switchAccount(selectedUsername, objects -> runOnUiThread(() ->
+                {
+                    Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }));
+            });
         }
     }
 
