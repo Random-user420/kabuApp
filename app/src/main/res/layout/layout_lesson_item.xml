@@ -23,7 +23,7 @@
                 android:id="@+id/text_view_lesson_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -35,7 +35,13 @@
                 android:layout_marginTop="4dp"
                 android:layout_weight="1"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_view_lesson_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2" />
         </LinearLayout>
 
         <LinearLayout

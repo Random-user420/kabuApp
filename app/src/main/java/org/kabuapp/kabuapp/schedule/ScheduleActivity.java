@@ -181,22 +181,10 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             for (Map<Short, MemLesson> lessons : scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values())
             {
                 MemLesson lesson = lessons.get((short) 1);
-                if (lessons.get((short) 1).getMaxGroup() == 1)
-                {
-                    scheduleUiGenerator.addSingleLessonElement(
-                            this,
-                            linearSchedule,
-                            lesson);
-                }
-                else
-                {
-                    MemLesson lesson2 = lessons.get((short) 2);
-                    scheduleUiGenerator.addDoubleLessonElement(
-                            this,
-                            linearSchedule,
-                            lesson,
-                            lesson2);
-                }
+                scheduleUiGenerator.addLessonElement(
+                        this,
+                        linearSchedule,
+                        lesson);
                 if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
                 {
                     dateAdapter.getDateList().add(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
