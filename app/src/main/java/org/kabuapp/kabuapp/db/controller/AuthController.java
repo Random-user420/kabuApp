@@ -57,6 +57,7 @@ public class AuthController implements AuthCallback
         stateholder.setUsername(null);
         stateholder.setPassword(null);
         stateholder.setToken(null);
+        stateholder.setDbId(UUID.randomUUID());
     }
 
     public boolean setCredentials(String username, String password, Callback callback, Object[] args)
@@ -66,6 +67,7 @@ public class AuthController implements AuthCallback
             stateholder.setUsername(username);
             stateholder.setPassword(password);
             auth(callback, args);
+            stateholder.getUsers().put(username, stateholder.getDbId());
             return true;
         }
         return false;
