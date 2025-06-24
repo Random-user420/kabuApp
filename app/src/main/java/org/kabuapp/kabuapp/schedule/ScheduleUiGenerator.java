@@ -57,7 +57,7 @@ public class ScheduleUiGenerator
             }
             else
             {
-                roomTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
+                groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
             }
         }
 
