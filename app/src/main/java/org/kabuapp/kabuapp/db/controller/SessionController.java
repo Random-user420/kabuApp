@@ -21,16 +21,27 @@ public class SessionController
     private ScheduleController scheduleController;
     private ExecutorService executorService;
 
-    public void loadSession()
+    public void loadSession(Callback callback, Object[] objects)
     {
         executorService.execute(() ->
         {
-            UUID userId = authController.getDbUser();
-            authController.getDbUsers();
-            examController.getDbExams(userId);
-            lifetimeController.getDbLifetime(userId);
-            scheduleController.getDbSchedule(userId);
+            loadSyncSession();
+            callback.callback(objects);
         });
+    }
+
+    public void loadSession()
+    {
+        executorService.execute(this::loadSyncSession);
+    }
+
+    private void loadSyncSession()
+    {
+        UUID userId = authController.getDbUser();
+        authController.getDbUsers();
+        examController.getDbExams(userId);
+        lifetimeController.getDbLifetime(userId);
+        scheduleController.getDbSchedule(userId);
     }
 
     public void removeUser(UUID userId, Callback callback)
