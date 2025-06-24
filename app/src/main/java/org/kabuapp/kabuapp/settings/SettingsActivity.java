@@ -20,13 +20,10 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivitySettingsBinding;
 import org.kabuapp.kabuapp.db.controller.SessionController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.db.controller.ExamController;
 import org.kabuapp.kabuapp.db.controller.LifetimeController;
 import org.kabuapp.kabuapp.db.controller.AuthController;
-import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
-import org.kabuapp.kabuapp.db.controller.ScheduleController;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -37,8 +34,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 {
     private ActivitySettingsBinding binding;
     private AuthController authController;
-    private ScheduleController scheduleController;
-    private ExamController examController;
     private LifetimeController lifetimeController;
     private SessionController sessionController;
     private ExecutorService executorService;
@@ -61,8 +56,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         });
 
         authController = ((KabuApp) getApplication()).getAuthController();
-        scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        examController = ((KabuApp) getApplication()).getExamController();
         lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
         sessionController = ((KabuApp) getApplication()).getSessionController();
         executorService = ((KabuApp) getApplication()).getExecutorService();
