@@ -42,7 +42,7 @@ public class SessionController
     public void removeUser(UUID userId)
     {
         db.userDao().delete(userId);
-        authController.resetUser(userId);
+        authController.removeUser(userId);
         scheduleController.resetSchedule(userId);
         examController.resetExams(userId);
         lifetimeController.resetLifetimes(userId);

@@ -42,14 +42,17 @@ public class AuthController implements AuthCallback
         return stateholder.getToken();
     }
 
-    public void resetUser(UUID id)
+    public void removeUser(UUID id)
     {
-        if (stateholder.getUsers().entrySet().stream().filter(entry -> entry.getValue().equals(id)).findAny().isEmpty())
+        if (stateholder.getUsers().entrySet().stream().filter(entry ->
+                entry.getValue().equals(id)).findAny().isEmpty())
         {
             return;
         }
         stateholder.getUsers().remove(stateholder.getUsers().entrySet().stream().filter(entry -> entry.getValue().equals(id)).findAny().get().getKey());
-        setCredentials(null, null, null);
+        stateholder.setUsername(null);
+        stateholder.setPassword(null);
+        stateholder.setToken(null);
     }
 
     public void resetState()
@@ -129,13 +132,13 @@ public class AuthController implements AuthCallback
     public UUID getDbUser()
     {
         List<User> users = db.userDao().getAll();
-        users.stream().filter(user -> Boolean.TRUE.equals(user.getStandard())).findAny().ifPresentOrElse(user ->
+        users.stream().filter(user -> Boolean.TRUE.equals(user.getStandard()) && !user.getUsername().isEmpty()).findAny().ifPresentOrElse(user ->
         {
             stateholder.setUsername(user.getUsername());
             stateholder.setPassword(user.getPassword());
             stateholder.setToken(user.getToken());
             stateholder.setDbId(user.getId());
-        }, () -> users.stream().findFirst().ifPresent(user ->
+        }, () -> users.stream().filter(user -> !user.getUsername().isEmpty()).findFirst().ifPresent(user ->
         {
             stateholder.setUsername(user.getUsername());
             stateholder.setPassword(user.getPassword());

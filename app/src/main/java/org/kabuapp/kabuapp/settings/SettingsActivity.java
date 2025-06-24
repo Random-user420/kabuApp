@@ -74,7 +74,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         findViewById(R.id.add_account_button).setOnClickListener(v -> onAddAccountClicked());
         findViewById(R.id.delete_account_button).setOnClickListener(v -> onDeleteAccountClicked());
 
-        resetUserHandler();
         setScheduleListener();
         examHandler();
         debugSwitchListener();
@@ -142,27 +141,33 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     private void onDeleteAccountClicked()
     {
-        sessionController.removeUser(authController.getId(), new Callback()
+        executorService.execute(() ->
         {
-            @Override
-            public void callback(Object[] objects)
+            sessionController.removeUser(authController.getId(), new Callback()
             {
-                runOnUiThread(() ->
+                @Override
+                public void callback(Object[] objects)
                 {
-                    refreshAccountsSpinner();
+                    runOnUiThread(() ->
+                    {
+                        refreshAccountsSpinner();
+                    });
                     if (authController.getUser() == null && !authController.getUsers().isEmpty())
                     {
                         sessionController.switchAccount(authController.getUsers().get(0), null);
                     }
                     else
                     {
-                        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
+                        runOnUiThread(() ->
+                        {
+                            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        });
                     }
-                });
-            }
+                }
+            });
         });
     }
 
@@ -177,19 +182,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("ADD_NEW_ACCOUNT", true);
         startActivity(intent);
-    }
-
-    private void resetUserHandler()
-    {
-        binding.deleteAccountButton.setOnClickListener(v ->
-        {
-            authController.setCredentials("", "", "");
-            scheduleController.resetSchedule(authController.getId());
-            examController.resetExams(authController.getId());
-            lifetimeController.resetLifetimes(authController.getId());
-            var i = new Intent(this, LoginActivity.class);
-            startActivity(i);
-        });
     }
 
     private void debugSwitchListener()
