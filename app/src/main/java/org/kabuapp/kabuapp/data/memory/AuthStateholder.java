@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
-import org.jetbrains.annotations.NotNull;
-
 import lombok.Getter;
 import lombok.Setter;
 
