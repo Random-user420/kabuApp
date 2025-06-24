@@ -35,7 +35,7 @@ public class ScheduleUiGenerator
         TextView roomTextView = lessonView.findViewById(R.id.text_view_lesson_room);
         TextView teacherTextView = lessonView.findViewById(R.id.text_view_lesson_teacher);
 
-        if (lesson.getTeacher().isEmpty())
+        if (lesson.getTeacher() != null && lesson.getTeacher().isEmpty())
         {
             nameTextView.setText(Html.fromHtml("<s>" + lesson.getName() + "</s>"));
             timeTextView.setText(Html.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "

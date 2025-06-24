@@ -19,7 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
@@ -36,7 +35,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -178,18 +176,18 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         if (scheduleController.getSchedule().getLessons() != null
                 && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate()))
         {
-            for (Map<Short, MemLesson> lessons : scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values())
-            {
-                MemLesson lesson = lessons.get((short) 1);
-                scheduleUiGenerator.addLessonElement(
-                        this,
-                        linearSchedule,
-                        lesson);
-                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
+            scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).values().forEach(map ->
+                map.values().forEach( lesson ->
                 {
-                    dateAdapter.getDateList().add(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
-                }
-            }
+                    scheduleUiGenerator.addLessonElement(
+                            this,
+                            linearSchedule,
+                            lesson);
+                    if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
+                    {
+                        dateAdapter.getDateList().add(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
+                    }
+                }));
         }
     }
 
