@@ -80,6 +80,9 @@ public class SessionController
         examController.getDbExams(userId);
         lifetimeController.getDbLifetime(userId);
         scheduleController.getDbSchedule(userId);
-        callback.callback(null);
+        if (callback != null)
+        {
+            callback.callback(null);
+        }
     }
 }
