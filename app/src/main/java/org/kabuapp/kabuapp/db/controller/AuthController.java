@@ -135,7 +135,13 @@ public class AuthController implements AuthCallback
             stateholder.setPassword(user.getPassword());
             stateholder.setToken(user.getToken());
             stateholder.setDbId(user.getId());
-        }, this::save);
+        }, () -> users.stream().findFirst().ifPresent(user ->
+        {
+            stateholder.setUsername(user.getUsername());
+            stateholder.setPassword(user.getPassword());
+            stateholder.setToken(user.getToken());
+            stateholder.setDbId(user.getId());
+        }));
         return stateholder.getDbId();
     }
 
@@ -169,7 +175,7 @@ public class AuthController implements AuthCallback
             stateholder.setToken(user.getToken());
             stateholder.setDbId(user.getId());
         });
-        return id;
+        return stateholder.getDbId();
     }
 
     public boolean isInitialized()
