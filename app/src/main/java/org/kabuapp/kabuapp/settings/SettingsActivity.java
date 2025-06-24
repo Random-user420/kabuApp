@@ -143,29 +143,22 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     {
         executorService.execute(() ->
         {
-            sessionController.removeUser(authController.getId(), new Callback()
+            sessionController.removeUser(authController.getId(), objects ->
             {
-                @Override
-                public void callback(Object[] objects)
+                runOnUiThread(this::refreshAccountsSpinner);
+                if (authController.getUser() == null && !authController.getUsers().isEmpty())
+                {
+                    sessionController.switchAccount(authController.getUsers().get(0), null);
+                }
+                else
                 {
                     runOnUiThread(() ->
                     {
-                        refreshAccountsSpinner();
+                        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
                     });
-                    if (authController.getUser() == null && !authController.getUsers().isEmpty())
-                    {
-                        sessionController.switchAccount(authController.getUsers().get(0), null);
-                    }
-                    else
-                    {
-                        runOnUiThread(() ->
-                        {
-                            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-                        });
-                    }
                 }
             });
         });
