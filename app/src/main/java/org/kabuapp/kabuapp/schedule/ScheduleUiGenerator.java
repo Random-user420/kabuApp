@@ -43,7 +43,14 @@ public class ScheduleUiGenerator
             teacherTextView.getParent().clearChildFocus(teacherTextView);
             roomTextView.setVisibility(View.GONE);
             teacherTextView.setVisibility(View.GONE);
-            groupTextView.setVisibility(View.GONE);
+            if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
+            {
+                groupTextView.setVisibility(View.GONE);
+            }
+            else
+            {
+                groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
+            }
         }
         else
         {
