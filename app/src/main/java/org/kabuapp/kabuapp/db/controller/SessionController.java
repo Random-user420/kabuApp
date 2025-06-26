@@ -82,7 +82,7 @@ public class SessionController
         scheduleController.getDbSchedule(userId);
         if (callback != null)
         {
-            callback.callback(null);
+            callback.callback(new Object[]{});
         }
     }
 }
