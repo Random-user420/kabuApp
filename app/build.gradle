@@ -55,6 +55,8 @@ dependencies {
     implementation libs.apache.httpclient
     implementation libs.apache.httpcore
     implementation libs.swiperrefeshlayout
+    implementation libs.recyclerview
+    implementation libs.fragment
     annotationProcessor libs.lombok
     annotationProcessor libs.room.compiler
 
