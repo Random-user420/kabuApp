@@ -28,7 +28,7 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 * **ExecutorService** für die Hintergrundausführung von Aufgaben (z.B. API-Aufrufe).
 * **Apache-http\*** für die API Aufrufe.
 * **Room** als DataBase abstraction.
-* Externe API: www.digikabu.de/api/swagger/
+* Externe API: www.digikabu.de/swagger/
 
 
 # Zum Nutzen
