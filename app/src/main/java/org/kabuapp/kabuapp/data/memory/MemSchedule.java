@@ -1,22 +1,22 @@
 package org.kabuapp.kabuapp.data.memory;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class MemSchedule
 {
-    //date, begin, group
-    private Map<LocalDate, Map<Short, Map<Short, MemLesson>>> lessons;
+    private Map<LocalDate, List<MemLesson>> lessons;
     private LocalDate selectedDate;
 
-    public synchronized Map<LocalDate, Map<Short, Map<Short, MemLesson>>> getLessons()
+    public synchronized Map<LocalDate, List<MemLesson>> getLessons()
     {
         return lessons;
     }
 
-    public synchronized void setLessons(Map<LocalDate, Map<Short, Map<Short, MemLesson>>> lessons)
+    public synchronized void setLessons(Map<LocalDate, List<MemLesson>> lessons)
     {
         this.lessons = lessons;
     }

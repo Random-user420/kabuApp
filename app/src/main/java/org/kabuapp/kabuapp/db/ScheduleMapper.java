@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.kabuapp.kabuapp.api.models.LessonResponse;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
@@ -25,7 +26,7 @@ public class ScheduleMapper
             schedule.setLessons(new LinkedHashMap<>());
         }
 
-        Map<LocalDate, Map<Short, Map<Short, MemLesson>>> lessons = schedule.getLessons();
+        Map<LocalDate, List<MemLesson>> lessons = schedule.getLessons();
 
         lessonResponses.forEach(lessonResponse ->
         {
@@ -44,20 +45,19 @@ public class ScheduleMapper
                     null);
             if (!lessons.containsKey(lesson.getDate()))
             {
-                lessons.put(lesson.getDate(), new LinkedHashMap<>());
+                lessons.put(lesson.getDate(), new ArrayList<>());
             }
+            List<MemLesson> dateLessons = lessons.get(lesson.getDate());
+            Optional<MemLesson> existingLesson = dateLessons.stream().filter(memLesson -> memLesson.getDate().equals(
+                    lesson.getDate()) && memLesson.getBegin() == lesson.getBegin() && lesson.getGroup() == memLesson.getGroup()).findAny();
 
-            Map<Short, Map<Short, MemLesson>> dateLessons = lessons.get(lesson.getDate());
+            existingLesson.ifPresent(memLesson ->
+            {
+                lesson.setDbId(memLesson.getDbId());
+                dateLessons.remove(memLesson);
+            });
 
-            if (!dateLessons.containsKey(lesson.getBegin()))
-            {
-                dateLessons.put(lesson.getBegin(), new LinkedHashMap<>());
-            }
-            else if (dateLessons.get(lesson.getBegin()).get(lesson.getGroup()) != null)
-            {
-                lesson.setDbId(dateLessons.get(lesson.getBegin()).get(lesson.getGroup()).getDbId());
-            }
-            dateLessons.get(lesson.getBegin()).put(lesson.getGroup(), lesson);
+            dateLessons.add(lesson);
         });
     }
 
@@ -66,30 +66,27 @@ public class ScheduleMapper
         List<Lesson> dbLessons = new ArrayList<>();
         if (schedule != null && schedule.getLessons() != null)
         {
-            schedule.getLessons().values().forEach(shortMapMap ->
+            schedule.getLessons().values().forEach(lessonList ->
             {
-                shortMapMap.values().forEach(shortLessonMap ->
+                lessonList.forEach(lesson ->
                 {
-                    shortLessonMap.values().forEach(lesson ->
+                    if (lesson.getDbId() == null)
                     {
-                        if (lesson.getDbId() == null)
-                        {
-                            lesson.setDbId(UUID.randomUUID());
-                        }
-                        Lesson dbLesson = new Lesson(
-                                lesson.getDbId(),
-                                userId,
-                                lesson.getBegin(),
-                                lesson.getEnd(),
-                                lesson.getDate(),
-                                lesson.getGroup(),
-                                lesson.getMaxGroup(),
-                                lesson.getName(),
-                                lesson.getTeacher(),
-                                lesson.getRoom()
-                        );
-                        dbLessons.add(dbLesson);
-                    });
+                        lesson.setDbId(UUID.randomUUID());
+                    }
+                    Lesson dbLesson = new Lesson(
+                            lesson.getDbId(),
+                            userId,
+                            lesson.getBegin(),
+                            lesson.getEnd(),
+                            lesson.getDate(),
+                            lesson.getGroup(),
+                            lesson.getMaxGroup(),
+                            lesson.getName(),
+                            lesson.getTeacher(),
+                            lesson.getRoom()
+                    );
+                    dbLessons.add(dbLesson);
                 });
             });
         }
@@ -116,13 +113,9 @@ public class ScheduleMapper
                     dbLesson.getId());
             if (!schedule.getLessons().containsKey(lesson.getDate()))
             {
-                schedule.getLessons().put(lesson.getDate(), new LinkedHashMap<>());
+                schedule.getLessons().put(lesson.getDate(), new ArrayList<>());
             }
-            if (!schedule.getLessons().get(lesson.getDate()).containsKey(lesson.getBegin()))
-            {
-                schedule.getLessons().get(lesson.getDate()).put(lesson.getBegin(), new LinkedHashMap<>());
-            }
-            schedule.getLessons().get(lesson.getDate()).get(lesson.getBegin()).put(lesson.getGroup(), lesson);
+            schedule.getLessons().get(lesson.getDate()).add(lesson);
         });
     }
 }
