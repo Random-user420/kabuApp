@@ -48,14 +48,11 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private ActivityScheduleBinding binding;
     private AuthController authController;
     private ScheduleController scheduleController;
-    private ExamController examController;
     private ScheduleUiGenerator scheduleUiGenerator;
-    private RecyclerView dateRecyclerView;
     private DateAdapter dateAdapter;
     private List<DateItem> dateItems;
     private LinearLayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ScrollView scheduleScrollView;
     private GestureDetector gestureDetector;
     private ExecutorService executorService;
     private DateTimeFormatter monthFormatter;
@@ -71,9 +68,10 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        examController = ((KabuApp) getApplication()).getExamController();
-        scheduleUiGenerator = new ScheduleUiGenerator();
         executorService = ((KabuApp) getApplication()).getExecutorService();
+        scheduleUiGenerator = new ScheduleUiGenerator();
+        ExamController examController = ((KabuApp) getApplication()).getExamController();
+
         monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
         dayFormatter = DateTimeFormatter.ofPattern("dd");
         weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
@@ -84,7 +82,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         setContentView(binding.getRoot());
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
-        scheduleScrollView = findViewById(R.id.schedule_scroll_view);
+        ScrollView scheduleScrollView = findViewById(R.id.schedule_scroll_view);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) ->
         {
@@ -120,7 +118,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        dateRecyclerView = findViewById(R.id.recycler_view_date_selector);
+        RecyclerView dateRecyclerView = findViewById(R.id.recycler_view_date_selector);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
 
@@ -321,7 +319,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             }
             catch (Exception exception)
             {
-                Logger.getLogger("GestureListener").log(Level.SEVERE, "Fehler in onFling", exception);
+                Logger.getLogger("GestureListener").log(Level.SEVERE, "Error in onFling", exception);
             }
             return result;
         }
