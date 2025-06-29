@@ -43,14 +43,6 @@ public class ScheduleUiGenerator
             teacherTextView.getParent().clearChildFocus(teacherTextView);
             roomTextView.setVisibility(View.GONE);
             teacherTextView.setVisibility(View.GONE);
-            if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
-            {
-                groupTextView.setVisibility(View.GONE);
-            }
-            else
-            {
-                groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
-            }
         }
         else
         {
@@ -58,14 +50,14 @@ public class ScheduleUiGenerator
             timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " + mapBeginnToString((short) (lesson.getEnd() + 1)));
             teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + lesson.getTeacher());
             roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + lesson.getRoom());
-            if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
-            {
-                groupTextView.setVisibility(View.GONE);
-            }
-            else
-            {
-                groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
-            }
+        }
+        if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
+        {
+            groupTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
         }
 
         if (isCurrent(toLocaleDate(lesson.getBegin()), toLocaleDate((short) (lesson.getEnd() + 1))))
