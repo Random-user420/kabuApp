@@ -23,4 +23,5 @@
     <string name="settings_add_account">add account</string>
     <string name="settings_delete_account">delete account</string>
     <string name="login_back">Back</string>
+    <string name="noSchoolHint">You don\'t have school in this or the next week</string>
 </resources>

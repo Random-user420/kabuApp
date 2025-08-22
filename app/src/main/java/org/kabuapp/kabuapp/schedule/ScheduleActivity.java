@@ -1,5 +1,8 @@
 package org.kabuapp.kabuapp.schedule;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +36,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -137,6 +141,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                 layoutManager.scrollToPositionWithOffset(selectedPosition, 0);
             }
         });
+        checkIfNoSchool();
 
         updateScheduleLoop();
     }
@@ -349,5 +354,18 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             }
         }
         changeSelectedDate(scheduleController.getSchedule().getSelectedDate().plusDays(days));
+    }
+
+    private void checkIfNoSchool()
+    {
+        boolean isSchool = scheduleController.getSchedule().getLessons().values().stream().mapToLong(Collection::size).sum() > 0;
+        if (!isSchool)
+        {
+            findViewById(R.id.noSchoolHint).setVisibility(VISIBLE);
+        }
+        else
+        {
+            findViewById(R.id.noSchoolHint).setVisibility(GONE);
+        }
     }
 }

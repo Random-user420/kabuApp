@@ -8,6 +8,17 @@
     android:elevation="0dp"
     tools:context=".schedule.ScheduleActivity">
 
+    <TextView
+        android:id="@+id/noSchoolHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/noSchoolHint"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recycler_view_date_selector" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_date_selector"
         android:layout_width="0dp"
