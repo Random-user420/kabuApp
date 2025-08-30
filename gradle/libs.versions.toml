@@ -1,5 +1,5 @@
 [versions]
-agp = "8.12.1"
+agp = "8.12.2"
 appcompat = "1.7.1"
 
 lombok = "1.18.38"
@@ -9,12 +9,12 @@ roomRuntimeAndroid = "2.7.2"
 roomCompiler = "2.7.2"
 
 apache-httpclient = "5.5"
-apache-httpcore = "5.3.4"
+apache-httpcore = "5.3.5"
 
 gson = "2.13.1"
 
-lifecycleLivedataKtx = "2.9.2"
-lifecycleViewmodelKtx = "2.9.2"
+lifecycleLivedataKtx = "2.9.3"
+lifecycleViewmodelKtx = "2.9.3"
 
 material = "1.12.0"
 preference = "1.2.1"
