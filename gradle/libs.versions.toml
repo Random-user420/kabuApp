@@ -11,7 +11,7 @@ roomCompiler = "2.7.2"
 apache-httpclient = "5.5"
 apache-httpcore = "5.3.5"
 
-gson = "2.13.1"
+metis = "1.0-SNAPSHOT"
 
 lifecycleLivedataKtx = "2.9.3"
 lifecycleViewmodelKtx = "2.9.3"
@@ -41,12 +41,12 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 apache-httpclient = { group = "org.apache.httpcomponents.client5", name = "httpclient5", version.ref = "apache-httpclient" }
 apache-httpcore = { group = "org.apache.httpcomponents.core5", name = "httpcore5", version.ref = "apache-httpcore" }
 swiperrefeshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+metis = { group = "io.lilithtechs", name = "metis-json", version.ref = "metis" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

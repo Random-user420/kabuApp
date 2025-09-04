@@ -1,6 +1,5 @@
 package org.kabuapp.kabuapp.api;
 
-import com.google.gson.Gson;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.classic.methods.HttpPut;
@@ -15,9 +14,9 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
+import io.lilithtechs.metisJson.JsonUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -28,12 +27,11 @@ public abstract class ApiService
 {
     protected String baseUrl;
     private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-    private final Gson gson = new Gson();
 
     protected <T> T executeRequest(
             String url,
             String httpMethod,
-            Type responseType,
+            Class<T> clazz,
             Map<String, Object> params,
             Map<String, String> headers,
             Object body) throws Exception
@@ -66,7 +64,7 @@ public abstract class ApiService
                 HttpPost httpPost = new HttpPost(uri);
                 if (body != null)
                 {
-                    String jsonBody = gson.toJson(body);
+                    String jsonBody = JsonUtils.toJson(body);
                     httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
                 }
                 request = httpPost;
@@ -75,7 +73,7 @@ public abstract class ApiService
                 HttpPut httpPut = new HttpPut(uri);
                 if (body != null)
                 {
-                    String jsonBody = gson.toJson(body);
+                    String jsonBody = JsonUtils.toJson(body);
                     httpPut.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
                 }
                 request = httpPut;
@@ -109,13 +107,13 @@ public abstract class ApiService
                 throw new Exception("API-Error: " + statusCode + " - " + response.getReasonPhrase() + "\nResponse Body: " + responseString);
             }
 
-            if (responseType instanceof Class && responseType.equals(String.class))
+            if (clazz.equals(String.class))
             {
                 return (T) responseString;
             }
             else if (responseString != null)
             {
-                return gson.fromJson(responseString, responseType);
+                return JsonUtils.fromJson(responseString, clazz);
             }
             else
             {

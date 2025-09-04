@@ -1,8 +1,8 @@
 package org.kabuapp.kabuapp.api;
 
-import com.google.gson.reflect.TypeToken;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -51,18 +51,16 @@ public class DigikabuApiService extends ApiService
     {
         try
         {
-            return executeRequest (
+            return Arrays.asList(executeRequest(
                     "stundenplan",
                     "GET",
-                    new TypeToken<List<LessonResponse>>()
-                    { }
-                            .getType(),
+                    LessonResponse[].class,
                     Map.of("datum",
                             date.format(formatter) + "T00:00:01.123Z",
                             "anzahl", days),
                     Map.of("Authorization", "Bearer " + token),
                     null
-            );
+            ));
         }
         catch (Exception e)
         {
@@ -79,16 +77,14 @@ public class DigikabuApiService extends ApiService
     {
         try
         {
-            return executeRequest (
+            return Arrays.asList(executeRequest(
                     "termine/schulaufgaben",
                     "GET",
-                    new TypeToken<List<ExamResponse>>()
-                    { }
-                            .getType(),
+                    ExamResponse[].class,
                     Map.of("monat", month),
                     Map.of("Authorization", "Bearer " + token),
                     null
-            );
+            ));
         }
         catch (Exception e)
         {

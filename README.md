@@ -28,6 +28,7 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 * **ExecutorService** für die Hintergrundausführung von Aufgaben (z.B. API-Aufrufe).
 * **Apache-http\*** für die API Aufrufe.
 * **Room** als DataBase abstraction.
+* **[MetisJson](https://github.com/Random-user420/MetisJson)** als AGL2 Json lib.
 * Externe API: www.digikabu.de/swagger/
 
 
@@ -69,15 +70,16 @@ This guide helps you set up and run the project locally.
 
 ### Installation
 
-1. Clone the repository:
+1. Have [MetisJson](https://github.com/Random-user420/MetisJson) in the local Maven repo installed.
+2. Clone the repository:
    ```bash
    git clone https://github.com/Random-user420/kabuApp.git
-2. Open the project in Android Studio.
-3. Let Gradle synchronize dependencies.
+3. Open the project in Android Studio.
+4. Let Gradle synchronize dependencies.
    
-4. Connect an Android device to your computer or start an emulator.
-5. Select the device in Android Studio.
-6. Click the "Run" button (green arrow) or go to Run > Run 'app'.
+5. Connect an Android device to your computer or start an emulator.
+6. Select the device in Android Studio.
+7. Click the "Run" button (green arrow) or go to Run > Run 'app'.
 
 The app should be installed and launched on your device/emulator. Note that the app requires a connection to the requires a login.
 
