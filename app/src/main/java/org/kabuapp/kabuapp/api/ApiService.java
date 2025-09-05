@@ -14,8 +14,6 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
-import io.lilithtechs.metisJson.JsonUtils;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -23,10 +21,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import io.lilithtechs.metisJson.JsonMapper;
+
 public abstract class ApiService
 {
     protected String baseUrl;
     private final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+    private final JsonMapper jsonMapper = new JsonMapper();
 
     protected <T> T executeRequest(
             String url,
@@ -64,7 +65,7 @@ public abstract class ApiService
                 HttpPost httpPost = new HttpPost(uri);
                 if (body != null)
                 {
-                    String jsonBody = JsonUtils.toJson(body);
+                    String jsonBody = jsonMapper.toJson(body);
                     httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
                 }
                 request = httpPost;
@@ -73,7 +74,7 @@ public abstract class ApiService
                 HttpPut httpPut = new HttpPut(uri);
                 if (body != null)
                 {
-                    String jsonBody = JsonUtils.toJson(body);
+                    String jsonBody = jsonMapper.toJson(body);
                     httpPut.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
                 }
                 request = httpPut;
@@ -113,7 +114,7 @@ public abstract class ApiService
             }
             else if (responseString != null)
             {
-                return JsonUtils.fromJson(responseString, clazz);
+                return jsonMapper.fromJson(responseString, clazz);
             }
             else
             {
