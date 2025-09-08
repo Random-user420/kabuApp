@@ -21,9 +21,7 @@ public class ThemeColorResolver
             {
                 return typedValue.data;
             }
-            else if (typedValue.type == TypedValue.TYPE_STRING
-                    || typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT
-                    && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT)
+            else if (typedValue.type == TypedValue.TYPE_STRING)
             {
                 try
                 {

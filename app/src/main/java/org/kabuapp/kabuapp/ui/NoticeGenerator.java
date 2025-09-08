@@ -21,13 +21,16 @@ public class NoticeGenerator
         String linkText = c.getString(R.string.github_text);
         String url = c.getString(R.string.github_link);
 
-        String fullText = prefix + linkText + ".";
+        String fullText = prefix + " " + linkText + ".";
 
         SpannableString spannableString = new SpannableString(fullText);
-        spannableString.setSpan(new URLSpan(url), fullText.indexOf(linkText), fullText.indexOf(linkText) + linkText.length(), Spanned.SPAN_COMPOSING);
+
+        int linkStartIndex = fullText.indexOf(linkText);
+        int linkEndIndex = linkStartIndex + linkText.length();
+
+        spannableString.setSpan(new URLSpan(url), linkStartIndex, linkEndIndex, Spanned.SPAN_COMPOSING);
 
         myTextView.setText(spannableString);
-
         myTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

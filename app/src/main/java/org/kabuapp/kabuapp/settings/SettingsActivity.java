@@ -4,7 +4,6 @@ import static org.kabuapp.kabuapp.ui.NoticeGenerator.setNotice;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +12,7 @@ import android.widget.Spinner;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.text.HtmlCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import org.kabuapp.kabuapp.KabuApp;
@@ -177,10 +177,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             if (ac && lifetimeController.getMemLifetime().getExamLastUpdate() != null && lifetimeController.getMemLifetime().getScheduleLastUpdate() != null)
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-                binding.debugScheduleLifetime.setText(Html.fromHtml(getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
-                                formatter.format(lifetimeController.getMemLifetime().getScheduleLastUpdate())));
-                binding.debugExamLifetime.setText(Html.fromHtml( getApplicationContext().getString(R.string.exam_title) + "<br/>" +
-                                formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate())));
+                binding.debugScheduleLifetime.setText(HtmlCompat.fromHtml(getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
+                        formatter.format(lifetimeController.getMemLifetime().getScheduleLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                binding.debugExamLifetime.setText(HtmlCompat.fromHtml( getApplicationContext().getString(R.string.exam_title) + "<br/>" +
+                                formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
             else
             {

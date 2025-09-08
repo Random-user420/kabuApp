@@ -4,13 +4,13 @@ import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.text.HtmlCompat;
 
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
@@ -37,9 +37,9 @@ public class ScheduleUiGenerator
 
         if (lesson.getTeacher() != null && lesson.getTeacher().isEmpty())
         {
-            nameTextView.setText(Html.fromHtml("<s>" + lesson.getName() + "</s>"));
-            timeTextView.setText(Html.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
-                    + mapBeginnToString((short) (lesson.getEnd() + 1)) + "</s>"));
+            nameTextView.setText(HtmlCompat.fromHtml("<s>" + lesson.getName() + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
+            timeTextView.setText(HtmlCompat.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
+                    + mapBeginnToString((short) (lesson.getEnd() + 1)) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
             teacherTextView.getParent().clearChildFocus(teacherTextView);
             roomTextView.setVisibility(View.GONE);
             teacherTextView.setVisibility(View.GONE);
