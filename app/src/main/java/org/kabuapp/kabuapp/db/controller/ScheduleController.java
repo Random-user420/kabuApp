@@ -37,12 +37,12 @@ public class ScheduleController
             if (lifetimeController.isLifetimeExpired(duration, DbType.SCHEDULE))
             {
                 updateSchedule(token, re, userId);
+                lifetimeController.updateLifetime(DbType.SCHEDULE);
+                lifetimeController.saveLifetimeToDb(userId);
                 if (ce != null)
                 {
                     ce.callback(objects);
                 }
-                lifetimeController.updateLifetime(DbType.SCHEDULE);
-                lifetimeController.saveLifetimeToDb(userId);
             }
         });
     }
@@ -54,8 +54,7 @@ public class ScheduleController
         LocalDate begin = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
         {
-            updateSchedule(begin, 7, token, userId);
-            updateSchedule(begin.plusDays(7), 7, token, userId);
+            updateSchedule(begin, 14, token, userId);
         }
         catch (UnauthorisedException ignored)
         {
@@ -63,8 +62,7 @@ public class ScheduleController
         }
         try
         {
-            updateSchedule(begin, 7, token, userId);
-            updateSchedule(begin.plusDays(7), 7, token, userId);
+            updateSchedule(begin, 14, token, userId);
         }
         catch (UnauthorisedException ignored)
         {

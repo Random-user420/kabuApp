@@ -37,8 +37,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +74,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
+        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofHours(2), authController.getId());
         executorService = ((KabuApp) getApplication()).getExecutorService();
         scheduleUiGenerator = new ScheduleUiGenerator();
         ExamController examController = ((KabuApp) getApplication()).getExamController();
@@ -79,8 +82,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
         dayFormatter = DateTimeFormatter.ofPattern("dd");
         weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
-
-        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofHours(2), authController.getId());
 
         binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -187,7 +188,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                         lesson);
                 if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
                 {
-                    dateAdapter.getDateList().add(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
+                    dateAdapter.addDate(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
                 }
             });
         }

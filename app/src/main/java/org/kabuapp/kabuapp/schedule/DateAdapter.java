@@ -142,6 +142,29 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         }
     }
 
+    public void addDate(DateItem dateItem)
+    {
+        List<DateItem> list = getDateList();
+        for (int i = 0, listSize = list.size(); i < listSize; i++)
+        {
+            DateItem item = list.get(i);
+            if (item.getDate().equals(dateItem))
+            {
+                getDateList().remove(item);
+                getDateList().add(i, dateItem);
+                notifyItemChanged(i);
+                return;
+            }
+        }
+        if (dateItem.getDate().isBefore(getDateList().get(0).getDate()))
+        {
+            dateList.add(0, dateItem);
+            notifyItemInserted(0);
+        }
+        dateList.add(dateItem);
+        notifyItemInserted(dateList.size() - 1);
+    }
+
     @Getter @Setter
     public static class DateViewHolder extends RecyclerView.ViewHolder
     {
