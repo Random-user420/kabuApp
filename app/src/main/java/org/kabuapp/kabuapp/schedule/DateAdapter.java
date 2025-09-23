@@ -122,6 +122,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
     public void setSelectedDate(LocalDate date)
     {
+        int old = selectedItemPosition;
         int positionToSelect = -1;
         for (int i = 0; i < dateList.size(); i++)
         {
@@ -139,20 +140,14 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             }
             selectedItemPosition = positionToSelect;
             dateList.get(selectedItemPosition).setSelected(true);
-            notifyDataSetChanged();
+            notifyItemChanged(positionToSelect);
+            notifyItemChanged(old);
         }
     }
 
     public void addDate(DateItem dateItem)
     {
-        int existingPosition = IntStream.range(0, dateList.size()).filter(i -> dateList.get(i).getDate().isEqual(dateItem.getDate())).findFirst().orElse(-1);
-
-        if (existingPosition != -1)
-        {
-            dateList.set(existingPosition, dateItem);
-            notifyItemChanged(existingPosition);
-        }
-        else
+        if (dateList.stream().noneMatch(date -> date.getDate().equals(dateItem.getDate())))
         {
             int insertionPosition = 0;
             for (int i = 0; i < dateList.size(); i++) {
@@ -162,8 +157,17 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
                 }
                 insertionPosition = i + 1;
             }
+            LocalDate selected = null;
+            if (dateList.size() >= selectedItemPosition)
+            {
+                selected = dateList.get(selectedItemPosition).getDate();
+            }
             dateList.add(insertionPosition, dateItem);
             notifyItemInserted(insertionPosition);
+            if (selected != null)
+            {
+                setSelectedDate(selected);
+            }
         }
     }
 
