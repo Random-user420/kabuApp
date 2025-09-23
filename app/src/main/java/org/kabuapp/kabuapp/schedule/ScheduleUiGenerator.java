@@ -53,7 +53,7 @@ public class ScheduleUiGenerator
         }
         if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
         {
-            groupTextView.setVisibility(View.GONE);
+            groupTextView.setText("");
         }
         else
         {
