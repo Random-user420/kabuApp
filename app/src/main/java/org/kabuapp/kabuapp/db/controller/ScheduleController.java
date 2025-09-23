@@ -5,9 +5,17 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
@@ -19,6 +27,7 @@ import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.interfaces.Callback;
 
+@Slf4j
 @AllArgsConstructor
 public class ScheduleController
 {
@@ -30,9 +39,9 @@ public class ScheduleController
     private AppDatabase db;
     private ExecutorService executorService;
 
-    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration, UUID userId)
+    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration, UUID userId, boolean async)
     {
-        executorService.execute(() ->
+        Future<?> future = executorService.submit(() ->
         {
             if (lifetimeController.isLifetimeExpired(duration, DbType.SCHEDULE))
             {
@@ -45,6 +54,15 @@ public class ScheduleController
                 }
             }
         });
+        if (async)
+        {
+            try
+            {
+                future.get(60, TimeUnit.SECONDS);
+            } catch (ExecutionException | InterruptedException | TimeoutException e) {
+                Logger.getLogger("updateSchedule").log(Level.WARNING, e.toString());
+            }
+        }
     }
 
     private void updateSchedule(String tokenIn, AuthCallback re, UUID userId)

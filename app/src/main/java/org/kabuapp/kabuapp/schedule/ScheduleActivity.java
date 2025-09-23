@@ -37,10 +37,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,7 +72,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         authController = ((KabuApp) getApplication()).getAuthController();
         scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofHours(2), authController.getId());
+        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofHours(2), authController.getId(), !scheduleController.getSchedule().getLessons().isEmpty());
         executorService = ((KabuApp) getApplication()).getExecutorService();
         scheduleUiGenerator = new ScheduleUiGenerator();
         ExamController examController = ((KabuApp) getApplication()).getExamController();
@@ -95,12 +93,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        if (scheduleController.getSchedule().getSelectedDate().isEqual(LocalDate.now()))
-        {
-            scheduleController.getSchedule().setSelectedDate(getDate());
-        }
-
         gestureDetector = new GestureDetector(this, new ScheduleGestureListener());
 
         if (scheduleScrollView != null)
@@ -131,6 +123,10 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
+        if (scheduleController.getSchedule().getSelectedDate().isEqual(LocalDate.now()))
+        {
+            scheduleController.getSchedule().setSelectedDate(getDate());
+        }
 
         dateAdapter.setSelectedDate(scheduleController.getSchedule().getSelectedDate());
 
@@ -150,7 +146,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     @Override
     public void onRefresh()
     {
-        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId());
+        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId(), true);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -173,22 +169,18 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         getDelegate().onStart();
     }
 
-    private void updateSchedule()
-    {
+    private void updateSchedule() {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
         linearSchedule.removeAllViews();
+
         if (scheduleController.getSchedule().getLessons() != null
-                && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate()))
-        {
-            scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson ->
-            {
-                scheduleUiGenerator.addLessonElement(
-                        this,
-                        linearSchedule,
-                        lesson);
-                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(lesson.getDate())))
-                {
-                    dateAdapter.addDate(generateDateItems(lesson.getDate(), 1, scheduleController).get(0));
+                && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate())) {
+            scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson -> {
+                scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson);
+            });
+            scheduleController.getSchedule().getLessons().keySet().forEach(date -> {
+                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date))) {
+                    dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0));
                 }
             });
         }
@@ -203,7 +195,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                 runOnUiThread(this::updateSchedule);
                 try
                 {
-                    Thread.sleep(3000);
+                    Thread.sleep(8000);
                 }
                 catch (InterruptedException ignored)
                 {

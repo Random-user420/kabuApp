@@ -16,6 +16,7 @@ import org.kabuapp.kabuapp.R;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -144,25 +145,26 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
     public void addDate(DateItem dateItem)
     {
-        List<DateItem> list = getDateList();
-        for (int i = 0, listSize = list.size(); i < listSize; i++)
+        int existingPosition = IntStream.range(0, dateList.size()).filter(i -> dateList.get(i).getDate().isEqual(dateItem.getDate())).findFirst().orElse(-1);
+
+        if (existingPosition != -1)
         {
-            DateItem item = list.get(i);
-            if (item.getDate().equals(dateItem))
-            {
-                getDateList().remove(item);
-                getDateList().add(i, dateItem);
-                notifyItemChanged(i);
-                return;
+            dateList.set(existingPosition, dateItem);
+            notifyItemChanged(existingPosition);
+        }
+        else
+        {
+            int insertionPosition = 0;
+            for (int i = 0; i < dateList.size(); i++) {
+                if (dateItem.getDate().isBefore(dateList.get(i).getDate())) {
+                    insertionPosition = i;
+                    break;
+                }
+                insertionPosition = i + 1;
             }
+            dateList.add(insertionPosition, dateItem);
+            notifyItemInserted(insertionPosition);
         }
-        if (dateItem.getDate().isBefore(getDateList().get(0).getDate()))
-        {
-            dateList.add(0, dateItem);
-            notifyItemInserted(0);
-        }
-        dateList.add(dateItem);
-        notifyItemInserted(dateList.size() - 1);
     }
 
     @Getter @Setter
