@@ -2,11 +2,11 @@
 
 ## Beschreibung
 
-Diese Android-Anwendung dient zur Anzeige des Stunden- und Schulaufgabenplans. Benutzer:innen können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren. Dies wird auch automatisch im hintergrund getan.
+Diese Android-Anwendung dient zur Anzeige des Stunden- und Schulaufgabenplans. Benutzer:innen können den Stundenplan für verschiedene Tage einsehen, durch Wischen navigieren und den Plan bei Bedarf aktualisieren. Dies wird auch automatisch im Hintergrund getan.
 
-**Diese App ist nur für Schüler:innen der BSZ Wiesau**
+**Diese App ist nur für Schüler:innen des BSZ Wiesau**
 
-Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privates Projekt.
+Das BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privates Projekt.
 
 ## Features
 
@@ -34,14 +34,14 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 
 # Zum Nutzen
 
-## Vorraussetzungen
+## Voraussetzungen
 * Android (version 9.0+)
-* Aktivierung der installation von nicht signed Apps, falls nötig. Bitte bei Problemen Googeln.
+* Aktivierung der Installation von nicht signed Apps, falls nötig. Bitte bei Problemen googeln.
 
 ## Schritte
-1. Lade die neuste Veröffentlichte APK von [Realeses](https://github.com/Random-user420/kabuApp/releases/tag/0.1-beta) auf dein Handy
+1. Lade die neuste veröffentlichte APK von [Releases](https://github.com/Random-user420/kabuApp/releases/tag/0.5-beta) auf dein Handy
 2. Klicke installieren\
-  2.1. Falls das Handy die installation nicht zulässt, gehe zum zweiten Punkt von Vorrausstzungen zurück.    
+  2.1. Falls das Handy die Installation nicht zulässt, gehe zum zweiten Punkt von Voraussetzungen zurück.    
 
 # How to use
 
@@ -50,13 +50,13 @@ Die BSZ Wiesau ist nicht für diese App verantwortlich, dies ist ein rein privat
 * No locking on unsinged Apps
 
 ## Steps
-1. Download the newest release APK from [Realeses](https://github.com/Random-user420/kabuApp/releases/tag/0.1-beta) to your Phone
+1. Download the newest release APK from [Releases](https://github.com/Random-user420/kabuApp/releases/tag/0.5-beta) to your Phone
 2. Click to install\
-  2.1. if there are questions form your Phone, awnser them accordingly. If your Phone doesn't want to install the app, google how to install unsigned apps  \<your phone model>   
+  2.1. If there are questions form your phone, anwser them accordingly. If your phone doesn't want to install the app, google how to install unsigned apps  \<your phone model>   
   
 ## Contributing
 
-Contributions are welcome! If you find bugs or would like to suggest improvements, please create an Issue or submit a Pull Request.
+Contributions are welcome! If you find bugs or would like to suggest improvements, please create an issue or submit a pull request.
 
 ## Getting Started
 
@@ -83,7 +83,7 @@ This guide helps you set up and run the project locally.
 
 The app should be installed and launched on your device/emulator. Note that the app requires a connection to the requires a login.
 
-Structure
+Structure\
 The project follows the standard Android app structure. Key packages/components include:
 
 ```org.lilith.kabuapp```: Contains Java code. The naming is self explaining.
@@ -94,9 +94,9 @@ The project follows the standard Android app structure. Key packages/components 
 
 ---
 **Note:**
-Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included in the Project before making a Pull request. I use this to keep the code style consistant.
+Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included in the project before making a pull request. I use this to keep the code style consistent.
 
-# Privicy Policy / Datenschutzerklärung
+# Privacy Policy / Datenschutzerklärung
 [here](https://github.com/Random-user420/kabuApp/blob/03a3f4968481bb9b7f2bf1d6e39d4fefae375c66/PRIVACY.md)
 
 # Warranty
@@ -117,7 +117,7 @@ For Everything that is committed under "Random-user420"
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation version 3 of the License
+the Free Software Foundation version 3 of the License.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
