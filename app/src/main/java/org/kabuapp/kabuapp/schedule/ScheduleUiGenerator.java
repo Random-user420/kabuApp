@@ -62,7 +62,7 @@ public class ScheduleUiGenerator
 
         if (isCurrent(toLocaleDate(lesson.getBegin()), toLocaleDate((short) (lesson.getEnd() + 1))))
         {
-            ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorSecondaryInverse));
+            ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
         }
 
         parentLayout.addView(lessonView);
@@ -87,7 +87,7 @@ public class ScheduleUiGenerator
             case 8 -> LocalTime.of(14, 0);
             case 9 -> LocalTime.of(14, 45);
             case 10 -> LocalTime.of(15, 30);
-            case 11 -> LocalTime.of(16, 15);
+            case 11 -> LocalTime.of(19, 15);
             case 12 -> LocalTime.of(17, 0);
             case 13 -> LocalTime.of(17, 45);
             case 14 -> LocalTime.of(18, 30);
