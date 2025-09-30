@@ -54,7 +54,7 @@ public class ScheduleController
                 }
             }
         });
-        if (async)
+        if (!async)
         {
             try
             {

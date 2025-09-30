@@ -68,6 +68,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        ((KabuApp) getApplication()).getScheduleUpdateTask().setRef(this);
         EdgeToEdge.enable(this);
 
         authController = ((KabuApp) getApplication()).getAuthController();
@@ -169,7 +170,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         getDelegate().onStart();
     }
 
-    private void updateSchedule() {
+    void updateSchedule() {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
         linearSchedule.removeAllViews();
 

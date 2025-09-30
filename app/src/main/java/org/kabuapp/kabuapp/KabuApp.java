@@ -1,6 +1,8 @@
 package org.kabuapp.kabuapp;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import com.google.android.material.color.DynamicColors;
 import lombok.Getter;
@@ -18,6 +20,7 @@ import org.kabuapp.kabuapp.db.controller.ExamController;
 import org.kabuapp.kabuapp.db.controller.LifetimeController;
 import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
+import org.kabuapp.kabuapp.schedule.ScheduleUpdateTask;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -30,6 +33,13 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class KabuApp extends Application
 {
+    @Getter
+    public static class GlobalTaskManager
+    {
+        private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    }
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private AppDatabase db;
     private AuthController authController;
     private DigikabuApiService digikabuApiService;
@@ -40,6 +50,7 @@ public class KabuApp extends Application
     private ExamMapper examMapper;
     private ScheduleMapper scheduleMapper;
     private SessionController sessionController;
+    private ScheduleUpdateTask scheduleUpdateTask;
     private ExecutorService executorService;
 
     @Override
@@ -67,10 +78,11 @@ public class KabuApp extends Application
         authController = new AuthController(new AuthStateholder(), db, digikabuApiService, executorService);
         examController = new ExamController(new MemExams(), examMapper, lifetimeController, digikabuApiService, executorService, db);
         sessionController = new SessionController(db, examController, lifetimeController, authController, scheduleController, executorService);
+        scheduleUpdateTask = new ScheduleUpdateTask(null);
 
-        sessionController.loadSession();
+
+        sessionController.loadSession(scheduleUpdateTask);
     }
-
     @Override
     public void onTerminate()
     {

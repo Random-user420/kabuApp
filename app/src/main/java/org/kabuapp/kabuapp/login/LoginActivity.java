@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements Callback
             binding.loginButtonBack.setVisibility(View.VISIBLE);
             binding.loginButtonBack.setOnClickListener((v) ->
             {
-                sessionController.loadSession(this, null);
+                sessionController.loadSession(this, null, null);
             });
         }
     }
