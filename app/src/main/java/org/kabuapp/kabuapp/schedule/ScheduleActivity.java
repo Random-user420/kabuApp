@@ -244,7 +244,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             String month = currentDate.format(monthFormatter);
             String day = currentDate.format(dayFormatter);
             String weekday = currentDate.format(weekdayFormatter);
-            items.add(new DateItem(currentDate, month, day, weekday, true));
+            items.add(new DateItem(currentDate, month, day, weekday, false));
         }
         return items;
     }
