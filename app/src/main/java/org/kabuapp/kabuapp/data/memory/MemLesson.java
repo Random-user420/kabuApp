@@ -106,4 +106,14 @@ public class MemLesson
     {
         this.dbId = dbId;
     }
+
+    public boolean isFollowingLessonTo(MemLesson lesson)
+    {
+        return this.getName().equals(lesson.getName())
+                && this.getRoom().equals(lesson.getRoom())
+                && this.getTeacher().equals(lesson.getTeacher())
+                && this.getMaxGroup() == lesson.getMaxGroup()
+                && this.getGroup() == lesson.getGroup()
+                && this.getBegin() == (lesson.getEnd() + 1);
+    }
 }

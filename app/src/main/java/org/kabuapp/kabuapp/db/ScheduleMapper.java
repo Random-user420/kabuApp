@@ -57,7 +57,8 @@ public class ScheduleMapper
                 dateLessons.remove(memLesson);
             });
 
-            dateLessons.add(lesson);
+            dateLessons.stream().filter(lesson::isFollowingLessonTo).findFirst().ifPresentOrElse(dateLesson ->
+                dateLesson.setEnd(lesson.getEnd()), () -> dateLessons.add(lesson));
         });
     }
 
