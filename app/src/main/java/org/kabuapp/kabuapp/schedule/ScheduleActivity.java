@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -126,7 +127,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         dateRecyclerView.setAdapter(dateAdapter);
         if (scheduleController.getSchedule().getSelectedDate().isEqual(LocalDate.now()))
         {
-            scheduleController.getSchedule().setSelectedDate(getDate());
+            scheduleController.getSchedule().setSelectedDate(getDate(dateItems));
         }
 
         dateAdapter.setSelectedDate(scheduleController.getSchedule().getSelectedDate());
@@ -139,8 +140,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                 layoutManager.scrollToPositionWithOffset(selectedPosition, 0);
             }
         });
-        checkIfNoSchool();
 
+        checkIfNoSchool();
         updateScheduleLoop();
     }
 
@@ -271,12 +272,24 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         }
     }
 
-    private LocalDate getDate()
+    private LocalDate getDate(List<DateItem> dateItems)
     {
         LocalDate date = LocalDate.now();
         if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
         {
             date = date.plusDays(1);
+        }
+        LocalDate finalDate = date;
+        if (dateItems.stream().noneMatch(item -> item.getDate().equals(finalDate)) && !dateItems.isEmpty())
+        {
+            for (LocalDate dateItem : dateItems.stream().map(DateItem::getDate).collect(Collectors.toList()))
+            {
+                if (dateItem.isAfter(date))
+                {
+                    return dateItem;
+                }
+            }
+            return dateItems.get(dateItems.size() - 1).getDate();
         }
         return date;
     }
