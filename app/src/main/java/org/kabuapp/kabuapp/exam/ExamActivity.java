@@ -68,7 +68,7 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
             examController.getExams().getExams().values()
-                    .stream().sorted(Comparator.comparing(MemExam::getDuration))
+                    .stream().sorted(Comparator.comparing(MemExam::getBeginn))
                     .forEach(exam ->
                     uiGenerator.addExamElement(
                             this,
