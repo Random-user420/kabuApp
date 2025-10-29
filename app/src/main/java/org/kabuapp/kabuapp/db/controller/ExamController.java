@@ -47,21 +47,13 @@ public class ExamController
         });
     }
 
-    private void updateExams(String tokenIn, AuthCallback re, UUID userId)
+    private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
-        String token = tokenIn;
         LocalDate date = LocalDate.now();
         try
         {
-            if (date.getMonthValue() != 8)
-            {
-                updateExams(date.getMonthValue(), token, userId);
-            }
-            if (date.getMonthValue() != 7)
-            {
-                updateExams(date.getMonthValue() + 1, token, userId);
-            }
+            updateExamsFor3Months(date, token, userId);
         }
         catch (UnauthorisedException ignored)
         {
@@ -69,17 +61,26 @@ public class ExamController
         }
         try
         {
-            if (date.getMonthValue() != 8)
-            {
-                updateExams(date.getMonthValue(), token, userId);
-            }
-            if (date.getMonthValue() != 7)
-            {
-                updateExams(date.getMonthValue() + 1, token, userId);
-            }
+            updateExamsFor3Months(date, token, userId);
         }
         catch (UnauthorisedException ignored)
         {
+        }
+    }
+
+    private void updateExamsFor3Months(LocalDate date, String token, UUID userId) throws UnauthorisedException
+    {
+        if (date.getMonthValue() != 8)
+        {
+            updateExams(date.getMonthValue(), token, userId);
+        }
+        if (date.getMonthValue() != 7)
+        {
+            updateExams(date.getMonthValue() + 1, token, userId);
+        }
+        if (date.getMonthValue() != 6)
+        {
+            updateExams(date.getMonthValue() + 2, token, userId);
         }
     }
 
