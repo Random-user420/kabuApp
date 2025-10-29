@@ -81,7 +81,7 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh()
     {
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getToken(), authController, this, new Object[1], Duration.ofSeconds(5), authController.getId());
+        examController.updateExams(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId());
     }
 
     public void callback(Object[] objects)

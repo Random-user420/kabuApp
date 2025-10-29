@@ -53,7 +53,7 @@ public class ExamController
         LocalDate date = LocalDate.now();
         try
         {
-            updateExamsFor3Months(date, token, userId);
+            updateExams(date, token, userId, (short) 3);
         }
         catch (UnauthorisedException ignored)
         {
@@ -61,26 +61,21 @@ public class ExamController
         }
         try
         {
-            updateExamsFor3Months(date, token, userId);
+            updateExams(date, token, userId, (short) 3);
         }
         catch (UnauthorisedException ignored)
         {
         }
     }
 
-    private void updateExamsFor3Months(LocalDate date, String token, UUID userId) throws UnauthorisedException
+    private void updateExams(LocalDate date, String token, UUID userId, short months) throws UnauthorisedException
     {
-        if (date.getMonthValue() != 8)
+        for (int i = 0; i < months; i++)
         {
-            updateExams(date.getMonthValue(), token, userId);
-        }
-        if (date.getMonthValue() != 7)
-        {
-            updateExams(date.getMonthValue() + 1, token, userId);
-        }
-        if (date.getMonthValue() != 6)
-        {
-            updateExams(date.getMonthValue() + 2, token, userId);
+            if (date.plusMonths(i).getMonthValue() != 8)
+            {
+                updateExams(date.plusMonths(i).getMonthValue(), token, userId);
+            }
         }
     }
 
