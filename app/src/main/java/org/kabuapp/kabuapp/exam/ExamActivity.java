@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
+import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
 import org.kabuapp.kabuapp.db.controller.ExamController;
 import org.kabuapp.kabuapp.interfaces.Callback;
@@ -21,6 +22,7 @@ import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.Duration;
+import java.util.Comparator;
 
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
@@ -65,7 +67,9 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         linearExams.removeAllViews();
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
-            examController.getExams().getExams().values().forEach(exam ->
+            examController.getExams().getExams().values()
+                    .stream().sorted(Comparator.comparing(MemExam::getDuration))
+                    .forEach(exam ->
                     uiGenerator.addExamElement(
                             this,
                             linearExams,
