@@ -112,7 +112,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         settingsHandler();
         examHandler();
 
-        examController.updateExams(authController.getToken(), authController, null, null, Duration.ofDays(1), authController.getId());
+        examController.updateExams(authController.getToken(), authController, null, null, Duration.ofHours(1), authController.getId());
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
