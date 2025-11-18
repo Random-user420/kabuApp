@@ -14,6 +14,7 @@ import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.db.controller.SessionController;
+import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.db.controller.ExamController;
@@ -51,6 +52,7 @@ public class KabuApp extends Application
     private ScheduleMapper scheduleMapper;
     private SessionController sessionController;
     private ScheduleUpdateTask scheduleUpdateTask;
+    private SettingsController settingsController;
     private ExecutorService executorService;
 
     @Override
@@ -79,9 +81,11 @@ public class KabuApp extends Application
         examController = new ExamController(new MemExams(), examMapper, lifetimeController, digikabuApiService, executorService, db);
         sessionController = new SessionController(db, examController, lifetimeController, authController, scheduleController, executorService);
         scheduleUpdateTask = new ScheduleUpdateTask(null);
-
+        settingsController = new SettingsController(executorService, db);
 
         sessionController.loadSession(scheduleUpdateTask);
+
+        settingsController.loadSettings();
     }
     @Override
     public void onTerminate()

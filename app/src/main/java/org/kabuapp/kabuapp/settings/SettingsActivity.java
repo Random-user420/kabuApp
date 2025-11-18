@@ -19,6 +19,7 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivitySettingsBinding;
 import org.kabuapp.kabuapp.db.controller.SessionController;
+import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.db.controller.LifetimeController;
 import org.kabuapp.kabuapp.db.controller.AuthController;
@@ -36,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     private AuthController authController;
     private LifetimeController lifetimeController;
     private SessionController sessionController;
+    private SettingsController settingsController;
     private ExecutorService executorService;
     private Spinner accountSpinner;
 
@@ -59,6 +61,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
         sessionController = ((KabuApp) getApplication()).getSessionController();
         executorService = ((KabuApp) getApplication()).getExecutorService();
+        settingsController = ((KabuApp) getApplication()).getSettingsController();
 
         accountSpinner = findViewById(R.id.account_spinner);
         accountSpinner.setOnItemSelectedListener(this);
@@ -70,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         setScheduleListener();
         examHandler();
         debugSwitchListener();
+        isoSwitchSetup();
         setNotice(this, findViewById(R.id.notice_code_settings));
     }
 
@@ -168,6 +172,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("ADD_NEW_ACCOUNT", true);
         startActivity(intent);
+    }
+
+    private void isoSwitchSetup()
+    {
+        binding.settingIsoDate.setChecked(settingsController.isIsoDate());
+        binding.settingIsoDate.setOnCheckedChangeListener((c, ac) ->
+        {
+            settingsController.setIsoDate(ac);
+        });
     }
 
     private void debugSwitchListener()

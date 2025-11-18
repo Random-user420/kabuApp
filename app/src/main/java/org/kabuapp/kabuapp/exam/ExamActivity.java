@@ -16,13 +16,18 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
 import org.kabuapp.kabuapp.db.controller.ExamController;
+import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.Comparator;
+import java.util.Locale;
 
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
@@ -41,7 +46,17 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         authController = ((KabuApp) getApplication()).getAuthController();
         examController = ((KabuApp) getApplication()).getExamController();
-        uiGenerator = new ExamUiGenerator();
+        SettingsController settingsController = ((KabuApp) getApplication()).getSettingsController();
+        DateTimeFormatter dateTimeFormatter;
+        if (settingsController.isIsoDate())
+        {
+            dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        }
+        else
+        {
+            dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+        }
+        uiGenerator = new ExamUiGenerator(dateTimeFormatter);
 
         binding = ActivityExamBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

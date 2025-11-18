@@ -17,12 +17,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class ExamUiGenerator
 {
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+    private final DateTimeFormatter dateTimeFormatter;
 
     public void addExamElement(
             Context context,
