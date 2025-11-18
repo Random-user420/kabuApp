@@ -50,6 +50,7 @@ public class ExamController
     private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
+        exams.getExams().clear();
         LocalDate date = LocalDate.now();
         try
         {
