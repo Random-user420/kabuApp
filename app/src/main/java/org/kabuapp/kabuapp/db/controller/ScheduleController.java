@@ -68,6 +68,7 @@ public class ScheduleController
     private void updateSchedule(String tokenIn, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
+        schedule.getLessons().clear();
         String token = tokenIn;
         LocalDate begin = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
