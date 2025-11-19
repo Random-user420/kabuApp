@@ -13,8 +13,10 @@ import org.kabuapp.kabuapp.interfaces.Callback;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,7 +52,6 @@ public class ExamController
     private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
-        exams.getExams().clear();
         LocalDate date = LocalDate.now();
         try
         {
@@ -71,6 +72,10 @@ public class ExamController
 
     private void updateExams(LocalDate date, String token, UUID userId, short months) throws UnauthorisedException
     {
+        Set<LocalDate> datesToRemove = exams.getExams().keySet().stream()
+                .filter(key -> key.isBefore(date.withDayOfMonth(0)))
+                .collect(Collectors.toSet());
+        datesToRemove.forEach(exams.getExams()::remove);
         for (int i = 0; i < months; i++)
         {
             if (date.plusMonths(i).getMonthValue() != 8)

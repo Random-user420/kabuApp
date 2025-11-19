@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -68,7 +70,6 @@ public class ScheduleController
     private void updateSchedule(String tokenIn, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
-        schedule.getLessons().clear();
         String token = tokenIn;
         LocalDate begin = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
         try
@@ -95,6 +96,9 @@ public class ScheduleController
         {
             return;
         }
+        Set<LocalDate> datesToRemove = schedule.getLessons().keySet().stream()
+                .filter(key -> key.isBefore(date)).collect(Collectors.toSet());
+        datesToRemove.forEach(schedule.getLessons()::remove);
         scheduleMapper.mapApiResToSchedule(responses, schedule);
         executorService.execute(() -> db.lessonDao().insertAll(scheduleMapper.mapScheduleToDb(schedule, userId)));
     }

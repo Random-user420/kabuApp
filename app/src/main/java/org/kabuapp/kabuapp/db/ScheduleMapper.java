@@ -2,6 +2,7 @@ package org.kabuapp.kabuapp.db;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ScheduleMapper
 
         if (schedule.getLessons() == null)
         {
-            schedule.setLessons(new LinkedHashMap<>());
+            schedule.setLessons(new HashMap<>());
         }
 
         Map<LocalDate, List<MemLesson>> lessons = schedule.getLessons();
@@ -98,7 +99,7 @@ public class ScheduleMapper
     {
         if (schedule.getLessons() == null)
         {
-            schedule.setLessons(new LinkedHashMap<>());
+            schedule.setLessons(new HashMap<>());
         }
         dbLessons.forEach(dbLesson ->
         {
