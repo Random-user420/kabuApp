@@ -109,6 +109,6 @@ public class ExamController
 
     public void resetState()
     {
-        exams.reset();
+        exams.getExams().clear();
     }
 }

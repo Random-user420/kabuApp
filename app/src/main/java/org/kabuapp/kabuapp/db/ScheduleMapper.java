@@ -22,11 +22,6 @@ public class ScheduleMapper
             return;
         }
 
-        if (schedule.getLessons() == null)
-        {
-            schedule.setLessons(new HashMap<>());
-        }
-
         Map<LocalDate, List<MemLesson>> lessons = schedule.getLessons();
 
         lessonResponses.forEach(lessonResponse ->
@@ -97,10 +92,6 @@ public class ScheduleMapper
 
     public void mapDbLessonToSchedule(List<Lesson> dbLessons, MemSchedule schedule)
     {
-        if (schedule.getLessons() == null)
-        {
-            schedule.setLessons(new HashMap<>());
-        }
         dbLessons.forEach(dbLesson ->
         {
             MemLesson lesson = new MemLesson(

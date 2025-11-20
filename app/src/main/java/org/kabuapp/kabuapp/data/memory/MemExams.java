@@ -15,9 +15,4 @@ public class MemExams
     {
         return exams;
     }
-
-    public synchronized void reset()
-    {
-        exams.clear();
-    }
 }

@@ -123,6 +123,6 @@ public class ScheduleController
 
     public void resetState()
     {
-        schedule.setLessons(new HashMap<>());
+        schedule.getLessons().clear();
     }
 }
