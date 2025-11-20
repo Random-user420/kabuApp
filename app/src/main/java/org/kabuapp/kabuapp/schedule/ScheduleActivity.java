@@ -48,21 +48,21 @@ import java.util.stream.IntStream;
 
 public class ScheduleActivity extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
-    private static final int SWIPE_THRESHOLD_DP = 69;
     private static final int SWIPE_VELOCITY_THRESHOLD_DP = 69;
-    private ActivityScheduleBinding binding;
-    private AuthController authController;
-    private ScheduleController scheduleController;
+    private static final int SWIPE_THRESHOLD_DP = 69;
     private ScheduleUiGenerator scheduleUiGenerator;
-    private DateAdapter dateAdapter;
-    private List<DateItem> dateItems;
-    private LinearLayoutManager layoutManager;
+    private ScheduleController scheduleController;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private DateTimeFormatter weekdayFormatter;
+    private LinearLayoutManager layoutManager;
+    private DateTimeFormatter monthFormatter;
     private GestureDetector gestureDetector;
     private ExecutorService executorService;
-    private DateTimeFormatter monthFormatter;
+    private ActivityScheduleBinding binding;
     private DateTimeFormatter dayFormatter;
-    private DateTimeFormatter weekdayFormatter;
+    private AuthController authController;
+    private List<DateItem> dateItems;
+    private DateAdapter dateAdapter;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

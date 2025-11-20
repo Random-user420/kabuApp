@@ -33,12 +33,12 @@ import java.util.concurrent.ExecutorService;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
-    private ActivitySettingsBinding binding;
-    private AuthController authController;
     private LifetimeController lifetimeController;
-    private SessionController sessionController;
     private SettingsController settingsController;
+    private SessionController sessionController;
+    private ActivitySettingsBinding binding;
     private ExecutorService executorService;
+    private AuthController authController;
     private Spinner accountSpinner;
 
     @Override

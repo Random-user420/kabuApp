@@ -23,13 +23,13 @@ import lombok.Setter;
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder>
 {
     @Getter
+    private int selectedItemPosition = RecyclerView.NO_POSITION;
+    private OnDateSelectedListener onDateSelectedListener;
+    private DateTimeFormatter weekdayFormatter;
+    private DateTimeFormatter monthFormatter;
+    @Getter
     private List<DateItem> dateList;
     private Context context;
-    private OnDateSelectedListener onDateSelectedListener;
-    @Getter
-    private int selectedItemPosition = RecyclerView.NO_POSITION;
-    private DateTimeFormatter monthFormatter;
-    private DateTimeFormatter weekdayFormatter;
 
     public interface OnDateSelectedListener
     {

@@ -22,9 +22,9 @@ import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 
 public class LoginActivity extends AppCompatActivity implements Callback
 {
-    private ActivityLoginBinding binding;
-    private AuthController authController;
     private SessionController sessionController;
+    private AuthController authController;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

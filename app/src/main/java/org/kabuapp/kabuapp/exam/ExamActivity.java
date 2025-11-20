@@ -29,11 +29,11 @@ import java.util.Comparator;
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
 {
-    private ActivityExamBinding binding;
-    private ExamUiGenerator uiGenerator;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private AuthController authController;
     private ExamController examController;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private ExamUiGenerator uiGenerator;
+    private ActivityExamBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

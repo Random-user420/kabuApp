@@ -40,19 +40,19 @@ public class KabuApp extends Application
     }
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private AppDatabase db;
-    private AuthController authController;
     private DigikabuApiService digikabuApiService;
-    private MemSchedule schedule;
     private ScheduleController scheduleController;
-    private ExamController examController;
     private LifetimeController lifetimeController;
-    private ExamMapper examMapper;
-    private ScheduleMapper scheduleMapper;
-    private SessionController sessionController;
     private ScheduleUpdateTask scheduleUpdateTask;
     private SettingsController settingsController;
+    private SessionController sessionController;
     private ExecutorService executorService;
+    private ScheduleMapper scheduleMapper;
+    private AuthController authController;
+    private ExamController examController;
+    private ExamMapper examMapper;
+    private MemSchedule schedule;
+    private AppDatabase db;
 
     @Override
     public void onCreate()
