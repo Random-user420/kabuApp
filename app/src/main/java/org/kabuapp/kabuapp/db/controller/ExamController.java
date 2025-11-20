@@ -73,7 +73,7 @@ public class ExamController
     private void updateExams(LocalDate date, String token, UUID userId, short months) throws UnauthorisedException
     {
         Set<LocalDate> datesToRemove = exams.getExams().keySet().stream()
-                .filter(key -> key.isBefore(date.withDayOfMonth(0)))
+                .filter(key -> key.isBefore(date.withDayOfMonth(1)))
                 .collect(Collectors.toSet());
         datesToRemove.forEach(exams.getExams()::remove);
         for (int i = 0; i < months; i++)
