@@ -15,21 +15,17 @@ import org.kabuapp.kabuapp.data.memory.MemExam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-public class ExamUiGenerator
-{
+public class ExamUiGenerator {
     private final DateTimeFormatter dateTimeFormatter;
 
     public void addExamElement(
             Context context,
             ViewGroup parentLayout,
-            MemExam exam)
-    {
+            MemExam exam) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View examView = inflater.inflate(R.layout.layout_exam_item, parentLayout, false);
 
@@ -37,8 +33,7 @@ public class ExamUiGenerator
         TextView endTextView = examView.findViewById(R.id.text_view_exam_end);
         TextView infoTextView = examView.findViewById(R.id.text_view_exam_info);
 
-        if (exam.getDuration() == 1)
-        {
+        if (exam.getDuration() == 1) {
             endTextView.setVisibility(View.GONE);
         }
         {
@@ -47,16 +42,14 @@ public class ExamUiGenerator
         beginTextView.setText(dateTimeFormatter.format(exam.getBeginn()));
         infoTextView.setText(exam.getInfo());
 
-        if (isCurrent(exam.getBeginn(), exam.getDuration()))
-        {
+        if (isCurrent(exam.getBeginn(), exam.getDuration())) {
             ((CardView) examView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorSecondaryInverse));
         }
 
         parentLayout.addView(examView);
     }
 
-    private boolean isCurrent(LocalDate begin, int duration)
-    {
+    private boolean isCurrent(LocalDate begin, int duration) {
         return LocalDate.now().isAfter(begin) && LocalDate.now().isBefore(begin.plusDays(duration));
     }
 }

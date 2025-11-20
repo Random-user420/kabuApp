@@ -20,7 +20,6 @@ import org.kabuapp.kabuapp.db.controller.SessionController;
 import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 
-
 public class LoginActivity extends AppCompatActivity implements Callback
 {
     private ActivityLoginBinding binding;

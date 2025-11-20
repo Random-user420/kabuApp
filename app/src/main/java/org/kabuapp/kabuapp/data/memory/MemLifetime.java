@@ -1,6 +1,5 @@
 package org.kabuapp.kabuapp.data.memory;
 
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

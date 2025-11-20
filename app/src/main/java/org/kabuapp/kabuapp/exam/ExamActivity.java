@@ -24,11 +24,8 @@ import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.Comparator;
-import java.util.Locale;
-
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
 {
