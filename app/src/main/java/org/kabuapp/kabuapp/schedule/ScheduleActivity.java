@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
+import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
@@ -34,11 +35,14 @@ import org.kabuapp.kabuapp.settings.SettingsActivity;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -154,7 +158,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     public void callback(Object[] objects)
     {
-        runOnUiThread(this::updateSchedule);
+        updateSchedule();
     }
 
     @Override
@@ -171,21 +175,46 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         getDelegate().onStart();
     }
 
-    void updateSchedule() {
+    private void updateSchedule() {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
-        linearSchedule.removeAllViews();
-
-        if (scheduleController.getSchedule().getLessons() != null
-                && scheduleController.getSchedule().getLessons().containsKey(scheduleController.getSchedule().getSelectedDate())) {
-            scheduleController.getSchedule().getLessons().get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson -> {
-                scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson);
-            });
-            scheduleController.getSchedule().getLessons().keySet().forEach(date -> {
-                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date))) {
-                    dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0));
-                }
-            });
+        runOnUiThread(linearSchedule::removeAllViews);
+        if (scheduleController.getSchedule().getLessons() == null) {
+            return;
         }
+        Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(scheduleController.getSchedule().getLessons());
+        if (lessons.containsKey(LocalDate.now()) && lessons.get(LocalDate.now()) != null
+                && lessons.get(LocalDate.now()).stream().noneMatch(this::isInLesson)) {
+            addNullLessonAtCurrentTime(lessons.get(LocalDate.now()));
+        }
+        if (lessons.containsKey(scheduleController.getSchedule().getSelectedDate())) {
+            runOnUiThread(() -> lessons.get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson ->
+                    scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson)));
+        }
+        lessons.keySet().forEach(date -> {
+            if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date))) {
+                runOnUiThread(() -> dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0)));
+            }
+        });
+    }
+
+    private void addNullLessonAtCurrentTime(List<MemLesson> lessons) {
+        int i = -1;
+        for (int k = 0; k < lessons.size(); k++) {
+            if (scheduleUiGenerator.toLocaleDate(lessons.get(k).getEnd()).isBefore(LocalTime.now())) {
+                i = k;
+            } else {
+                break;
+            }
+        }
+        if (i != -1 && i != lessons.size() - 1) {
+            lessons.add(i + 1, new MemLesson((short) -1, (short) -1, null, (short) -1, (short) -1, null, null, null, null));
+        }
+    }
+
+    private boolean isInLesson(MemLesson lesson) {
+        return scheduleUiGenerator.toLocaleDate(lesson.getBegin()) == null
+                || (scheduleUiGenerator.toLocaleDate(lesson.getBegin()).isBefore(LocalTime.now())
+                && scheduleUiGenerator.toLocaleDate((short) (lesson.getEnd() + 1)).isAfter(LocalTime.now()));
     }
 
     private void updateScheduleLoop()
@@ -194,7 +223,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         {
             while (!this.isDestroyed())
             {
-                runOnUiThread(this::updateSchedule);
+                updateSchedule();
                 try
                 {
                     Thread.sleep(8000);

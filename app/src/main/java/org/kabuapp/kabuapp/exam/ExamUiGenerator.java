@@ -27,29 +27,36 @@ public class ExamUiGenerator {
             ViewGroup parentLayout,
             MemExam exam) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View examView = inflater.inflate(R.layout.layout_exam_item, parentLayout, false);
-
-        TextView beginTextView = examView.findViewById(R.id.text_view_exam_begin);
-        TextView endTextView = examView.findViewById(R.id.text_view_exam_end);
-        TextView infoTextView = examView.findViewById(R.id.text_view_exam_info);
-
-        if (exam.getDuration() == 1) {
-            endTextView.setVisibility(View.GONE);
+        if (exam.getDuration() == -1) {
+            View dividerView = inflater.inflate(R.layout.layout_current_item, parentLayout, false);
+            parentLayout.addView(dividerView);
         }
-        {
-            endTextView.setText(dateTimeFormatter.format(exam.getBeginn().plusDays(exam.getDuration() - 1)));
-        }
-        beginTextView.setText(dateTimeFormatter.format(exam.getBeginn()));
-        infoTextView.setText(exam.getInfo());
+        else {
+            View examView = inflater.inflate(R.layout.layout_exam_item, parentLayout, false);
 
-        if (isCurrent(exam.getBeginn(), exam.getDuration())) {
-            ((CardView) examView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorSecondaryInverse));
-        }
+            TextView beginTextView = examView.findViewById(R.id.text_view_exam_begin);
+            TextView endTextView = examView.findViewById(R.id.text_view_exam_end);
+            TextView infoTextView = examView.findViewById(R.id.text_view_exam_info);
 
-        parentLayout.addView(examView);
+            if (exam.getDuration() == 1) {
+                endTextView.setVisibility(View.GONE);
+            }
+            {
+                endTextView.setText(dateTimeFormatter.format(exam.getBeginn().plusDays(exam.getDuration() - 1)));
+            }
+            beginTextView.setText(dateTimeFormatter.format(exam.getBeginn()));
+            infoTextView.setText(exam.getInfo());
+
+            if (isCurrent(exam.getBeginn(), exam.getDuration())) {
+                ((CardView) examView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
+            }
+
+            parentLayout.addView(examView);
+        }
     }
 
     private boolean isCurrent(LocalDate begin, int duration) {
-        return LocalDate.now().isAfter(begin) && LocalDate.now().isBefore(begin.plusDays(duration));
+        return (LocalDate.now().isAfter(begin) || LocalDate.now().isEqual(begin)) &&
+                (LocalDate.now().isBefore(begin.plusDays(duration)) || LocalDate.now().isEqual(begin.plusDays(duration)));
     }
 }

@@ -23,9 +23,12 @@ import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
 {
@@ -79,8 +82,9 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         linearExams.removeAllViews();
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
-            examController.getExams().getExams().values()
-                    .stream().sorted(Comparator.comparing(MemExam::getBeginn))
+            Map<LocalDate, MemExam> exams = new HashMap<>(examController.getExams().getExams());
+            exams.computeIfAbsent(LocalDate.now(), k -> new MemExam(null, LocalDate.now(), (short) -1, null));
+            exams.values().stream().sorted(Comparator.comparing(MemExam::getBeginn))
                     .forEach(exam ->
                     uiGenerator.addExamElement(
                             this,

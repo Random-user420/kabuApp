@@ -27,45 +27,49 @@ public class ScheduleUiGenerator
     {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View lessonView = inflater.inflate(R.layout.layout_lesson_item, parentLayout, false);
+        if (lesson.getBegin() == -1) {
+            View dividerView = inflater.inflate(R.layout.layout_current_item, parentLayout, false);
+            parentLayout.addView(dividerView);
+        } else {
+            View lessonView = inflater.inflate(R.layout.layout_lesson_item, parentLayout, false);
 
-        TextView timeTextView = lessonView.findViewById(R.id.text_view_lesson_time);
-        TextView nameTextView = lessonView.findViewById(R.id.text_view_lesson_name);
-        TextView groupTextView = lessonView.findViewById(R.id.text_view_lesson_group);
-        TextView roomTextView = lessonView.findViewById(R.id.text_view_lesson_room);
-        TextView teacherTextView = lessonView.findViewById(R.id.text_view_lesson_teacher);
+            TextView timeTextView = lessonView.findViewById(R.id.text_view_lesson_time);
+            TextView nameTextView = lessonView.findViewById(R.id.text_view_lesson_name);
+            TextView groupTextView = lessonView.findViewById(R.id.text_view_lesson_group);
+            TextView roomTextView = lessonView.findViewById(R.id.text_view_lesson_room);
+            TextView teacherTextView = lessonView.findViewById(R.id.text_view_lesson_teacher);
 
-        if (lesson.getTeacher() != null && lesson.getTeacher().isEmpty())
-        {
-            nameTextView.setText(HtmlCompat.fromHtml("<s>" + lesson.getName() + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
-            timeTextView.setText(HtmlCompat.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
-                    + mapBeginnToString((short) (lesson.getEnd() + 1)) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
-            teacherTextView.getParent().clearChildFocus(teacherTextView);
-            roomTextView.setVisibility(View.GONE);
-            teacherTextView.setVisibility(View.GONE);
-        }
-        else
-        {
-            nameTextView.setText(lesson.getName());
-            timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " + mapBeginnToString((short) (lesson.getEnd() + 1)));
-            teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + lesson.getTeacher());
-            roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + lesson.getRoom());
-        }
-        if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
-        {
-            groupTextView.setText("");
-        }
-        else
-        {
-            groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
-        }
+            if (lesson.getTeacher() != null && lesson.getTeacher().isEmpty())
+            {
+                nameTextView.setText(HtmlCompat.fromHtml("<s>" + lesson.getName() + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
+                timeTextView.setText(HtmlCompat.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
+                        + mapBeginnToString((short) (lesson.getEnd() + 1)) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
+                teacherTextView.getParent().clearChildFocus(teacherTextView);
+                roomTextView.setVisibility(View.GONE);
+                teacherTextView.setVisibility(View.GONE);
+            }
+            else
+            {
+                nameTextView.setText(lesson.getName());
+                timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " + mapBeginnToString((short) (lesson.getEnd() + 1)));
+                teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + lesson.getTeacher());
+                roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + lesson.getRoom());
+            }
+            if (lesson.getGroup() == 1 && lesson.getMaxGroup() == 1)
+            {
+                groupTextView.setText("");
+            }
+            else
+            {
+                groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
+            }
 
-        if (isCurrent(toLocaleDate(lesson.getBegin()), toLocaleDate((short) (lesson.getEnd() + 1))))
-        {
-            ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
+            if (isCurrent(toLocaleDate(lesson.getBegin()), toLocaleDate((short) (lesson.getEnd() + 1))))
+            {
+                ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
+            }
+            parentLayout.addView(lessonView);
         }
-
-        parentLayout.addView(lessonView);
     }
 
     private boolean isCurrent(LocalTime begin, LocalTime end)
@@ -73,7 +77,7 @@ public class ScheduleUiGenerator
         return LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin);
     }
 
-    private LocalTime toLocaleDate(short time)
+    public LocalTime toLocaleDate(short time)
     {
         return switch (time)
         {
@@ -95,7 +99,7 @@ public class ScheduleUiGenerator
         };
     }
 
-    public String mapBeginnToString(short lesson)
+    private String mapBeginnToString(short lesson)
     {
         return switch (lesson)
         {
