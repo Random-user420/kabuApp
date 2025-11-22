@@ -181,8 +181,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             return;
         }
         Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(scheduleController.getSchedule().getLessons());
-        if (lessons.containsKey(LocalDate.now()) && lessons.get(LocalDate.now()) != null
-                && lessons.get(LocalDate.now()).stream().noneMatch(this::isInLesson)) {
+        if (lessons.get(LocalDate.now()) != null && lessons.get(LocalDate.now()).stream().noneMatch(this::isInLesson)) {
             addNullLessonAtCurrentTime(lessons.get(LocalDate.now()));
         }
         runOnUiThread(() -> {
