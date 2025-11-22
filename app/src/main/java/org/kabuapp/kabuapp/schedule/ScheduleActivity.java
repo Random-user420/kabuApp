@@ -186,14 +186,17 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
                 && lessons.get(LocalDate.now()).stream().noneMatch(this::isInLesson)) {
             addNullLessonAtCurrentTime(lessons.get(LocalDate.now()));
         }
-        if (lessons.containsKey(scheduleController.getSchedule().getSelectedDate())) {
-            runOnUiThread(() -> lessons.get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson ->
-                    scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson)));
-        }
-        lessons.keySet().forEach(date -> {
-            if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date))) {
-                runOnUiThread(() -> dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0)));
+        runOnUiThread(() -> {
+            linearSchedule.removeAllViews();
+            if (lessons.containsKey(scheduleController.getSchedule().getSelectedDate())) {
+                lessons.get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson ->
+                        scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson));
             }
+            lessons.keySet().forEach(date -> {
+                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date))) {
+                    dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0));
+                }
+            });
         });
     }
 
