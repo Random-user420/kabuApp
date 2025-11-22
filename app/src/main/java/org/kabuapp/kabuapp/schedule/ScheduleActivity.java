@@ -177,7 +177,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private void updateSchedule() {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
-        runOnUiThread(linearSchedule::removeAllViews);
         if (scheduleController.getSchedule().getLessons() == null) {
             return;
         }
@@ -203,7 +202,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private void addNullLessonAtCurrentTime(List<MemLesson> lessons) {
         int i = -1;
         for (int k = 0; k < lessons.size(); k++) {
-            if (scheduleUiGenerator.toLocaleDate(lessons.get(k).getEnd()).isBefore(LocalTime.now())) {
+            if (scheduleUiGenerator.endToLocaleTime(lessons.get(k).getEnd()).isBefore(LocalTime.now())) {
                 i = k;
             } else {
                 break;
@@ -215,9 +214,9 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     }
 
     private boolean isInLesson(MemLesson lesson) {
-        return scheduleUiGenerator.toLocaleDate(lesson.getBegin()) == null
-                || (scheduleUiGenerator.toLocaleDate(lesson.getBegin()).isBefore(LocalTime.now())
-                && scheduleUiGenerator.toLocaleDate((short) (lesson.getEnd() + 1)).isAfter(LocalTime.now()));
+        return scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()) == null
+                || (scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()).isBefore(LocalTime.now())
+                && scheduleUiGenerator.endToLocaleTime(lesson.getEnd()).isAfter(LocalTime.now()));
     }
 
     private void updateScheduleLoop()
