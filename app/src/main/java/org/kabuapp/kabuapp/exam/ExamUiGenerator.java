@@ -57,6 +57,6 @@ public class ExamUiGenerator {
 
     private boolean isCurrent(LocalDate begin, int duration) {
         return (LocalDate.now().isAfter(begin) || LocalDate.now().isEqual(begin)) &&
-                (LocalDate.now().isBefore(begin.plusDays(duration)) || LocalDate.now().isEqual(begin.plusDays(duration)));
+                (LocalDate.now().isBefore(begin.plusDays(duration - 1)) || LocalDate.now().isEqual(begin.plusDays(duration - 1)));
     }
 }
