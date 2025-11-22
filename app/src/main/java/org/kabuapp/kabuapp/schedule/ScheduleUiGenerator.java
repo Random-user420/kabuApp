@@ -43,7 +43,7 @@ public class ScheduleUiGenerator
             {
                 nameTextView.setText(HtmlCompat.fromHtml("<s>" + lesson.getName() + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
                 timeTextView.setText(HtmlCompat.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
-                        + mapBeginnToString((short) (lesson.getEnd() + 1)) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        + mapEndToString(lesson.getEnd()) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
                 teacherTextView.getParent().clearChildFocus(teacherTextView);
                 roomTextView.setVisibility(View.GONE);
                 teacherTextView.setVisibility(View.GONE);
@@ -51,7 +51,7 @@ public class ScheduleUiGenerator
             else
             {
                 nameTextView.setText(lesson.getName());
-                timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " + mapBeginnToString((short) (lesson.getEnd() + 1)));
+                timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " +  mapEndToString(lesson.getEnd()));
                 teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + lesson.getTeacher());
                 roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + lesson.getRoom());
             }
@@ -64,7 +64,7 @@ public class ScheduleUiGenerator
                 groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
             }
 
-            if (isCurrent(toLocaleDate(lesson.getBegin()), toLocaleDate((short) (lesson.getEnd() + 1))))
+            if (isCurrent(beginToLocaleTime(lesson.getBegin()), endToLocaleTime(lesson.getEnd())))
             {
                 ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
             }
@@ -77,7 +77,7 @@ public class ScheduleUiGenerator
         return LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin);
     }
 
-    public LocalTime toLocaleDate(short time)
+    public LocalTime beginToLocaleTime(short time)
     {
         return switch (time)
         {
@@ -85,6 +85,27 @@ public class ScheduleUiGenerator
             case 2 -> LocalTime.of(9, 15);
             case 3 -> LocalTime.of(10, 0);
             case 4 -> LocalTime.of(11, 0);
+            case 5 -> LocalTime.of(11, 45);
+            case 6 -> LocalTime.of(12, 30);
+            case 7 -> LocalTime.of(13, 15);
+            case 8 -> LocalTime.of(14, 0);
+            case 9 -> LocalTime.of(14, 45);
+            case 10 -> LocalTime.of(15, 30);
+            case 11 -> LocalTime.of(16, 15);
+            case 12 -> LocalTime.of(17, 0);
+            case 13 -> LocalTime.of(17, 45);
+            case 14 -> LocalTime.of(18, 30);
+            default -> null;
+        };
+    }
+
+    public LocalTime endToLocaleTime(short time)
+    {
+        return switch (time + 1)
+        {
+            case 2 -> LocalTime.of(9, 15);
+            case 3 -> LocalTime.of(10, 0);
+            case 4 -> LocalTime.of(10, 45);
             case 5 -> LocalTime.of(11, 45);
             case 6 -> LocalTime.of(12, 30);
             case 7 -> LocalTime.of(13, 15);
@@ -107,6 +128,26 @@ public class ScheduleUiGenerator
             case 2 -> "9:15";
             case 3 -> "10:00";
             case 4 -> "11:00";
+            case 5 -> "11:45";
+            case 6 -> "12:30";
+            case 7 -> "13:15";
+            case 8 -> "14:00";
+            case 9 -> "14:45";
+            case 10 -> "15:30";
+            case 11 -> "16:15";
+            case 12 -> "17:00";
+            case 13 -> "17:45";
+            case 14 -> "18:30";
+            default -> "ERROR";
+        };
+    }
+    private String mapEndToString(short lesson)
+    {
+        return switch (lesson + 1)
+        {
+            case 2 -> "9:15";
+            case 3 -> "10:00";
+            case 4 -> "10:45";
             case 5 -> "11:45";
             case 6 -> "12:30";
             case 7 -> "13:15";
