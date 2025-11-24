@@ -31,6 +31,7 @@ import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -125,11 +126,11 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         dateRecyclerView.setLayoutManager(layoutManager);
 
-        dateItems = generateDateItems(LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1), 14, scheduleController);
+        dateItems = generateDateItems(DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1), 14, scheduleController);
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
-        if (scheduleController.getSchedule().getSelectedDate().isEqual(LocalDate.now()))
+        if (scheduleController.getSchedule().getSelectedDate().isEqual(DateTimeUtils.getLocalDate()))
         {
             scheduleController.getSchedule().setSelectedDate(getDate(dateItems));
         }
@@ -181,8 +182,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             return;
         }
         Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(scheduleController.getSchedule().getLessons());
-        if (lessons.get(LocalDate.now()) != null && lessons.get(LocalDate.now()).stream().noneMatch(this::isInLesson)) {
-            addNullLessonAtCurrentTime(lessons.get(LocalDate.now()));
+        if (lessons.get(DateTimeUtils.getLocalDate()) != null && lessons.get(DateTimeUtils.getLocalDate()).stream().noneMatch(this::isInLesson)) {
+            addNullLessonAtCurrentTime(lessons.get(DateTimeUtils.getLocalDate()));
         }
         runOnUiThread(() -> {
             linearSchedule.removeAllViews();
@@ -201,7 +202,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private void addNullLessonAtCurrentTime(List<MemLesson> lessons) {
         int i = -1;
         for (int k = 0; k < lessons.size(); k++) {
-            if (scheduleUiGenerator.endToLocaleTime(lessons.get(k).getEnd()).isBefore(LocalTime.now())) {
+            if (scheduleUiGenerator.endToLocaleTime(lessons.get(k).getEnd()).isBefore(DateTimeUtils.getLocalTime())) {
                 i = k;
             } else {
                 break;
@@ -214,8 +215,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private boolean isInLesson(MemLesson lesson) {
         return scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()) == null
-                || (scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()).isBefore(LocalTime.now())
-                && scheduleUiGenerator.endToLocaleTime(lesson.getEnd()).isAfter(LocalTime.now()));
+                || (scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()).isBefore(DateTimeUtils.getLocalTime())
+                && scheduleUiGenerator.endToLocaleTime(lesson.getEnd()).isAfter(DateTimeUtils.getLocalTime()));
     }
 
     private void updateScheduleLoop()
@@ -272,7 +273,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         }
         if (items.isEmpty())
         {
-            LocalDate currentDate = LocalDate.now();
+            LocalDate currentDate = DateTimeUtils.getLocalDate();
             String month = currentDate.format(monthFormatter);
             String day = currentDate.format(dayFormatter);
             String weekday = currentDate.format(weekdayFormatter);
@@ -304,7 +305,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private LocalDate getDate(List<DateItem> dateItems)
     {
-        LocalDate date = LocalDate.now();
+        LocalDate date = DateTimeUtils.getLocalDate();
         if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
         {
             date = date.plusDays(1);

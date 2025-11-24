@@ -27,6 +27,7 @@ import org.kabuapp.kabuapp.db.ScheduleMapper;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 @Slf4j
 @AllArgsConstructor
@@ -70,7 +71,7 @@ public class ScheduleController
     {
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
         String token = tokenIn;
-        LocalDate begin = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() - 1);
+        LocalDate begin = DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1);
         try
         {
             updateSchedule(begin, 14, token, userId);

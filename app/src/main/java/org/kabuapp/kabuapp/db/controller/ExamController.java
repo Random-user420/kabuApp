@@ -9,6 +9,7 @@ import org.kabuapp.kabuapp.db.model.AppDatabase;
 import org.kabuapp.kabuapp.db.model.DbType;
 import org.kabuapp.kabuapp.interfaces.AuthCallback;
 import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -52,7 +53,7 @@ public class ExamController
     private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
-        LocalDate date = LocalDate.now();
+        LocalDate date = DateTimeUtils.getLocalDate();
         try
         {
             updateExams(date, token, userId, (short) 3);

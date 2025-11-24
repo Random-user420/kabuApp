@@ -21,6 +21,7 @@ import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -83,7 +84,7 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
             Map<LocalDate, MemExam> exams = new HashMap<>(examController.getExams().getExams());
-            exams.computeIfAbsent(LocalDate.now(), k -> new MemExam(null, LocalDate.now(), (short) -1, null));
+            exams.computeIfAbsent(DateTimeUtils.getLocalDate(), k -> new MemExam(null, DateTimeUtils.getLocalDate(), (short) -1, null));
             exams.values().stream().sorted(Comparator.comparing(MemExam::getBeginn))
                     .forEach(exam ->
                     uiGenerator.addExamElement(

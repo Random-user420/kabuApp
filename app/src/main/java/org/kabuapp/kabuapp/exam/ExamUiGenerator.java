@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemExam;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +57,7 @@ public class ExamUiGenerator {
     }
 
     private boolean isCurrent(LocalDate begin, int duration) {
-        return (LocalDate.now().isAfter(begin) || LocalDate.now().isEqual(begin)) &&
-                (LocalDate.now().isBefore(begin.plusDays(duration - 1)) || LocalDate.now().isEqual(begin.plusDays(duration - 1)));
+        return (DateTimeUtils.getLocalDate().isAfter(begin) || DateTimeUtils.getLocalDate().isEqual(begin)) &&
+                (DateTimeUtils.getLocalDate().isBefore(begin.plusDays(duration - 1)) || DateTimeUtils.getLocalDate().isEqual(begin.plusDays(duration - 1)));
     }
 }

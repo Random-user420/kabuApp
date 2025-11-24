@@ -22,6 +22,7 @@ import org.kabuapp.kabuapp.db.controller.LifetimeController;
 import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.schedule.ScheduleUpdateTask;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -67,7 +68,7 @@ public class KabuApp extends Application
         executorService = Executors.newCachedThreadPool();
 
         schedule = new MemSchedule();
-        schedule.setSelectedDate(LocalDate.now());
+        schedule.setSelectedDate(DateTimeUtils.getLocalDate());
 
         db = AppDatabase.getDatabase(getApplicationContext());
         digikabuApiService = new DigikabuApiService();

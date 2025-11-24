@@ -14,6 +14,7 @@ import androidx.core.text.HtmlCompat;
 
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -65,7 +66,7 @@ public class ScheduleUiGenerator
                 groupTextView.setText(lesson.getGroup() + "/" + lesson.getMaxGroup());
             }
 
-            if (lesson.getDate().isEqual(LocalDate.now()) && isCurrent(beginToLocaleTime(lesson.getBegin()), endToLocaleTime(lesson.getEnd())))
+            if (lesson.getDate().isEqual(DateTimeUtils.getLocalDate()) && isCurrent(beginToLocaleTime(lesson.getBegin()), endToLocaleTime(lesson.getEnd())))
             {
                 ((CardView) lessonView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
             }
@@ -75,7 +76,7 @@ public class ScheduleUiGenerator
 
     private boolean isCurrent(LocalTime begin, LocalTime end)
     {
-        return LocalTime.now().isBefore(end) && LocalTime.now().isAfter(begin);
+        return DateTimeUtils.getLocalTime().isBefore(end) && DateTimeUtils.getLocalTime().isAfter(begin);
     }
 
     public LocalTime beginToLocaleTime(short time)
