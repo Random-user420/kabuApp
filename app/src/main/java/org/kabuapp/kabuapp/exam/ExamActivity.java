@@ -84,7 +84,10 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
         {
             Map<LocalDate, MemExam> exams = new HashMap<>(examController.getExams().getExams());
-            exams.computeIfAbsent(DateTimeUtils.getLocalDate(), k -> new MemExam(null, DateTimeUtils.getLocalDate(), (short) -1, null));
+            if (exams.keySet().stream().anyMatch(date -> date.isBefore(DateTimeUtils.getLocalDate()))
+                && exams.keySet().stream().anyMatch(date -> date.isAfter(DateTimeUtils.getLocalDate()))) {
+                exams.computeIfAbsent(DateTimeUtils.getLocalDate(), k -> new MemExam(null, DateTimeUtils.getLocalDate(), (short) -1, null));
+            }
             exams.values().stream().sorted(Comparator.comparing(MemExam::getBeginn))
                     .forEach(exam ->
                     uiGenerator.addExamElement(

@@ -76,7 +76,7 @@ public class ScheduleUiGenerator
 
     private boolean isCurrent(LocalTime begin, LocalTime end)
     {
-        return DateTimeUtils.getLocalTime().isBefore(end) && DateTimeUtils.getLocalTime().isAfter(begin);
+        return !end.isBefore(DateTimeUtils.getLocalTime()) && !begin.isAfter(DateTimeUtils.getLocalTime());
     }
 
     public LocalTime beginToLocaleTime(short time)

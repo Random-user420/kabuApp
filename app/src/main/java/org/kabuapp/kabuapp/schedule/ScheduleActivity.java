@@ -215,8 +215,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private boolean isInLesson(MemLesson lesson) {
         return scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()) == null
-                || (scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()).isBefore(DateTimeUtils.getLocalTime())
-                && scheduleUiGenerator.endToLocaleTime(lesson.getEnd()).isAfter(DateTimeUtils.getLocalTime()));
+                || (!DateTimeUtils.getLocalTime().isBefore(scheduleUiGenerator.beginToLocaleTime(lesson.getBegin()))
+                && !DateTimeUtils.getLocalTime().isAfter(scheduleUiGenerator.endToLocaleTime(lesson.getEnd())));
     }
 
     private void updateScheduleLoop()
