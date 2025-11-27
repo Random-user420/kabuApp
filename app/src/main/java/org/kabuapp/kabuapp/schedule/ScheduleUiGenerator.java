@@ -85,7 +85,7 @@ public class ScheduleUiGenerator
         {
             case 1 -> LocalTime.of(8, 30);
             case 2 -> LocalTime.of(9, 15);
-            case 3 -> LocalTime.of(10, 0);
+            case 3 -> LocalTime.of(10, 15);
             case 4 -> LocalTime.of(11, 0);
             case 5 -> LocalTime.of(11, 45);
             case 6 -> LocalTime.of(12, 30);
@@ -107,7 +107,7 @@ public class ScheduleUiGenerator
         {
             case 2 -> LocalTime.of(9, 15);
             case 3 -> LocalTime.of(10, 0);
-            case 4 -> LocalTime.of(10, 45);
+            case 4 -> LocalTime.of(11, 0);
             case 5 -> LocalTime.of(11, 45);
             case 6 -> LocalTime.of(12, 30);
             case 7 -> LocalTime.of(13, 15);
@@ -128,7 +128,7 @@ public class ScheduleUiGenerator
         {
             case 1 -> "8:30";
             case 2 -> "9:15";
-            case 3 -> "10:00";
+            case 3 -> "10:15";
             case 4 -> "11:00";
             case 5 -> "11:45";
             case 6 -> "12:30";
@@ -149,7 +149,7 @@ public class ScheduleUiGenerator
         {
             case 2 -> "9:15";
             case 3 -> "10:00";
-            case 4 -> "10:45";
+            case 4 -> "11:00";
             case 5 -> "11:45";
             case 6 -> "12:30";
             case 7 -> "13:15";
