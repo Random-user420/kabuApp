@@ -178,7 +178,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private void updateSchedule() {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
-        if (scheduleController.getSchedule().getLessons() == null) {
+        if (scheduleController.getSchedule().getLessons() == null || linearSchedule == null) {
             return;
         }
         Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(scheduleController.getSchedule().getLessons());
