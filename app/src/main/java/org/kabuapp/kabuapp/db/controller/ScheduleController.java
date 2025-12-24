@@ -61,7 +61,9 @@ public class ScheduleController
             try
             {
                 future.get(60, TimeUnit.SECONDS);
-            } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            }
+            catch (ExecutionException | InterruptedException | TimeoutException e)
+            {
                 Logger.getLogger("updateSchedule").log(Level.WARNING, e.toString());
             }
         }
@@ -97,7 +99,7 @@ public class ScheduleController
             return;
         }
         Set<LocalDate> datesToRemove = schedule.getLessons().keySet().stream()
-                .filter(key -> key.isBefore(date)).collect(Collectors.toSet());
+            .filter(key -> key.isBefore(date)).collect(Collectors.toSet());
         datesToRemove.forEach(schedule.getLessons()::remove);
         scheduleMapper.mapApiResToSchedule(responses, schedule);
         executorService.execute(() -> db.lessonDao().insertAll(scheduleMapper.mapScheduleToDb(schedule, userId)));
@@ -111,8 +113,8 @@ public class ScheduleController
     public boolean isSchool(LocalDate date)
     {
         return schedule.getLessons() != null
-                && schedule.getLessons().containsKey(date)
-                && !schedule.getLessons().get(date).isEmpty();
+            && schedule.getLessons().containsKey(date)
+            && !schedule.getLessons().get(date).isEmpty();
     }
 
     public void resetSchedule(UUID userId)

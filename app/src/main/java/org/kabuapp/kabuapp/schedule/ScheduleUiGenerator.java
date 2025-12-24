@@ -16,23 +16,25 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ScheduleUiGenerator
 {
     @SuppressLint("SetTextI18n")
     public void addLessonElement(
-            Context context,
-            ViewGroup parentLayout,
-            MemLesson lesson)
+        Context context,
+        ViewGroup parentLayout,
+        MemLesson lesson)
     {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (lesson.getBegin() == -1) {
+        if (lesson.getBegin() == -1)
+        {
             View dividerView = inflater.inflate(R.layout.layout_current_item, parentLayout, false);
             parentLayout.addView(dividerView);
-        } else {
+        }
+        else
+        {
             View lessonView = inflater.inflate(R.layout.layout_lesson_item, parentLayout, false);
 
             TextView timeTextView = lessonView.findViewById(R.id.text_view_lesson_time);
@@ -45,7 +47,7 @@ public class ScheduleUiGenerator
             {
                 nameTextView.setText(HtmlCompat.fromHtml("<s>" + lesson.getName() + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
                 timeTextView.setText(HtmlCompat.fromHtml("<s>" + mapBeginnToString(lesson.getBegin()) + " - "
-                        + mapEndToString(lesson.getEnd()) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    + mapEndToString(lesson.getEnd()) + "</s>", HtmlCompat.FROM_HTML_MODE_LEGACY));
                 teacherTextView.getParent().clearChildFocus(teacherTextView);
                 roomTextView.setVisibility(View.GONE);
                 teacherTextView.setVisibility(View.GONE);
@@ -53,7 +55,7 @@ public class ScheduleUiGenerator
             else
             {
                 nameTextView.setText(lesson.getName());
-                timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " +  mapEndToString(lesson.getEnd()));
+                timeTextView.setText(mapBeginnToString(lesson.getBegin()) + " - " + mapEndToString(lesson.getEnd()));
                 teacherTextView.setText(context.getString(R.string.lesson_teacher_prefix) + ": " + lesson.getTeacher());
                 roomTextView.setText(context.getString(R.string.lesson_room_prefix) + ": " + lesson.getRoom());
             }
@@ -143,6 +145,7 @@ public class ScheduleUiGenerator
             default -> "ERROR";
         };
     }
+
     private String mapEndToString(short lesson)
     {
         return switch (lesson + 1)

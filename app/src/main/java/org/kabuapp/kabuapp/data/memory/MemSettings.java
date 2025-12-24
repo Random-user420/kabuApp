@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MemSettings {
+public class MemSettings
+{
     private boolean isoDate;
 }

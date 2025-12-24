@@ -9,10 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import org.kabuapp.kabuapp.R;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -149,8 +152,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         if (dateList.stream().noneMatch(date -> date.getDate().equals(dateItem.getDate())))
         {
             int insertionPosition = 0;
-            for (int i = 0; i < dateList.size(); i++) {
-                if (dateItem.getDate().isBefore(dateList.get(i).getDate())) {
+            for (int i = 0; i < dateList.size(); i++)
+            {
+                if (dateItem.getDate().isBefore(dateList.get(i).getDate()))
+                {
                     insertionPosition = i;
                     break;
                 }
@@ -170,7 +175,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         }
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class DateViewHolder extends RecyclerView.ViewHolder
     {
         private TextView monthTextView;

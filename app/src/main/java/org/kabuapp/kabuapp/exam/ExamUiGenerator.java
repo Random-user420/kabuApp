@@ -20,26 +20,31 @@ import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ExamUiGenerator {
+public class ExamUiGenerator
+{
     private final DateTimeFormatter dateTimeFormatter;
 
     public void addExamElement(
-            Context context,
-            ViewGroup parentLayout,
-            MemExam exam) {
+        Context context,
+        ViewGroup parentLayout,
+        MemExam exam)
+    {
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (exam.getDuration() == -1) {
+        if (exam.getDuration() == -1)
+        {
             View dividerView = inflater.inflate(R.layout.layout_current_item, parentLayout, false);
             parentLayout.addView(dividerView);
         }
-        else {
+        else
+        {
             View examView = inflater.inflate(R.layout.layout_exam_item, parentLayout, false);
 
             TextView beginTextView = examView.findViewById(R.id.text_view_exam_begin);
             TextView endTextView = examView.findViewById(R.id.text_view_exam_end);
             TextView infoTextView = examView.findViewById(R.id.text_view_exam_info);
 
-            if (exam.getDuration() == 1) {
+            if (exam.getDuration() == 1)
+            {
                 endTextView.setVisibility(View.GONE);
             }
             {
@@ -48,7 +53,8 @@ public class ExamUiGenerator {
             beginTextView.setText(dateTimeFormatter.format(exam.getBeginn()));
             infoTextView.setText(exam.getInfo());
 
-            if (isCurrent(exam.getBeginn(), exam.getDuration())) {
+            if (isCurrent(exam.getBeginn(), exam.getDuration()))
+            {
                 ((CardView) examView).setCardBackgroundColor(resolveColorAttribute(context, android.R.attr.textColorHighlight));
             }
 
@@ -56,8 +62,9 @@ public class ExamUiGenerator {
         }
     }
 
-    private boolean isCurrent(LocalDate begin, int duration) {
+    private boolean isCurrent(LocalDate begin, int duration)
+    {
         return (DateTimeUtils.getLocalDate().isAfter(begin) || DateTimeUtils.getLocalDate().isEqual(begin)) &&
-                (DateTimeUtils.getLocalDate().isBefore(begin.plusDays(duration - 1)) || DateTimeUtils.getLocalDate().isEqual(begin.plusDays(duration - 1)));
+            (DateTimeUtils.getLocalDate().isBefore(begin.plusDays(duration - 1)) || DateTimeUtils.getLocalDate().isEqual(begin.plusDays(duration - 1)));
     }
 }

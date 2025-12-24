@@ -25,7 +25,6 @@ import org.kabuapp.kabuapp.schedule.ScheduleUpdateTask;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -87,6 +86,7 @@ public class KabuApp extends Application
 
         settingsController.loadSettings();
     }
+
     @Override
     public void onTerminate()
     {

@@ -12,7 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Entity(tableName = "settings")
-public class Settings {
+public class Settings
+{
     @PrimaryKey()
     private int id;
     @ColumnInfo(name = "isoDate")

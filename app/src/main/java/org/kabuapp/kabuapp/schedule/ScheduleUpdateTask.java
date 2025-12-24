@@ -6,7 +6,8 @@ import org.kabuapp.kabuapp.KabuApp;
 
 import java.lang.ref.WeakReference;
 
-public class ScheduleUpdateTask implements Runnable {
+public class ScheduleUpdateTask implements Runnable
+{
 
     private final Handler uiHandler = new KabuApp.GlobalTaskManager().getMainHandler();
 
@@ -23,9 +24,11 @@ public class ScheduleUpdateTask implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         final ScheduleActivity activity = activityRef.get();
-        if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+        if (activity != null && !activity.isFinishing() && !activity.isDestroyed())
+        {
             Runnable uiUpdateAction = () -> activity.callback(null);
             uiHandler.post(uiUpdateAction);
         }
