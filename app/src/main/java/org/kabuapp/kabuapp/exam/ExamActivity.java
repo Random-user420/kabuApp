@@ -8,7 +8,7 @@ import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.intigration.Activity;
+import org.kabuapp.kabuapp.integration.Activity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;

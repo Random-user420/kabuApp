@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import androidx.core.text.HtmlCompat;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.intigration.Activity;
+import org.kabuapp.kabuapp.integration.Activity;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 

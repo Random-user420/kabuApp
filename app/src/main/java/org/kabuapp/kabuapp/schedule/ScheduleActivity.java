@@ -18,7 +18,7 @@ import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.intigration.Activity;
+import org.kabuapp.kabuapp.integration.Activity;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;

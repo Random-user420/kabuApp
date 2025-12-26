@@ -1,4 +1,4 @@
-package org.kabuapp.kabuapp.intigration;
+package org.kabuapp.kabuapp.integration;
 
 import android.content.Intent;
 import android.os.Bundle;

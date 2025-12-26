@@ -8,7 +8,7 @@ import android.widget.EditText;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.databinding.ActivityLoginBinding;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.intigration.Activity;
+import org.kabuapp.kabuapp.integration.Activity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 
 import static org.kabuapp.kabuapp.ui.NoticeGenerator.setNotice;
