@@ -1,67 +1,37 @@
 package org.kabuapp.kabuapp.settings;
 
-import static org.kabuapp.kabuapp.ui.NoticeGenerator.setNotice;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.text.HtmlCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.databinding.ActivitySettingsBinding;
-import org.kabuapp.kabuapp.db.controller.SessionController;
-import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.db.controller.LifetimeController;
-import org.kabuapp.kabuapp.db.controller.AuthController;
+import org.kabuapp.kabuapp.intigration.Activity;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
-public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
+import static org.kabuapp.kabuapp.databinding.ActivitySettingsBinding.inflate;
+import static org.kabuapp.kabuapp.ui.NoticeGenerator.setNotice;
+
+public class SettingsActivity extends Activity implements AdapterView.OnItemSelectedListener
 {
-    private LifetimeController lifetimeController;
-    private SettingsController settingsController;
-    private SessionController sessionController;
-    private ActivitySettingsBinding binding;
-    private ExecutorService executorService;
-    private AuthController authController;
-    private Spinner accountSpinner;
+    private org.kabuapp.kabuapp.databinding.ActivitySettingsBinding binding;
+    private android.widget.Spinner accountSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        EdgeToEdge.enable(this);
-
-        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        
+        binding = inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
-        {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        authController = ((KabuApp) getApplication()).getAuthController();
-        lifetimeController = ((KabuApp) getApplication()).getLifetimeController();
-        sessionController = ((KabuApp) getApplication()).getSessionController();
-        executorService = ((KabuApp) getApplication()).getExecutorService();
-        settingsController = ((KabuApp) getApplication()).getSettingsController();
 
         accountSpinner = findViewById(R.id.account_spinner);
         accountSpinner.setOnItemSelectedListener(this);
@@ -70,8 +40,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         findViewById(R.id.add_account_button).setOnClickListener(v -> onAddAccountClicked());
         findViewById(R.id.delete_account_button).setOnClickListener(v -> onDeleteAccountClicked());
 
-        setScheduleListener();
-        examHandler();
+        barButtonRefListener(binding.barExam, ExamActivity.class);
+        barButtonRefListener(binding.barSchedule, ScheduleActivity.class);
+
         debugSwitchListener();
         isoSwitchSetup();
         setNotice(this, findViewById(R.id.notice_code_settings));
@@ -81,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     protected void onStart()
     {
         super.onStart();
-        if (!authController.isInitialized())
+        if (!getAuthController().isInitialized())
         {
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
@@ -92,8 +63,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     private void refreshAccountsSpinner()
     {
-        List<String> usernames = authController.getUsers();
-        String currentUsername = authController.getUser();
+        List<String> usernames = getAuthController().getUsers();
+        String currentUsername = getAuthController().getUser();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
@@ -118,13 +89,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
         String selectedUsername = (String) parent.getItemAtPosition(position);
-        String currentActiveUsername = authController.getUser();
+        String currentActiveUsername = getAuthController().getUser();
 
         if (!selectedUsername.equals(currentActiveUsername))
         {
-            executorService.execute(() ->
+            getExecutorService().execute(() ->
             {
-                sessionController.switchAccount(selectedUsername, objects -> runOnUiThread(() ->
+                getSessionController().switchAccount(selectedUsername, objects -> runOnUiThread(() ->
                 {
                     Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -138,14 +109,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     private void onDeleteAccountClicked()
     {
-        executorService.execute(() ->
+        getExecutorService().execute(() ->
         {
-            sessionController.removeUser(authController.getId(), objects ->
+            getSessionController().removeUser(getAuthController().getId(), objects ->
             {
                 runOnUiThread(this::refreshAccountsSpinner);
-                if (authController.getUser() == null && !authController.getUsers().isEmpty())
+                if (getAuthController().getUser() == null && !getAuthController().getUsers().isEmpty())
                 {
-                    sessionController.switchAccount(authController.getUsers().get(0), null);
+                    getSessionController().switchAccount(getAuthController().getUsers().get(0), null);
                 }
                 else
                 {
@@ -168,18 +139,16 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     private void onAddAccountClicked()
     {
-        sessionController.resetSate();
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra("ADD_NEW_ACCOUNT", true);
-        startActivity(intent);
+        getSessionController().resetSate();
+        startActivity(new Intent(this, LoginActivity.class).putExtra("ADD_NEW_ACCOUNT", true));
     }
 
     private void isoSwitchSetup()
     {
-        binding.settingIsoDate.setChecked(settingsController.isIsoDate());
+        binding.settingIsoDate.setChecked(getSettingsController().isIsoDate());
         binding.settingIsoDate.setOnCheckedChangeListener((c, ac) ->
         {
-            settingsController.setIsoDate(ac);
+            getSettingsController().setIsoDate(ac);
         });
     }
 
@@ -187,37 +156,20 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     {
         binding.debugSwitch.setOnCheckedChangeListener((c, ac) ->
         {
-            if (ac && lifetimeController.getMemLifetime().getExamLastUpdate() != null && lifetimeController.getMemLifetime().getScheduleLastUpdate() != null)
+            if (ac && getLifetimeController().getMemLifetime().getExamLastUpdate() != null
+                && getLifetimeController().getMemLifetime().getScheduleLastUpdate() != null)
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
                 binding.debugScheduleLifetime.setText(HtmlCompat.fromHtml(getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
-                        formatter.format(lifetimeController.getMemLifetime().getScheduleLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        formatter.format(getLifetimeController().getMemLifetime().getScheduleLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 binding.debugExamLifetime.setText(HtmlCompat.fromHtml( getApplicationContext().getString(R.string.exam_title) + "<br/>" +
-                                formatter.format(lifetimeController.getMemLifetime().getExamLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                                formatter.format(getLifetimeController().getMemLifetime().getExamLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
             else
             {
                 binding.debugScheduleLifetime.setText("");
                 binding.debugExamLifetime.setText("");
             }
-        });
-    }
-
-    private void setScheduleListener()
-    {
-        binding.barSchedule.setOnClickListener((v) ->
-        {
-            var i = new Intent(this, ScheduleActivity.class);
-            startActivity(i);
-        });
-    }
-
-    private void examHandler()
-    {
-        binding.barExam.setOnClickListener(v ->
-        {
-            var i = new Intent(this, ExamActivity.class);
-            startActivity(i);
         });
     }
 }

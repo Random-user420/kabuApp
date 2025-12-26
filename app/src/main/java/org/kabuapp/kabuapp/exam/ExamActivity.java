@@ -1,24 +1,14 @@
 package org.kabuapp.kabuapp.exam;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
-
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.databinding.ActivityExamBinding;
-import org.kabuapp.kabuapp.db.controller.ExamController;
-import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.db.controller.AuthController;
+import org.kabuapp.kabuapp.intigration.Activity;
 import org.kabuapp.kabuapp.schedule.ScheduleActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
@@ -31,11 +21,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Callback
+public class ExamActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, Callback
 {
     private SwipeRefreshLayout swipeRefreshLayout;
-    private AuthController authController;
-    private ExamController examController;
     private ExamUiGenerator uiGenerator;
     private ActivityExamBinding binding;
 
@@ -45,35 +33,17 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        authController = ((KabuApp) getApplication()).getAuthController();
-        examController = ((KabuApp) getApplication()).getExamController();
-        SettingsController settingsController = ((KabuApp) getApplication()).getSettingsController();
-        DateTimeFormatter dateTimeFormatter;
-        if (settingsController.isIsoDate())
-        {
-            dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        }
-        else
-        {
-            dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-        }
-        uiGenerator = new ExamUiGenerator(dateTimeFormatter);
+        uiGenerator = new ExamUiGenerator(getSettingsController().isIsoDate()
+            ? DateTimeFormatter.ISO_LOCAL_DATE : DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
 
         binding = ActivityExamBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) ->
-        {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_exam);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        settingsHandler();
-        setScheduleListener();
+        barButtonRefListener(binding.barSettings, SettingsActivity.class);
+        barButtonRefListener(binding.barSchedule, ScheduleActivity.class);
         updateExams();
     }
 
@@ -81,9 +51,10 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     {
         ViewGroup linearExams = findViewById(R.id.linear_exams);
         linearExams.removeAllViews();
-        if (examController.getExams().getExams() != null && !examController.getExams().getExams().isEmpty())
+        Map<LocalDate, MemExam> examsRef = getExamController().getExams().getExams();
+        if (examsRef != null && !examsRef.isEmpty())
         {
-            Map<LocalDate, MemExam> exams = new HashMap<>(examController.getExams().getExams());
+            Map<LocalDate, MemExam> exams = new HashMap<>(examsRef);
             if (exams.keySet().stream().anyMatch(date -> date.isBefore(DateTimeUtils.getLocalDate()))
                 && exams.keySet().stream().anyMatch(date -> date.isAfter(DateTimeUtils.getLocalDate())))
             {
@@ -102,29 +73,12 @@ public class ExamActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh()
     {
         swipeRefreshLayout.setRefreshing(false);
-        examController.updateExams(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId());
+        getExamController().updateExams(getAuthController().getToken(), getAuthController(), this,
+            new Object[1], Duration.ofMinutes(5), getAuthController().getId());
     }
 
     public void callback(Object[] objects)
     {
         runOnUiThread(this::updateExams);
-    }
-
-    private void settingsHandler()
-    {
-        binding.barSettings.setOnClickListener(v ->
-        {
-            var i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        });
-    }
-
-    private void setScheduleListener()
-    {
-        binding.barSchedule.setOnClickListener((v) ->
-        {
-            var i = new Intent(this, ScheduleActivity.class);
-            startActivity(i);
-        });
     }
 }

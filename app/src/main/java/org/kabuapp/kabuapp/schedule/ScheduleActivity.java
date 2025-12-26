@@ -1,8 +1,5 @@
 package org.kabuapp.kabuapp.schedule;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,26 +7,19 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
 import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.db.controller.ExamController;
-import org.kabuapp.kabuapp.db.controller.AuthController;
-import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.intigration.Activity;
+import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
@@ -43,28 +33,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
-public class ScheduleActivity extends AppCompatActivity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
+
+public class ScheduleActivity extends Activity implements Callback, DateAdapter.OnDateSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     private static final int SWIPE_VELOCITY_THRESHOLD_DP = 69;
     private static final int SWIPE_THRESHOLD_DP = 69;
     private ScheduleUiGenerator scheduleUiGenerator;
-    private ScheduleController scheduleController;
     private SwipeRefreshLayout swipeRefreshLayout;
     private DateTimeFormatter weekdayFormatter;
     private LinearLayoutManager layoutManager;
     private DateTimeFormatter monthFormatter;
     private GestureDetector gestureDetector;
-    private ExecutorService executorService;
     private ActivityScheduleBinding binding;
     private DateTimeFormatter dayFormatter;
-    private AuthController authController;
     private List<DateItem> dateItems;
     private DateAdapter dateAdapter;
 
@@ -74,16 +63,12 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     {
         super.onCreate(savedInstanceState);
         ((KabuApp) getApplication()).getScheduleUpdateTask().setRef(this);
-        EdgeToEdge.enable(this);
 
-        authController = ((KabuApp) getApplication()).getAuthController();
-        scheduleController = ((KabuApp) getApplication()).getScheduleController();
-        scheduleController.updateSchedule(
-            authController.getToken(), authController, this, new Object[1], Duration.ofHours(2),
-            authController.getId(), !scheduleController.getSchedule().getLessons().isEmpty());
-        executorService = ((KabuApp) getApplication()).getExecutorService();
+        getScheduleController().updateSchedule(
+            getAuthController().getToken(), getAuthController(), this, new Object[1], Duration.ofHours(2),
+            getAuthController().getId(), !getScheduleController().getSchedule().getLessons().isEmpty());
+
         scheduleUiGenerator = new ScheduleUiGenerator();
-        ExamController examController = ((KabuApp) getApplication()).getExamController();
 
         monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
         dayFormatter = DateTimeFormatter.ofPattern("dd");
@@ -95,12 +80,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         ScrollView scheduleScrollView = findViewById(R.id.schedule_scroll_view);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) ->
-        {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         gestureDetector = new GestureDetector(this, new ScheduleGestureListener());
 
         if (scheduleScrollView != null)
@@ -115,10 +94,10 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
             });
         }
 
-        settingsHandler();
-        examHandler();
+        barButtonRefListener(binding.barSettings, SettingsActivity.class);
+        barButtonRefListener(binding.barExam, ExamActivity.class);
 
-        examController.updateExams(authController.getToken(), authController, null, null, Duration.ofHours(1), authController.getId());
+        getExamController().updateExams(getAuthController().getToken(), getAuthController(), null, null, Duration.ofHours(1), getAuthController().getId());
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -128,16 +107,16 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         dateRecyclerView.setLayoutManager(layoutManager);
 
         dateItems = generateDateItems(
-            DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1), 14, scheduleController);
+            DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1), 14, getScheduleController());
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
-        if (scheduleController.getSchedule().getSelectedDate().isEqual(DateTimeUtils.getLocalDate()))
+        if (getScheduleController().getSchedule().getSelectedDate().isEqual(DateTimeUtils.getLocalDate()))
         {
-            scheduleController.getSchedule().setSelectedDate(getDate(dateItems));
+            getScheduleController().getSchedule().setSelectedDate(getDate(dateItems));
         }
 
-        dateAdapter.setSelectedDate(scheduleController.getSchedule().getSelectedDate());
+        dateAdapter.setSelectedDate(getScheduleController().getSchedule().getSelectedDate());
 
         dateRecyclerView.post(() ->
         {
@@ -155,7 +134,8 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     @Override
     public void onRefresh()
     {
-        scheduleController.updateSchedule(authController.getToken(), authController, this, new Object[1], Duration.ofMinutes(5), authController.getId(), true);
+        getScheduleController().updateSchedule(getAuthController().getToken(), getAuthController(), this,
+            new Object[1], Duration.ofMinutes(5), getAuthController().getId(), true);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -169,7 +149,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     {
         super.onStart();
 
-        if (!authController.isInitialized())
+        if (!getAuthController().isInitialized())
         {
             var i = new Intent(this, LoginActivity.class);
             startActivity(i);
@@ -181,28 +161,31 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private void updateSchedule()
     {
         ViewGroup linearSchedule = findViewById(R.id.linear_schedule);
-        if (scheduleController.getSchedule().getLessons() == null || linearSchedule == null)
+        LocalDate selectedDate = getScheduleController().getSchedule().getSelectedDate();
+        Map<LocalDate, List<MemLesson>> lessonRef = getScheduleController().getSchedule().getLessons();
+        if (lessonRef == null || linearSchedule == null || selectedDate == null)
         {
             return;
         }
-        Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(scheduleController.getSchedule().getLessons());
-        if (lessons.get(DateTimeUtils.getLocalDate()) != null && lessons.get(DateTimeUtils.getLocalDate()).stream().noneMatch(this::isInLesson))
+        Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(lessonRef);
+        List<MemLesson> currentLessons = lessons.get(DateTimeUtils.getLocalDate());
+        if (currentLessons != null && currentLessons.stream().noneMatch(this::isInLesson))
         {
-            addNullLessonAtCurrentTime(lessons.get(DateTimeUtils.getLocalDate()));
+            addNullLessonAtCurrentTime(currentLessons);
         }
         runOnUiThread(() ->
         {
             linearSchedule.removeAllViews();
-            if (lessons.containsKey(scheduleController.getSchedule().getSelectedDate()))
+            if (lessons.containsKey(selectedDate))
             {
-                lessons.get(scheduleController.getSchedule().getSelectedDate()).forEach(lesson ->
+                lessons.get(selectedDate).forEach(lesson ->
                     scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson));
             }
             lessons.keySet().forEach(date ->
             {
                 if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date)))
                 {
-                    dateAdapter.addDate(generateDateItems(date, 1, scheduleController).get(0));
+                    dateAdapter.addDate(generateDateItems(date, 1, getScheduleController()).get(0));
                 }
             });
         });
@@ -237,7 +220,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
     private void updateScheduleLoop()
     {
-        executorService.execute(() ->
+        getExecutorService().execute(() ->
         {
             while (!this.isDestroyed())
             {
@@ -253,24 +236,6 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         });
     }
 
-    private void settingsHandler()
-    {
-        binding.barSettings.setOnClickListener(v ->
-        {
-            var i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        });
-    }
-
-    private void examHandler()
-    {
-        binding.barExam.setOnClickListener(v ->
-        {
-            var i = new Intent(this, ExamActivity.class);
-            startActivity(i);
-        });
-    }
-
     private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays, ScheduleController scheduleController)
     {
         List<DateItem> items = new ArrayList<>();
@@ -278,22 +243,18 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         for (int i = 0; i < numberOfDays; i++)
         {
             LocalDate currentDate = startDate.plusDays(i);
-            if (!scheduleController.isSchool(currentDate))
+            if (!getScheduleController().isSchool(currentDate))
             {
                 continue;
             }
-            String month = currentDate.format(monthFormatter);
-            String day = currentDate.format(dayFormatter);
-            String weekday = currentDate.format(weekdayFormatter);
-            items.add(new DateItem(currentDate, month, day, weekday, false));
+            items.add(new DateItem(
+                currentDate, currentDate.format(monthFormatter), currentDate.format(dayFormatter), currentDate.format(weekdayFormatter), false));
         }
         if (items.isEmpty())
         {
             LocalDate currentDate = DateTimeUtils.getLocalDate();
-            String month = currentDate.format(monthFormatter);
-            String day = currentDate.format(dayFormatter);
-            String weekday = currentDate.format(weekdayFormatter);
-            items.add(new DateItem(currentDate, month, day, weekday, false));
+            items.add(new DateItem(
+                currentDate, currentDate.format(monthFormatter), currentDate.format(dayFormatter), currentDate.format(weekdayFormatter), false));
         }
         return items;
     }
@@ -301,7 +262,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     @Override
     public void onDateSelected(LocalDate date)
     {
-        scheduleController.getSchedule().setSelectedDate(date);
+        getScheduleController().getSchedule().setSelectedDate(date);
         updateSchedule();
     }
 
@@ -312,7 +273,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
 
         if (newPosition != -1)
         {
-            scheduleController.getSchedule().setSelectedDate(newDate);
+            getScheduleController().getSchedule().setSelectedDate(newDate);
             dateAdapter.setSelectedDate(newDate);
             updateSchedule();
 
@@ -322,7 +283,7 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private LocalDate getDate(List<DateItem> dateItems)
     {
         LocalDate date = DateTimeUtils.getLocalDate();
-        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !scheduleController.isSchool(date))
+        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) && !getScheduleController().isSchool(date))
         {
             date = date.plusDays(1);
         }
@@ -344,12 +305,12 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
     private class ScheduleGestureListener extends GestureDetector.SimpleOnGestureListener
     {
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        public boolean onFling(MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY)
         {
             boolean result = false;
             try
             {
-                if (e1 == null || e2 == null)
+                if (e1 == null)
                 {
                     return false;
                 }
@@ -389,12 +350,12 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         int days = 1;
         for (; days < 15; days++)
         {
-            if (scheduleController.isSchool(scheduleController.getSchedule().getSelectedDate().minusDays(days)))
+            if (getScheduleController().isSchool(getScheduleController().getSchedule().getSelectedDate().minusDays(days)))
             {
                 break;
             }
         }
-        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().minusDays(days));
+        changeSelectedDate(getScheduleController().getSchedule().getSelectedDate().minusDays(days));
     }
 
     private void onSwipeLeft()
@@ -402,17 +363,17 @@ public class ScheduleActivity extends AppCompatActivity implements Callback, Dat
         int days = 1;
         for (; days < 15; days++)
         {
-            if (scheduleController.isSchool(scheduleController.getSchedule().getSelectedDate().plusDays(days)))
+            if (getScheduleController().isSchool(getScheduleController().getSchedule().getSelectedDate().plusDays(days)))
             {
                 break;
             }
         }
-        changeSelectedDate(scheduleController.getSchedule().getSelectedDate().plusDays(days));
+        changeSelectedDate(getScheduleController().getSchedule().getSelectedDate().plusDays(days));
     }
 
     private void checkIfNoSchool()
     {
-        boolean isSchool = scheduleController.getSchedule().getLessons().values().stream().mapToLong(Collection::size).sum() > 0;
+        boolean isSchool = getScheduleController().getSchedule().getLessons().values().stream().mapToLong(Collection::size).sum() > 0;
         if (!isSchool)
         {
             findViewById(R.id.noSchoolHint).setVisibility(VISIBLE);
