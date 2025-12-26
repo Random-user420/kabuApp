@@ -52,7 +52,6 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     private LinearLayoutManager layoutManager;
     private DateTimeFormatter monthFormatter;
     private GestureDetector gestureDetector;
-    private ActivityScheduleBinding binding;
     private DateTimeFormatter dayFormatter;
     private List<DateItem> dateItems;
     private DateAdapter dateAdapter;
@@ -74,7 +73,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         dayFormatter = DateTimeFormatter.ofPattern("dd");
         weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
-        binding = ActivityScheduleBinding.inflate(getLayoutInflater());
+        ActivityScheduleBinding binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_schedule);
