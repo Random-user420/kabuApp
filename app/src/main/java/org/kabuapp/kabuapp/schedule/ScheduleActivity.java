@@ -48,11 +48,11 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     private static final int SWIPE_THRESHOLD_DP = 69;
     private ScheduleUiGenerator scheduleUiGenerator;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private DateTimeFormatter weekdayFormatter;
+    private final DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
     private LinearLayoutManager layoutManager;
-    private DateTimeFormatter monthFormatter;
+    private final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
     private GestureDetector gestureDetector;
-    private DateTimeFormatter dayFormatter;
+    private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
     private List<DateItem> dateItems;
     private DateAdapter dateAdapter;
 
@@ -68,10 +68,6 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
             getAuthController().getId(), !getScheduleController().getSchedule().getLessons().isEmpty());
 
         scheduleUiGenerator = new ScheduleUiGenerator();
-
-        monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
-        dayFormatter = DateTimeFormatter.ofPattern("dd");
-        weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
 
         ActivityScheduleBinding binding = ActivityScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
