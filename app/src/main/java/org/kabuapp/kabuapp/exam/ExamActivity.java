@@ -50,22 +50,30 @@ public class ExamActivity extends Activity implements SwipeRefreshLayout.OnRefre
     private void updateExams()
     {
         ViewGroup linearExams = findViewById(R.id.linear_exams);
-        linearExams.removeAllViews();
         Map<LocalDate, MemExam> examsRef = getExamController().getExams().getExams();
         if (examsRef != null && !examsRef.isEmpty())
         {
             Map<LocalDate, MemExam> exams = new HashMap<>(examsRef);
             if (exams.keySet().stream().anyMatch(date -> date.isBefore(DateTimeUtils.getLocalDate()))
-                && exams.keySet().stream().anyMatch(date -> date.isAfter(DateTimeUtils.getLocalDate())))
+                && exams.keySet().stream().anyMatch(date -> date.isAfter(DateTimeUtils.getLocalDate()))
+                && exams.entrySet().stream().noneMatch(entry -> uiGenerator.isCurrent(entry.getKey(), entry.getValue().getDuration())))
             {
                 exams.computeIfAbsent(DateTimeUtils.getLocalDate(), k -> new MemExam(null, DateTimeUtils.getLocalDate(), (short) -1, null));
             }
-            exams.values().stream().sorted(Comparator.comparing(MemExam::getBeginn))
-                .forEach(exam ->
-                    uiGenerator.addExamElement(
-                        this,
-                        linearExams,
-                        exam));
+            runOnUiThread(() ->
+            {
+                linearExams.removeAllViews();
+                exams.values().stream().sorted(Comparator.comparing(MemExam::getBeginn))
+                    .forEach(exam ->
+                        uiGenerator.addExamElement(
+                            this,
+                            linearExams,
+                            exam));
+            });
+        }
+        else
+        {
+            runOnUiThread(linearExams::removeAllViews);
         }
     }
 
@@ -79,6 +87,6 @@ public class ExamActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     public void callback(Object[] objects)
     {
-        runOnUiThread(this::updateExams);
+        updateExams();
     }
 }

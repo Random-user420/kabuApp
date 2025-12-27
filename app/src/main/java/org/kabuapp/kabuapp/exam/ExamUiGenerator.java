@@ -1,15 +1,12 @@
 package org.kabuapp.kabuapp.exam;
 
-import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
-
+import lombok.AllArgsConstructor;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
@@ -17,7 +14,7 @@ import org.kabuapp.kabuapp.utils.DateTimeUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import lombok.AllArgsConstructor;
+import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
 
 @AllArgsConstructor
 public class ExamUiGenerator
@@ -62,7 +59,7 @@ public class ExamUiGenerator
         }
     }
 
-    private boolean isCurrent(LocalDate begin, int duration)
+    public boolean isCurrent(LocalDate begin, int duration)
     {
         return (DateTimeUtils.getLocalDate().isAfter(begin) || DateTimeUtils.getLocalDate().isEqual(begin)) &&
             (DateTimeUtils.getLocalDate().isBefore(begin.plusDays(duration - 1)) || DateTimeUtils.getLocalDate().isEqual(begin.plusDays(duration - 1)));
