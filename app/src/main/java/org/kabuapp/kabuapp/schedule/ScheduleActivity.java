@@ -15,10 +15,9 @@ import org.kabuapp.kabuapp.KabuApp;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.databinding.ActivityScheduleBinding;
-import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.exam.ExamActivity;
-import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.integration.Activity;
+import org.kabuapp.kabuapp.interfaces.Callback;
 import org.kabuapp.kabuapp.login.LoginActivity;
 import org.kabuapp.kabuapp.settings.SettingsActivity;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
@@ -102,7 +101,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         dateRecyclerView.setLayoutManager(layoutManager);
 
         dateItems = generateDateItems(
-            DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1), 14, getScheduleController());
+            DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1), 14);
 
         dateAdapter = new DateAdapter(this, dateItems, this);
         dateRecyclerView.setAdapter(dateAdapter);
@@ -180,7 +179,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
             {
                 if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date)))
                 {
-                    dateAdapter.addDate(generateDateItems(date, 1, getScheduleController()).get(0));
+                    dateAdapter.addDate(generateDateItems(date, 1).get(0));
                 }
             });
         });
@@ -231,7 +230,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         });
     }
 
-    private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays, ScheduleController scheduleController)
+    private List<DateItem> generateDateItems(LocalDate startDate, int numberOfDays)
     {
         List<DateItem> items = new ArrayList<>();
 
