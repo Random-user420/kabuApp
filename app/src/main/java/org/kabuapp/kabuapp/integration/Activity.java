@@ -18,7 +18,7 @@ import org.kabuapp.kabuapp.db.controller.SettingsController;
 
 import java.util.concurrent.ExecutorService;
 
-public class Activity extends AppCompatActivity
+public abstract class Activity extends AppCompatActivity
 {
     protected ScheduleController getScheduleController()
     {

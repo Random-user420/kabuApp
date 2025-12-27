@@ -18,4 +18,14 @@ public class DateTimeUtils
     {
         return LocalDate.now();
     }
+
+    public static LocalDate getFirstDayOfWeek()
+    {
+        return DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1);
+    }
+
+    public static LocalDate getFirstDayOfMonth()
+    {
+        return DateTimeUtils.getLocalDate().withDayOfMonth(1);
+    }
 }

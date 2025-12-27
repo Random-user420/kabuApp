@@ -4,10 +4,12 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 import androidx.room.Update;
-
+import org.kabuapp.kabuapp.db.LocalDateConverter;
 import org.kabuapp.kabuapp.db.model.entity.Exam;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +30,10 @@ public interface ExamDao
 
     @Query("DELETE FROM exams WHERE userId = :userId")
     void deletePerUser(UUID userId);
+
+    @TypeConverters({LocalDateConverter.class})
+    @Query("DELETE FROM exams WHERE userId = :userId AND date < :date")
+    void deletePerUserBeforeDate(UUID userId, LocalDate date);
 
     @Query("DELETE FROM exams")
     void deleteAll();

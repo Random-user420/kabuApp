@@ -1,5 +1,20 @@
 package org.kabuapp.kabuapp.db.controller;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.kabuapp.kabuapp.api.DigikabuApiService;
+import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
+import org.kabuapp.kabuapp.api.models.LessonResponse;
+import org.kabuapp.kabuapp.data.memory.MemSchedule;
+import org.kabuapp.kabuapp.db.ScheduleMapper;
+import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.DbType;
+import org.kabuapp.kabuapp.interfaces.AuthCallback;
+import org.kabuapp.kabuapp.interfaces.Callback;
+import org.kabuapp.kabuapp.utils.DateTimeUtils;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,21 +28,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
-import org.kabuapp.kabuapp.api.DigikabuApiService;
-import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
-import org.kabuapp.kabuapp.api.models.LessonResponse;
-import org.kabuapp.kabuapp.db.model.DbType;
-import org.kabuapp.kabuapp.interfaces.AuthCallback;
-import org.kabuapp.kabuapp.db.ScheduleMapper;
-import org.kabuapp.kabuapp.db.model.AppDatabase;
-import org.kabuapp.kabuapp.data.memory.MemSchedule;
-import org.kabuapp.kabuapp.interfaces.Callback;
-import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 @Slf4j
 @AllArgsConstructor
@@ -55,6 +55,10 @@ public class ScheduleController
                     ce.callback(objects);
                 }
             }
+            else
+            {
+                executorService.execute(() -> db.lessonDao().deletePerUserBeforeDate(userId, DateTimeUtils.getFirstDayOfWeek()));
+            }
         });
         if (!async)
         {
@@ -73,7 +77,7 @@ public class ScheduleController
     {
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
         String token = tokenIn;
-        LocalDate begin = DateTimeUtils.getLocalDate().minusDays(DateTimeUtils.getLocalDate().getDayOfWeek().getValue() - 1);
+        LocalDate begin = DateTimeUtils.getFirstDayOfWeek();
         try
         {
             updateSchedule(begin, 14, token, userId);

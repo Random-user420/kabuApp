@@ -1,5 +1,7 @@
 package org.kabuapp.kabuapp.db.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
 import org.kabuapp.kabuapp.api.exceptions.UnauthorisedException;
 import org.kabuapp.kabuapp.api.models.ExamResponse;
@@ -18,9 +20,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class ExamController
@@ -47,13 +46,17 @@ public class ExamController
                 lifetimeController.updateLifetime(DbType.EXAM);
                 lifetimeController.saveLifetimeToDb(userId);
             }
+            else
+            {
+                executorService.execute(() -> db.examDao().deletePerUserBeforeDate(userId, DateTimeUtils.getFirstDayOfMonth()));
+            }
         });
     }
 
     private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
-        LocalDate date = DateTimeUtils.getLocalDate();
+        LocalDate date = DateTimeUtils.getFirstDayOfMonth();
         try
         {
             updateExams(date, token, userId, (short) 3);
