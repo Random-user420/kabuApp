@@ -56,6 +56,7 @@ public class ExamController
     private void updateExams(String token, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.examDao().deletePerUser(userId));
+        exams = new MemExams();
         LocalDate date = DateTimeUtils.getFirstDayOfMonth();
         try
         {
