@@ -28,7 +28,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -161,7 +163,18 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         {
             return;
         }
-        Map<LocalDate, List<MemLesson>> lessons = new HashMap<>(lessonRef);
+        Map<LocalDate, List<MemLesson>> lessons = lessonRef.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> entry.getValue().stream()
+                    .sorted(Comparator.comparing(MemLesson::getBegin)
+                        .thenComparing(MemLesson::getGroup))
+                    .collect(Collectors.toList()),
+                (e1, e2) -> e1,
+                LinkedHashMap::new
+            ));
         List<MemLesson> currentLessons = lessons.get(DateTimeUtils.getLocalDate());
         if (currentLessons != null && currentLessons.stream().noneMatch(this::isInLesson))
         {
