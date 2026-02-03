@@ -102,9 +102,7 @@ public class ScheduleController
         {
             return;
         }
-        Set<LocalDate> datesToRemove = schedule.getLessons().keySet().stream()
-            .filter(key -> key.isBefore(date)).collect(Collectors.toSet());
-        datesToRemove.forEach(schedule.getLessons()::remove);
+        schedule.getLessons().clear();
         scheduleMapper.mapApiResToSchedule(responses, schedule);
         executorService.execute(() -> db.lessonDao().insertAll(scheduleMapper.mapScheduleToDb(schedule, userId)));
     }
