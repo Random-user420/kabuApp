@@ -46,13 +46,13 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
 {
     private static final int SWIPE_VELOCITY_THRESHOLD_DP = 69;
     private static final int SWIPE_THRESHOLD_DP = 69;
+    private final DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
+    private final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
+    private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
     private ScheduleUiGenerator scheduleUiGenerator;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private final DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
     private LinearLayoutManager layoutManager;
-    private final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
     private GestureDetector gestureDetector;
-    private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
     private List<DateItem> dateItems;
     private DateAdapter dateAdapter;
 
@@ -130,7 +130,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     public void onRefresh()
     {
         getScheduleController().updateSchedule(getAuthController().getToken(), getAuthController(), this,
-            new Object[1], Duration.ofMinutes(5), getAuthController().getId(), true);
+            new Object[1], Duration.ofSeconds(1), getAuthController().getId(), true);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -174,6 +174,14 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
                 (e1, e2) -> e1,
                 LinkedHashMap::new
             ));
+        List<DateItem> dateItems = new ArrayList<>();
+        lessons.keySet().forEach(date ->
+        {
+            if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date)))
+            {
+                dateItems.add(generateDateItems(date, 1).get(0));
+            }
+        });
         List<MemLesson> currentLessons = lessons.get(DateTimeUtils.getLocalDate());
         if (currentLessons != null && currentLessons.stream().noneMatch(this::isInLesson))
         {
@@ -187,13 +195,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
                 lessons.get(selectedDate).forEach(lesson ->
                     scheduleUiGenerator.addLessonElement(this, linearSchedule, lesson));
             }
-            lessons.keySet().forEach(date ->
-            {
-                if (dateAdapter.getDateList().stream().noneMatch(dateItem -> dateItem.getDate().isEqual(date)))
-                {
-                    dateAdapter.addDate(generateDateItems(date, 1).get(0));
-                }
-            });
+            dateItems.forEach(dateAdapter::addDate);
         });
     }
 
@@ -237,6 +239,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
                 }
                 catch (InterruptedException ignored)
                 {
+                    return;
                 }
             }
         });
