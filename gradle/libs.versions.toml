@@ -8,7 +8,7 @@ annotation = "1.9.1"
 roomRuntimeAndroid = "2.8.4"
 roomCompiler = "2.8.4"
 
-apache-httpclient = "5.6"
+apache-httpclient = "5.4.4"
 apache-httpcore = "5.4.1"
 
 metis = "1.0-SNAPSHOT"
