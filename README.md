@@ -102,7 +102,7 @@ Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included 
 # Warranty
 ** We don't provide any sort of warranty on this program **
 
-**contact: lilithtechs@protonmail.com**
+**contact: mikatechs@protonmail.com**
 
 ## Contributors
 
@@ -113,7 +113,7 @@ Check your codestyle with the Checkstyle Plugin and the checkstyle.xml included 
 # Copyright
 For Everything that is committed under "Random-user420"
 
-(C) 2025 Lilith
+(C) 2025 Mika
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
