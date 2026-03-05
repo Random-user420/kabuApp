@@ -1,22 +1,20 @@
 package org.kabuapp.kabuapp.schedule;
 
-import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
 import androidx.core.text.HtmlCompat;
-
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.LocalTime;
+
+import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
 
 public class ScheduleUiGenerator
 {
@@ -105,23 +103,7 @@ public class ScheduleUiGenerator
 
     public LocalTime endToLocaleTime(short time)
     {
-        return switch (time + 1)
-        {
-            case 2 -> LocalTime.of(9, 15);
-            case 3 -> LocalTime.of(10, 0);
-            case 4 -> LocalTime.of(11, 0);
-            case 5 -> LocalTime.of(11, 45);
-            case 6 -> LocalTime.of(12, 30);
-            case 7 -> LocalTime.of(13, 15);
-            case 8 -> LocalTime.of(14, 0);
-            case 9 -> LocalTime.of(14, 45);
-            case 10 -> LocalTime.of(15, 30);
-            case 11 -> LocalTime.of(16, 15);
-            case 12 -> LocalTime.of(17, 0);
-            case 13 -> LocalTime.of(17, 45);
-            case 14 -> LocalTime.of(18, 30);
-            default -> null;
-        };
+        return time == 2 ? LocalTime.of(10, 0) : beginToLocaleTime((short) (time + 1));
     }
 
     private String mapBeginnToString(short lesson)
@@ -148,22 +130,6 @@ public class ScheduleUiGenerator
 
     private String mapEndToString(short lesson)
     {
-        return switch (lesson + 1)
-        {
-            case 2 -> "9:15";
-            case 3 -> "10:00";
-            case 4 -> "11:00";
-            case 5 -> "11:45";
-            case 6 -> "12:30";
-            case 7 -> "13:15";
-            case 8 -> "14:00";
-            case 9 -> "14:45";
-            case 10 -> "15:30";
-            case 11 -> "16:15";
-            case 12 -> "17:00";
-            case 13 -> "17:45";
-            case 14 -> "18:30";
-            default -> "ERROR";
-        };
+        return lesson == 2 ? "10:00" : mapBeginnToString((short) (lesson + 1));
     }
 }
