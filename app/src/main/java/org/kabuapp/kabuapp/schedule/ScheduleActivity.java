@@ -65,7 +65,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
 
         getScheduleController().updateSchedule(
             getAuthController().getToken(), getAuthController(), this, new Object[1], Duration.ofHours(2),
-            getAuthController().getId(), !getScheduleController().getSchedule().getLessons().isEmpty());
+            getAuthController().getId(), !getScheduleController().getSchedule().getLessons().isEmpty(), s -> getAuthController().setToken(s));
 
         scheduleUiGenerator = new ScheduleUiGenerator();
 
@@ -130,7 +130,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     public void onRefresh()
     {
         getScheduleController().updateSchedule(getAuthController().getToken(), getAuthController(), this,
-            new Object[1], Duration.ofSeconds(1), getAuthController().getId(), true);
+            new Object[1], Duration.ofSeconds(1), getAuthController().getId(), true, s -> getAuthController().setToken(s));
         swipeRefreshLayout.setRefreshing(false);
     }
 

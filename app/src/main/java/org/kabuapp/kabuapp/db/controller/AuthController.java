@@ -1,5 +1,14 @@
 package org.kabuapp.kabuapp.db.controller;
 
+import lombok.AllArgsConstructor;
+import org.kabuapp.kabuapp.api.DigikabuApiService;
+import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
+import org.kabuapp.kabuapp.data.memory.AuthStateholder;
+import org.kabuapp.kabuapp.db.model.AppDatabase;
+import org.kabuapp.kabuapp.db.model.entity.User;
+import org.kabuapp.kabuapp.interfaces.AuthCallback;
+import org.kabuapp.kabuapp.interfaces.Callback;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,15 +17,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.AllArgsConstructor;
-
-import org.kabuapp.kabuapp.api.exceptions.BadRequestException;
-import org.kabuapp.kabuapp.api.DigikabuApiService;
-import org.kabuapp.kabuapp.interfaces.AuthCallback;
-import org.kabuapp.kabuapp.data.memory.AuthStateholder;
-import org.kabuapp.kabuapp.db.model.AppDatabase;
-import org.kabuapp.kabuapp.db.model.entity.User;
-import org.kabuapp.kabuapp.interfaces.Callback;
 
 @AllArgsConstructor
 public class AuthController implements AuthCallback
@@ -40,6 +40,11 @@ public class AuthController implements AuthCallback
     public String getToken()
     {
         return stateholder.getToken();
+    }
+
+    public void setToken(String token)
+    {
+        stateholder.setToken(token);
     }
 
     public void removeUser(UUID id)

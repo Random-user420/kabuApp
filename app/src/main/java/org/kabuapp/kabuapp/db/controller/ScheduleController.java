@@ -18,12 +18,14 @@ import org.kabuapp.kabuapp.utils.DateTimeUtils;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,13 +41,18 @@ public class ScheduleController
     private AppDatabase db;
     private ExecutorService executorService;
 
-    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration, UUID userId, boolean async)
+    public void updateSchedule(String token, AuthCallback re, Callback ce, Object[] objects, Duration duration, UUID userId, boolean async,
+                               Consumer<String> setToken)
     {
         Future<?> future = executorService.submit(() ->
         {
             if (lifetimeController.isLifetimeExpired(duration, DbType.SCHEDULE))
             {
-                updateSchedule(token, re, userId);
+                String newToken = updateSchedule(token, re, userId);
+                if (!Objects.equals(token, newToken))
+                {
+                    setToken.accept(newToken);
+                }
                 lifetimeController.updateLifetime(DbType.SCHEDULE);
                 lifetimeController.saveLifetimeToDb(userId);
                 if (ce != null)
@@ -71,7 +78,7 @@ public class ScheduleController
         }
     }
 
-    private void updateSchedule(String tokenIn, AuthCallback re, UUID userId)
+    private String updateSchedule(String tokenIn, AuthCallback re, UUID userId)
     {
         executorService.execute(() -> db.lessonDao().deletePerUser(userId));
         String token = tokenIn;
@@ -79,6 +86,7 @@ public class ScheduleController
         try
         {
             updateSchedule(begin, 14, token, userId);
+            return token;
         }
         catch (UnauthorisedException ignored)
         {
@@ -87,10 +95,12 @@ public class ScheduleController
         try
         {
             updateSchedule(begin, 14, token, userId);
+            return token;
         }
         catch (UnauthorisedException ignored)
         {
         }
+        return token;
     }
 
     private void updateSchedule(LocalDate date, int days, String token, UUID userId) throws UnauthorisedException
@@ -107,6 +117,7 @@ public class ScheduleController
 
     public void getDbSchedule(UUID userId)
     {
+        schedule.getLessons().clear();
         executorService.execute(() -> scheduleMapper.mapDbLessonToSchedule(db.lessonDao().get(userId), schedule));
     }
 
