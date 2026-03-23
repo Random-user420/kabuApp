@@ -21,6 +21,12 @@ public class LoginActivity extends Activity implements Callback
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        if (getAuthController().isInitialized())
+        {
+            var i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return;
+        }
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -38,20 +44,6 @@ public class LoginActivity extends Activity implements Callback
                 getSessionController().loadSession(this, null, null);
             });
         }
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
-        if (getAuthController().isInitialized())
-        {
-            var i = new Intent(this, ScheduleActivity.class);
-            startActivity(i);
-        }
-
-        getDelegate().onStart();
     }
 
     private void authHandler()
