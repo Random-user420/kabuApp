@@ -13,6 +13,7 @@ import org.kabuapp.kabuapp.data.memory.MemLesson;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.time.LocalTime;
+import java.util.Optional;
 
 import static org.kabuapp.kabuapp.ui.ThemeColorResolver.resolveColorAttribute;
 
@@ -77,6 +78,16 @@ public class ScheduleUiGenerator
     private boolean isCurrent(LocalTime begin, LocalTime end)
     {
         return !end.isBefore(DateTimeUtils.getLocalTime()) && !begin.isAfter(DateTimeUtils.getLocalTime());
+    }
+
+    public Optional<LocalTime> beginToLocaleTime(Optional<Short> time)
+    {
+        return time.map(this::beginToLocaleTime);
+    }
+
+    public Optional<LocalTime> endToLocaleTime(Optional<Short> time)
+    {
+        return time.map(this::endToLocaleTime);
     }
 
     public LocalTime beginToLocaleTime(short time)

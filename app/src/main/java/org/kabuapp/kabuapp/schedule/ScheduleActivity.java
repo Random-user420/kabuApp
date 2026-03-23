@@ -3,10 +3,12 @@ package org.kabuapp.kabuapp.schedule;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +27,9 @@ import org.kabuapp.kabuapp.utils.DateTimeUtils;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -33,10 +37,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -49,12 +58,15 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     private final DateTimeFormatter weekdayFormatter = DateTimeFormatter.ofPattern("EEE", Locale.getDefault());
     private final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault());
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
+    private final Handler timerHandler = new Handler();
     private ScheduleUiGenerator scheduleUiGenerator;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayoutManager layoutManager;
     private GestureDetector gestureDetector;
+    private TextView durationTextView;
     private List<DateItem> dateItems;
     private DateAdapter dateAdapter;
+    private Runnable timerRunnable;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -121,9 +133,11 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
                 layoutManager.scrollToPositionWithOffset(selectedPosition, 0);
             }
         });
+        durationTextView = findViewById(R.id.text_view_next_lesson_timer);
 
         checkIfNoSchool();
         updateScheduleLoop();
+        setupDurationNextLesson();
     }
 
     @Override
@@ -272,6 +286,8 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
     public void onDateSelected(LocalDate date)
     {
         getScheduleController().getSchedule().setSelectedDate(date);
+        timerHandler.removeCallbacks(timerRunnable);
+        timerHandler.postDelayed(timerRunnable, 0);
         updateSchedule();
     }
 
@@ -390,6 +406,64 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         else
         {
             findViewById(R.id.noSchoolHint).setVisibility(GONE);
+        }
+    }
+
+    private void setupDurationNextLesson()
+    {
+        boolean isSchool = getScheduleController().getSchedule().getLessons().values().stream().mapToLong(Collection::size).sum() > 0;
+
+        if (!isSchool)
+        {
+            durationTextView.setVisibility(GONE);
+            return;
+        }
+        Supplier<Boolean> isCurrentDaySelected = () -> dateItems.stream().anyMatch(di -> di.isSelected() && di.getDate().equals(DateTimeUtils.getLocalDate()));
+
+        AtomicReference<LocalTime> localTime = new AtomicReference<>();
+        Supplier<Stream<LocalTime>> getLessons = () -> getScheduleController().getSchedule().getLessons()
+            .getOrDefault(DateTimeUtils.getLocalDate(), List.of())
+            .stream()
+            .flatMap(l -> Stream.of(scheduleUiGenerator.beginToLocaleTime(l.getBegin()), scheduleUiGenerator.endToLocaleTime(l.getEnd())))
+            .sorted();
+        Function<Stream<LocalTime>, Optional<LocalTime>> getNextLesson = lessons -> lessons
+            .filter(event -> event.isAfter(localTime.get()))
+            .findFirst();
+        Function<Optional<LocalTime>, Optional<String>> formatTime = ot -> ot.map(targetTime ->
+        {
+            long seconds = ChronoUnit.SECONDS.between(localTime.get(), targetTime);
+            if (seconds <= 0)
+            {
+                return "00:00:00";
+            }
+            return String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+        });
+        Supplier<Optional<String>> getTime = () -> formatTime.apply(getNextLesson.apply(getLessons.get()));
+
+        timerRunnable = () ->
+        {
+            if (isCurrentDaySelected.get())
+            {
+                localTime.set(DateTimeUtils.getLocalTime());
+                getTime.get().ifPresent(s -> durationTextView.setText(s));
+                durationTextView.setVisibility(VISIBLE);
+            }
+            else
+            {
+                durationTextView.setVisibility(GONE);
+            }
+            timerHandler.postDelayed(timerRunnable, 999);
+        };
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (timerHandler != null)
+        {
+            timerHandler.removeCallbacks(timerRunnable);
         }
     }
 }

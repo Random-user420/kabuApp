@@ -31,6 +31,26 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/layout_date_item" />
 
+    <TextView
+            android:id="@+id/text_view_next_lesson_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="12dp"
+            android:padding="12dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:backgroundTint="?android:attr/colorBackgroundFloating"
+            android:elevation="20dp"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_date_selector"
+            android:clickable="false"
+            android:contextClickable="false"
+            android:editable="false"
+            android:visibility="invisible"
+            android:layout_marginTop="-32dp" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout_schedule"
         android:layout_width="match_parent"
