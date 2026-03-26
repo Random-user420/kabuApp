@@ -445,7 +445,7 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
             if (isCurrentDaySelected.get())
             {
                 localTime.set(DateTimeUtils.getLocalTime());
-                getTime.get().ifPresent(s -> durationTextView.setText(s));
+                getTime.get().ifPresentOrElse(s -> durationTextView.setText(s), () -> durationTextView.setVisibility(GONE));
                 durationTextView.setVisibility(VISIBLE);
             }
             else
