@@ -81,14 +81,6 @@ public class AuthController implements AuthCallback
         return false;
     }
 
-    public void setCredentials(String username, String password, String token)
-    {
-        stateholder.setUsername(username);
-        stateholder.setPassword(password);
-        stateholder.setToken(token);
-        executorService.execute(this::save);
-    }
-
     public void auth(Callback callback, Object[] args)
     {
         try

@@ -25,4 +25,6 @@
     <string name="login_back">Back</string>
     <string name="noSchoolHint">You don\'t have school in this or the next week</string>
     <string name="settings_isoDate">use ISO date format on exams</string>
+    <string name="settings_notfication_next_day_exam">Nofification for Eventw at next day</string>
+    <string name="nofification_exam_next_day_title">Event tomorrow</string>
 </resources>

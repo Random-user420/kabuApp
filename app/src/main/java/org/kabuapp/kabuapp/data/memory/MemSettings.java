@@ -10,4 +10,5 @@ import lombok.Setter;
 public class MemSettings
 {
     private boolean isoDate;
+    private boolean notificationExamNextDay;
 }

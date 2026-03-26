@@ -18,4 +18,6 @@ public class Settings
     private int id;
     @ColumnInfo(name = "isoDate")
     private boolean isoDate;
+    @ColumnInfo(name = "notificationNextDayExam")
+    private boolean notificationNextDayExam;
 }

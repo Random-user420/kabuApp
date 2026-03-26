@@ -1,11 +1,17 @@
 package org.kabuapp.kabuapp.settings;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 import org.kabuapp.kabuapp.R;
 import org.kabuapp.kabuapp.exam.ExamActivity;
@@ -24,12 +30,25 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
 {
     private org.kabuapp.kabuapp.databinding.ActivitySettingsBinding binding;
     private android.widget.Spinner accountSpinner;
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->
+        {
+            if (isGranted)
+            {
+                getSettingsController().setNotificationNextDayExam(true);
+            }
+            else
+            {
+                binding.settingNotNextDayExam.setChecked(false);
+                getSettingsController().setNotificationNextDayExam(false);
+            }
+        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
+
         binding = inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -46,6 +65,7 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         debugSwitchListener();
         isoSwitchSetup();
         setNotice(this, findViewById(R.id.notice_code_settings));
+        notificationNextDayExamSetup();
     }
 
     @Override
@@ -67,9 +87,9 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         String currentUsername = getAuthController().getUser();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                usernames
+            this,
+            android.R.layout.simple_spinner_item,
+            usernames
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -152,6 +172,37 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
         });
     }
 
+    private void notificationNextDayExamSetup()
+    {
+        binding.settingNotNextDayExam.setChecked(getSettingsController().isNotificationNextDayExam());
+        binding.settingNotNextDayExam.setOnCheckedChangeListener((c, ac) ->
+        {
+            if (ac)
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED)
+                    {
+                        getSettingsController().setNotificationNextDayExam(true);
+                    }
+                    else
+                    {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                    }
+                }
+                else
+                {
+                    getSettingsController().setNotificationNextDayExam(true);
+                }
+            }
+            else
+            {
+                getSettingsController().setNotificationNextDayExam(false);
+            }
+        });
+    }
+
     private void debugSwitchListener()
     {
         binding.debugSwitch.setOnCheckedChangeListener((c, ac) ->
@@ -161,9 +212,9 @@ public class SettingsActivity extends Activity implements AdapterView.OnItemSele
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
                 binding.debugScheduleLifetime.setText(HtmlCompat.fromHtml(getApplicationContext().getString(R.string.schedule_title) + "<br/>" +
-                        formatter.format(getLifetimeController().getMemLifetime().getScheduleLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
-                binding.debugExamLifetime.setText(HtmlCompat.fromHtml( getApplicationContext().getString(R.string.exam_title) + "<br/>" +
-                                formatter.format(getLifetimeController().getMemLifetime().getExamLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    formatter.format(getLifetimeController().getMemLifetime().getScheduleLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                binding.debugExamLifetime.setText(HtmlCompat.fromHtml(getApplicationContext().getString(R.string.exam_title) + "<br/>" +
+                    formatter.format(getLifetimeController().getMemLifetime().getExamLastUpdate()), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
             else
             {

@@ -4,27 +4,33 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import com.google.android.material.color.DynamicColors;
 import lombok.Getter;
 import lombok.Setter;
 import org.kabuapp.kabuapp.api.DigikabuApiService;
+import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.data.memory.MemExams;
 import org.kabuapp.kabuapp.data.memory.MemLifetime;
+import org.kabuapp.kabuapp.data.memory.MemSchedule;
 import org.kabuapp.kabuapp.db.ExamMapper;
 import org.kabuapp.kabuapp.db.ScheduleMapper;
-import org.kabuapp.kabuapp.data.memory.AuthStateholder;
+import org.kabuapp.kabuapp.db.controller.AuthController;
+import org.kabuapp.kabuapp.db.controller.ExamController;
+import org.kabuapp.kabuapp.db.controller.LifetimeController;
+import org.kabuapp.kabuapp.db.controller.ScheduleController;
 import org.kabuapp.kabuapp.db.controller.SessionController;
 import org.kabuapp.kabuapp.db.controller.SettingsController;
 import org.kabuapp.kabuapp.db.model.AppDatabase;
-import org.kabuapp.kabuapp.data.memory.MemSchedule;
-import org.kabuapp.kabuapp.db.controller.ExamController;
-import org.kabuapp.kabuapp.db.controller.LifetimeController;
-import org.kabuapp.kabuapp.db.controller.AuthController;
-import org.kabuapp.kabuapp.db.controller.ScheduleController;
+import org.kabuapp.kabuapp.notifications.ExamNotificationWorker;
 import org.kabuapp.kabuapp.schedule.ScheduleUpdateTask;
 import org.kabuapp.kabuapp.utils.DateTimeUtils;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -85,6 +91,7 @@ public class KabuApp extends Application
         sessionController.loadSession(scheduleUpdateTask);
 
         settingsController.loadSettings();
+        startNotificationWorker();
     }
 
     @Override
@@ -114,5 +121,38 @@ public class KabuApp extends Application
                 Thread.currentThread().interrupt();
             }
         }
+    }
+
+    private void startNotificationWorker()
+    {
+        Constraints constraints = new Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .build();
+
+        Calendar calendar = Calendar.getInstance();
+        long now = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() <= now)
+        {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        long initialDelay = calendar.getTimeInMillis() - now;
+        PeriodicWorkRequest dailyWorkRequest =
+            new PeriodicWorkRequest.Builder(ExamNotificationWorker.class, 24, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .addTag("daily_notification_check")
+                .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "DailyNotify",
+            ExistingPeriodicWorkPolicy.KEEP,
+            dailyWorkRequest
+        );
     }
 }

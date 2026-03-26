@@ -33,6 +33,20 @@ public class SettingsController
         }
     }
 
+    public boolean isNotificationNextDayExam()
+    {
+        return settings.isNotificationExamNextDay();
+    }
+
+    public void setNotificationNextDayExam(boolean notificationNextDayExam)
+    {
+        if (!Objects.equals(notificationNextDayExam, settings.isNotificationExamNextDay()))
+        {
+            settings.setNotificationExamNextDay(notificationNextDayExam);
+            updateSettings();
+        }
+    }
+
     private void updateSettings()
     {
         executorService.execute(() -> db.settingsDao().update(toSettings()));
@@ -45,7 +59,7 @@ public class SettingsController
             Settings dbSettings = db.settingsDao().get();
             if (dbSettings == null)
             {
-                dbSettings = new Settings(0, false);
+                dbSettings = new Settings(0, false, false);
                 db.settingsDao().insert(dbSettings);
             }
             toMemSettings(dbSettings);
@@ -54,11 +68,21 @@ public class SettingsController
 
     private Settings toSettings()
     {
-        return new Settings(0, settings.isIsoDate());
+        return new Settings(0, settings.isIsoDate(), settings.isNotificationExamNextDay());
     }
 
     private void toMemSettings(Settings dbSettings)
     {
-        settings = new MemSettings(dbSettings.isIsoDate());
+        settings = new MemSettings(dbSettings.isIsoDate(), dbSettings.isNotificationNextDayExam());
+    }
+
+    public MemSettings getMemSettingsFromDb()
+    {
+        Settings dbSettings = db.settingsDao().get();
+        if (dbSettings == null)
+        {
+            return null;
+        }
+        return new MemSettings(dbSettings.isIsoDate(), dbSettings.isNotificationNextDayExam());
     }
 }

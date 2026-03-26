@@ -22,4 +22,6 @@
     <string name="login_back">Zurück</string>
     <string name="noSchoolHint">Es ist keine Schule in dieser oder der nächten Woche für Sie</string>
     <string name="settings_isoDate">nutze ISO Datum Format für Schulaufgaben</string>
+    <string name="settings_notfication_next_day_exam">Benachrichtigung für Ergeignisse am nächten Tag</string>
+    <string name="nofification_exam_next_day_title">Ergeigniss morgen</string>
 </resources>

@@ -116,4 +116,11 @@ public class ExamController
     {
         exams.getExams().clear();
     }
+
+    public MemExams getMemExamsFromDb(UUID userId)
+    {
+        MemExams memExams = new MemExams();
+        examMapper.mapDbToExams(db.examDao().get(userId), memExams);
+        return memExams;
+    }
 }
