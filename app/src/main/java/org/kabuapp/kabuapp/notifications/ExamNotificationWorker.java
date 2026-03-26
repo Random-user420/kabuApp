@@ -14,12 +14,10 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import org.kabuapp.kabuapp.R;
-import org.kabuapp.kabuapp.data.memory.AuthStateholder;
 import org.kabuapp.kabuapp.data.memory.MemExam;
 import org.kabuapp.kabuapp.data.memory.MemExams;
 import org.kabuapp.kabuapp.data.memory.MemSettings;
 import org.kabuapp.kabuapp.db.ExamMapper;
-import org.kabuapp.kabuapp.db.controller.AuthController;
 import org.kabuapp.kabuapp.db.controller.ExamController;
 import org.kabuapp.kabuapp.db.controller.LifetimeController;
 import org.kabuapp.kabuapp.db.controller.SettingsController;
@@ -105,10 +103,9 @@ public class ExamNotificationWorker extends Worker
 
     private MemExams getMemExams(AppDatabase db)
     {
-        AuthController authController = new AuthController(new AuthStateholder(), db, null, null);
         ExamController examController =
             new ExamController(new MemExams(), new ExamMapper(),
                 new LifetimeController(null, null, null), null, null, db);
-        return examController.getMemExamsFromDb(authController.getDbUser());
+        return examController.getAllMemExamsFromDb();
     }
 }

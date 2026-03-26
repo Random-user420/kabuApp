@@ -117,10 +117,10 @@ public class ExamController
         exams.getExams().clear();
     }
 
-    public MemExams getMemExamsFromDb(UUID userId)
+    public MemExams getAllMemExamsFromDb()
     {
         MemExams memExams = new MemExams();
-        examMapper.mapDbToExams(db.examDao().get(userId), memExams);
+        examMapper.mapDbToExams(db.examDao().getAll(), memExams);
         return memExams;
     }
 }
