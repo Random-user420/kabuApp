@@ -11,7 +11,7 @@ public class DateTimeUtils
 
     public static LocalTime getLocalTime()
     {
-        return LocalTime.now().minusHours(10);
+        return LocalTime.now();
     }
 
     public static LocalDate getLocalDate()
