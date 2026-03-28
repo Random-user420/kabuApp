@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -201,6 +202,10 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         {
             addNullLessonAtCurrentTime(currentLessons);
         }
+        if (lessons.containsKey(selectedDate))
+        {
+            splitFirstBreakLessons(lessons.get(selectedDate));
+        }
         runOnUiThread(() ->
         {
             linearSchedule.removeAllViews();
@@ -231,6 +236,30 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         {
             lessons.add(i + 1, new MemLesson((short) -1, (short) -1, null, (short) -1, (short) -1, null, null, null, null));
         }
+    }
+
+    private void splitFirstBreakLessons(List<MemLesson> lessons)
+    {
+        Function<MemLesson, Boolean> isOverBreak = l -> l.getBegin() <= 2 && l.getEnd() >= 3;
+        List<MemLesson> overBreakLessons = lessons.stream().filter(isOverBreak::apply).collect(Collectors.toList());
+        if (overBreakLessons.isEmpty())
+        {
+            return;
+        }
+        int startIndex = lessons.indexOf(overBreakLessons.get(0));
+        int size = overBreakLessons.size();
+        for (int i = 0; i < size; i++)
+        {
+            MemLesson l = overBreakLessons.get(i);
+            MemLesson fl = new MemLesson(
+                l.getBegin(), (short) 2, l.getDate(), l.getGroup(), l.getMaxGroup(), l.getName(), l.getTeacher(), l.getRoom(), UUID.randomUUID());
+            MemLesson sl = new MemLesson(
+                (short) 3, l.getEnd(), l.getDate(), l.getGroup(), l.getMaxGroup(), l.getName(), l.getTeacher(), l.getRoom(), UUID.randomUUID());
+            lessons.add(startIndex + size + i - 1 + l.getGroup(), sl);
+            lessons.add(startIndex + size + i - 1 + l.getGroup(), fl);
+            lessons.remove(l);
+        }
+
     }
 
     private boolean isInLesson(MemLesson lesson)
@@ -424,7 +453,9 @@ public class ScheduleActivity extends Activity implements Callback, DateAdapter.
         Supplier<Stream<LocalTime>> getLessons = () -> getScheduleController().getSchedule().getLessons()
             .getOrDefault(DateTimeUtils.getLocalDate(), List.of())
             .stream()
-            .flatMap(l -> Stream.of(scheduleUiGenerator.beginToLocaleTime(l.getBegin()), scheduleUiGenerator.endToLocaleTime(l.getEnd())))
+            .flatMap(l -> Stream.of(scheduleUiGenerator.beginToLocaleTime(l.getBegin()), scheduleUiGenerator.endToLocaleTime(l.getEnd()),
+                scheduleUiGenerator.beginToLocaleTime((short) 2), scheduleUiGenerator.endToLocaleTime((short) 2)))
+            .distinct()
             .sorted();
         Function<Stream<LocalTime>, Optional<LocalTime>> getNextLesson = lessons -> lessons
             .filter(event -> event.isAfter(localTime.get()))
